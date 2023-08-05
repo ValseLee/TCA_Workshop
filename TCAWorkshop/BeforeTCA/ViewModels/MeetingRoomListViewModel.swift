@@ -7,14 +7,54 @@
 
 import SwiftUI
 
-struct MeetingRoomListView: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+final class MeetingRoomListViewModel: ObservableObject {
+    enum MeetingRoomCondition {
+        case available
+        case unavailable
+        case booked
     }
-}
-
-struct MeetingRoomListView_Previews: PreviewProvider {
-    static var previews: some View {
-        MeetingRoomListView()
+    
+    @Published var availableRoomArray: [MeetingRoom] = []
+    @Published var unavailableMeetingRoomArray: [MeetingRoom] = []
+    @Published var bookedMeetingRoomArray: [MeetingRoom] = []
+    
+    public func fetchAllMeetingRoom() async {
+        try? await Task.sleep(for: .seconds(1))
+        let fetched = Array(repeating: MeetingRoom(id: .init(), date: .now, rentBy: "others"), count: 10)
+        
+        await withTaskGroup(of: Void.self) { group in
+            fetched.forEach { meetingRoom in
+                if meetingRoom.rentBy == "CURRENT_USER" {
+                    group.addTask { [weak self] in
+                        await self?.appendRoomArray(by: .booked, with: meetingRoom)
+                    }
+                } else if meetingRoom.rentBy == "OTHERS" {
+                    group.addTask { [weak self] in
+                        await self?.appendRoomArray(by: .unavailable, with: meetingRoom)
+                    }
+                } else {
+                    group.addTask { [weak self] in
+                        await self?.appendRoomArray(by: .available, with: meetingRoom)
+                    }
+                }
+            }
+            
+            if group.isEmpty { Logger._printData(.read, fetched) }
+        }
+    }
+    
+    @MainActor
+    private func appendRoomArray(
+        by condition: MeetingRoomCondition,
+        with meetingRoom: MeetingRoom
+    ) async {
+        switch condition {
+        case .available:
+            self.availableRoomArray.append(meetingRoom)
+        case .booked:
+            self.bookedMeetingRoomArray.append(meetingRoom)
+        case .unavailable:
+            self.unavailableMeetingRoomArray.append(meetingRoom)
+        }
     }
 }
