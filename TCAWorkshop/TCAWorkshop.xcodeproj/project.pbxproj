@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7E612C2F2A7E65BF00E4EC21 /* MeetingRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E612C2E2A7E65BF00E4EC21 /* MeetingRoom.swift */; };
+		7E612C312A7E660600E4EC21 /* MeetingRoomListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E612C302A7E660600E4EC21 /* MeetingRoomListViewModel.swift */; };
+		7E612C332A7E69DD00E4EC21 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E612C322A7E69DD00E4EC21 /* Logger.swift */; };
 		7E7C639A2A7D17AA00AB05BC /* TCAWorkshopApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7C63992A7D17AA00AB05BC /* TCAWorkshopApp.swift */; };
 		7E7C639C2A7D17AA00AB05BC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7C639B2A7D17AA00AB05BC /* ContentView.swift */; };
 		7E7C639E2A7D17AB00AB05BC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7E7C639D2A7D17AB00AB05BC /* Assets.xcassets */; };
@@ -38,6 +41,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		7E612C2E2A7E65BF00E4EC21 /* MeetingRoom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingRoom.swift; sourceTree = "<group>"; };
+		7E612C302A7E660600E4EC21 /* MeetingRoomListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingRoomListViewModel.swift; sourceTree = "<group>"; };
+		7E612C322A7E69DD00E4EC21 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		7E7C63962A7D17AA00AB05BC /* TCAWorkshop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TCAWorkshop.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7E7C63992A7D17AA00AB05BC /* TCAWorkshopApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCAWorkshopApp.swift; sourceTree = "<group>"; };
 		7E7C639B2A7D17AA00AB05BC /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -87,6 +93,31 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7E4309F82A7E6561006F0CD9 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				7E7C63CF2A7D233600AB05BC /* ContentView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		7E4309F92A7E6564006F0CD9 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				7E612C2E2A7E65BF00E4EC21 /* MeetingRoom.swift */,
+				7E612C322A7E69DD00E4EC21 /* Logger.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		7E4309FA2A7E6569006F0CD9 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				7E612C302A7E660600E4EC21 /* MeetingRoomListViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
 		7E7C638D2A7D17AA00AB05BC = {
 			isa = PBXGroup;
 			children = (
@@ -140,7 +171,9 @@
 			isa = PBXGroup;
 			children = (
 				7E7C63CD2A7D233600AB05BC /* BeforeTCAApp.swift */,
-				7E7C63CF2A7D233600AB05BC /* ContentView.swift */,
+				7E4309F92A7E6564006F0CD9 /* Models */,
+				7E4309FA2A7E6569006F0CD9 /* ViewModels */,
+				7E4309F82A7E6561006F0CD9 /* Views */,
 				7E7C63D12A7D233700AB05BC /* Assets.xcassets */,
 				7E7C63D32A7D233700AB05BC /* Preview Content */,
 			);
@@ -346,8 +379,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7E612C332A7E69DD00E4EC21 /* Logger.swift in Sources */,
 				7E7C63D02A7D233600AB05BC /* ContentView.swift in Sources */,
+				7E612C312A7E660600E4EC21 /* MeetingRoomListViewModel.swift in Sources */,
 				7E7C63CE2A7D233600AB05BC /* BeforeTCAApp.swift in Sources */,
+				7E612C2F2A7E65BF00E4EC21 /* MeetingRoom.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
