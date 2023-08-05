@@ -6,3 +6,9 @@
 //
 
 import Foundation
+
+struct MeetingRoom: Identifiable, Hashable {
+    var id: UUID
+    var date: Date
+    var rentBy: String
+}

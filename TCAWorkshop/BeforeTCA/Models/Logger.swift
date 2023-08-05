@@ -6,3 +6,38 @@
 //
 
 import Foundation
+
+struct Logger {
+    internal enum LogStyle {
+        case create
+        case read
+        case delete
+        case update
+    }
+    
+    static public func _printData(
+        _ style: LogStyle,
+        _ data: Any
+    ) {
+        print("--------------------")
+        
+        switch style {
+        case .create:
+            print("\(data) CREATED: ")
+        case .read:
+            print("\(data) FETCHED: ")
+        case .delete:
+            print("\(data) DELETED: ")
+        case .update:
+            print("\(data) UPDATED: ")
+        }
+        
+        print("--------------------")
+    }
+    
+    static public func dashedPrint(completionPrinter: @escaping () -> ()) {
+        print("--------------------")
+        completionPrinter()
+        print("--------------------")
+    }
+}
