@@ -40,4 +40,10 @@ struct Logger {
         completionPrinter()
         print("--------------------")
     }
+    
+    static public func methodExecTimePrint(_ start: Date) {
+        print("--------------------")
+        print("ENDED IN: ", Date().timeIntervalSince(start))
+        print("--------------------")
+    }
 }
