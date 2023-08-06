@@ -8,38 +8,75 @@
 import SwiftUI
 
 final class MeetingRoomListViewModel: ObservableObject {
-    enum MeetingRoomCondition {
+    @frozen enum MeetingRoomCondition {
         case available
         case unavailable
         case booked
     }
     
+    private let DUMMIES = [
+        "CURRENT_USER",
+        "OTHERS",
+        "AVAILABLE"
+    ]
+    
     @Published var availableRoomArray: [MeetingRoom] = []
     @Published var unavailableMeetingRoomArray: [MeetingRoom] = []
     @Published var bookedMeetingRoomArray: [MeetingRoom] = []
     
+    init() {
+        Task {
+            await fetchAllMeetingRoom()
+        }
+    }
+    
     public func fetchAllMeetingRoom() async {
-        try? await Task.sleep(for: .seconds(1))
-        let fetched = Array(repeating: MeetingRoom(id: .init(), date: .now, rentBy: "others"), count: 10)
+        var fetched = [MeetingRoom]()
+        for _ in 0..<10 {
+            fetched.append(MeetingRoom(id: .init(), date: .now, rentBy: DUMMIES.randomElement()!))
+        }
         
         await withTaskGroup(of: Void.self) { group in
+            let start = Date()
+            defer {
+                Logger.methodExecTimePrint(start)
+                Logger._printData(.read, "")
+            }
+            
             fetched.forEach { meetingRoom in
-                if meetingRoom.rentBy == "CURRENT_USER" {
-                    group.addTask { [weak self] in
-                        await self?.appendRoomArray(by: .booked, with: meetingRoom)
-                    }
-                } else if meetingRoom.rentBy == "OTHERS" {
-                    group.addTask { [weak self] in
-                        await self?.appendRoomArray(by: .unavailable, with: meetingRoom)
-                    }
-                } else {
-                    group.addTask { [weak self] in
-                        await self?.appendRoomArray(by: .available, with: meetingRoom)
+                group.addTask {
+                    if meetingRoom.rentBy == "CURRENT_USER" {
+                         await self.appendRoomArray(
+                            by: .booked,
+                            with: meetingRoom
+                        )
+                    } else if meetingRoom.rentBy == "OTHERS" {
+                         await self.appendRoomArray(
+                            by: .unavailable,
+                            with: meetingRoom
+                        )
+                    } else {
+                         await self.appendRoomArray(
+                            by: .available,
+                            with: meetingRoom
+                        )
                     }
                 }
             }
             
-            if group.isEmpty { Logger._printData(.read, fetched) }
+            await group.waitForAll()
+        }
+    }
+    
+    public func getRoomArray(with condition: MeetingRoomCondition) -> [MeetingRoom] {
+        switch condition {
+        case .available:
+            return availableRoomArray
+        case .unavailable:
+            return unavailableMeetingRoomArray
+        case .booked:
+            return bookedMeetingRoomArray
+            
         }
     }
     
@@ -47,7 +84,7 @@ final class MeetingRoomListViewModel: ObservableObject {
     private func appendRoomArray(
         by condition: MeetingRoomCondition,
         with meetingRoom: MeetingRoom
-    ) async {
+    ) {
         switch condition {
         case .available:
             self.availableRoomArray.append(meetingRoom)
