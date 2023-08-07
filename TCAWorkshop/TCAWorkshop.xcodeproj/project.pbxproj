@@ -7,18 +7,29 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7E28FA042A80A026002E3AA9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7E28FA032A80A026002E3AA9 /* GoogleService-Info.plist */; };
+		7E28FA052A80A026002E3AA9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7E28FA032A80A026002E3AA9 /* GoogleService-Info.plist */; };
+		7E28FA082A80A09A002E3AA9 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 7E28FA072A80A09A002E3AA9 /* FirebaseFirestore */; };
+		7E28FA0A2A80A09A002E3AA9 /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 7E28FA092A80A09A002E3AA9 /* FirebaseFirestoreSwift */; };
+		7E28FA0D2A80A0DD002E3AA9 /* AppDelegate+Firebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E28FA0C2A80A0DD002E3AA9 /* AppDelegate+Firebase.swift */; };
+		7E28FA0E2A80A0DD002E3AA9 /* AppDelegate+Firebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E28FA0C2A80A0DD002E3AA9 /* AppDelegate+Firebase.swift */; };
 		7E612C2F2A7E65BF00E4EC21 /* MeetingRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E612C2E2A7E65BF00E4EC21 /* MeetingRoom.swift */; };
 		7E612C312A7E660600E4EC21 /* MeetingRoomListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E612C302A7E660600E4EC21 /* MeetingRoomListViewModel.swift */; };
 		7E612C332A7E69DD00E4EC21 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E612C322A7E69DD00E4EC21 /* Logger.swift */; };
+		7E6BC5102A81261100D2A871 /* MeetingRoomFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E6BC50F2A81261100D2A871 /* MeetingRoomFeature.swift */; };
+		7E6BC5112A81265A00D2A871 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E612C322A7E69DD00E4EC21 /* Logger.swift */; };
+		7E6BC5122A81265D00D2A871 /* MeetingRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E612C2E2A7E65BF00E4EC21 /* MeetingRoom.swift */; };
+		7E6BC5142A8126B500D2A871 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7E7C639D2A7D17AB00AB05BC /* Assets.xcassets */; };
+		7E6BC5152A8126C300D2A871 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7E7C63D42A7D233700AB05BC /* Preview Assets.xcassets */; };
+		7E6BC5182A81277700D2A871 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E6BC5172A81277700D2A871 /* Constants.swift */; };
+		7E6BC5192A81277700D2A871 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E6BC5172A81277700D2A871 /* Constants.swift */; };
 		7E7C639A2A7D17AA00AB05BC /* TCAWorkshopApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7C63992A7D17AA00AB05BC /* TCAWorkshopApp.swift */; };
 		7E7C639C2A7D17AA00AB05BC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7C639B2A7D17AA00AB05BC /* ContentView.swift */; };
 		7E7C639E2A7D17AB00AB05BC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7E7C639D2A7D17AB00AB05BC /* Assets.xcassets */; };
-		7E7C63A12A7D17AB00AB05BC /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7E7C63A02A7D17AB00AB05BC /* Preview Assets.xcassets */; };
 		7E7C63AB2A7D17AB00AB05BC /* TCAWorkshopTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7C63AA2A7D17AB00AB05BC /* TCAWorkshopTests.swift */; };
 		7E7C63C52A7D17F200AB05BC /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 7E7C63C42A7D17F200AB05BC /* ComposableArchitecture */; };
 		7E7C63CE2A7D233600AB05BC /* BeforeTCAApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7C63CD2A7D233600AB05BC /* BeforeTCAApp.swift */; };
 		7E7C63D02A7D233600AB05BC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7C63CF2A7D233600AB05BC /* ContentView.swift */; };
-		7E7C63D22A7D233700AB05BC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7E7C63D12A7D233700AB05BC /* Assets.xcassets */; };
 		7E7C63D52A7D233700AB05BC /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7E7C63D42A7D233700AB05BC /* Preview Assets.xcassets */; };
 		7E7C63DF2A7D233700AB05BC /* BeforeTCATests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7C63DE2A7D233700AB05BC /* BeforeTCATests.swift */; };
 /* End PBXBuildFile section */
@@ -41,20 +52,22 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		7E28FA032A80A026002E3AA9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		7E28FA0C2A80A0DD002E3AA9 /* AppDelegate+Firebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+Firebase.swift"; sourceTree = "<group>"; };
 		7E612C2E2A7E65BF00E4EC21 /* MeetingRoom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingRoom.swift; sourceTree = "<group>"; };
 		7E612C302A7E660600E4EC21 /* MeetingRoomListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingRoomListViewModel.swift; sourceTree = "<group>"; };
 		7E612C322A7E69DD00E4EC21 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
+		7E6BC50F2A81261100D2A871 /* MeetingRoomFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingRoomFeature.swift; sourceTree = "<group>"; };
+		7E6BC5172A81277700D2A871 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		7E7C63962A7D17AA00AB05BC /* TCAWorkshop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TCAWorkshop.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7E7C63992A7D17AA00AB05BC /* TCAWorkshopApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCAWorkshopApp.swift; sourceTree = "<group>"; };
 		7E7C639B2A7D17AA00AB05BC /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		7E7C639D2A7D17AB00AB05BC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		7E7C63A02A7D17AB00AB05BC /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		7E7C63A62A7D17AB00AB05BC /* TCAWorkshopTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TCAWorkshopTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7E7C63AA2A7D17AB00AB05BC /* TCAWorkshopTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCAWorkshopTests.swift; sourceTree = "<group>"; };
 		7E7C63CB2A7D233600AB05BC /* BeforeTCA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BeforeTCA.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7E7C63CD2A7D233600AB05BC /* BeforeTCAApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeforeTCAApp.swift; sourceTree = "<group>"; };
 		7E7C63CF2A7D233600AB05BC /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		7E7C63D12A7D233700AB05BC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7E7C63D42A7D233700AB05BC /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		7E7C63DA2A7D233700AB05BC /* BeforeTCATests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BeforeTCATests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7E7C63DE2A7D233700AB05BC /* BeforeTCATests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeforeTCATests.swift; sourceTree = "<group>"; };
@@ -66,6 +79,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				7E7C63C52A7D17F200AB05BC /* ComposableArchitecture in Frameworks */,
+				7E28FA082A80A09A002E3AA9 /* FirebaseFirestore in Frameworks */,
+				7E28FA0A2A80A09A002E3AA9 /* FirebaseFirestoreSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -93,6 +108,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7E28FA0B2A80A0BE002E3AA9 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				7E6BC5172A81277700D2A871 /* Constants.swift */,
+				7E7C63D32A7D233700AB05BC /* Preview Content */,
+				7E7C639D2A7D17AB00AB05BC /* Assets.xcassets */,
+				7E6BC5132A81267100D2A871 /* Firebase */,
+				7E4309F92A7E6564006F0CD9 /* Models */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
 		7E4309F82A7E6561006F0CD9 /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -118,13 +145,47 @@
 			path = ViewModels;
 			sourceTree = "<group>";
 		};
+		7E6BC50D2A8125F900D2A871 /* Reducers */ = {
+			isa = PBXGroup;
+			children = (
+				7E6BC50F2A81261100D2A871 /* MeetingRoomFeature.swift */,
+			);
+			path = Reducers;
+			sourceTree = "<group>";
+		};
+		7E6BC50E2A8125FD00D2A871 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				7E7C639B2A7D17AA00AB05BC /* ContentView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		7E6BC5132A81267100D2A871 /* Firebase */ = {
+			isa = PBXGroup;
+			children = (
+				7E28FA0C2A80A0DD002E3AA9 /* AppDelegate+Firebase.swift */,
+				7E28FA032A80A026002E3AA9 /* GoogleService-Info.plist */,
+			);
+			path = Firebase;
+			sourceTree = "<group>";
+		};
+		7E6BC5162A81275100D2A871 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				7E7C63DD2A7D233700AB05BC /* BeforeTCATests */,
+				7E7C63A92A7D17AB00AB05BC /* TCAWorkshopTests */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
 		7E7C638D2A7D17AA00AB05BC = {
 			isa = PBXGroup;
 			children = (
+				7E6BC5162A81275100D2A871 /* Tests */,
+				7E28FA0B2A80A0BE002E3AA9 /* Common */,
 				7E7C63982A7D17AA00AB05BC /* TCAWorkshop */,
-				7E7C63A92A7D17AB00AB05BC /* TCAWorkshopTests */,
 				7E7C63CC2A7D233600AB05BC /* BeforeTCA */,
-				7E7C63DD2A7D233700AB05BC /* BeforeTCATests */,
 				7E7C63972A7D17AA00AB05BC /* Products */,
 			);
 			sourceTree = "<group>";
@@ -144,19 +205,10 @@
 			isa = PBXGroup;
 			children = (
 				7E7C63992A7D17AA00AB05BC /* TCAWorkshopApp.swift */,
-				7E7C639B2A7D17AA00AB05BC /* ContentView.swift */,
-				7E7C639D2A7D17AB00AB05BC /* Assets.xcassets */,
-				7E7C639F2A7D17AB00AB05BC /* Preview Content */,
+				7E6BC50E2A8125FD00D2A871 /* Views */,
+				7E6BC50D2A8125F900D2A871 /* Reducers */,
 			);
 			path = TCAWorkshop;
-			sourceTree = "<group>";
-		};
-		7E7C639F2A7D17AB00AB05BC /* Preview Content */ = {
-			isa = PBXGroup;
-			children = (
-				7E7C63A02A7D17AB00AB05BC /* Preview Assets.xcassets */,
-			);
-			path = "Preview Content";
 			sourceTree = "<group>";
 		};
 		7E7C63A92A7D17AB00AB05BC /* TCAWorkshopTests */ = {
@@ -171,11 +223,8 @@
 			isa = PBXGroup;
 			children = (
 				7E7C63CD2A7D233600AB05BC /* BeforeTCAApp.swift */,
-				7E4309F92A7E6564006F0CD9 /* Models */,
 				7E4309FA2A7E6569006F0CD9 /* ViewModels */,
 				7E4309F82A7E6561006F0CD9 /* Views */,
-				7E7C63D12A7D233700AB05BC /* Assets.xcassets */,
-				7E7C63D32A7D233700AB05BC /* Preview Content */,
 			);
 			path = BeforeTCA;
 			sourceTree = "<group>";
@@ -214,6 +263,8 @@
 			name = TCAWorkshop;
 			packageProductDependencies = (
 				7E7C63C42A7D17F200AB05BC /* ComposableArchitecture */,
+				7E28FA072A80A09A002E3AA9 /* FirebaseFirestore */,
+				7E28FA092A80A09A002E3AA9 /* FirebaseFirestoreSwift */,
 			);
 			productName = TCAWorkshop;
 			productReference = 7E7C63962A7D17AA00AB05BC /* TCAWorkshop.app */;
@@ -309,6 +360,7 @@
 			mainGroup = 7E7C638D2A7D17AA00AB05BC;
 			packageReferences = (
 				7E7C63C32A7D17F200AB05BC /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
+				7E28FA062A80A09A002E3AA9 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			productRefGroup = 7E7C63972A7D17AA00AB05BC /* Products */;
 			projectDirPath = "";
@@ -327,8 +379,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7E7C63A12A7D17AB00AB05BC /* Preview Assets.xcassets in Resources */,
+				7E6BC5152A8126C300D2A871 /* Preview Assets.xcassets in Resources */,
 				7E7C639E2A7D17AB00AB05BC /* Assets.xcassets in Resources */,
+				7E28FA042A80A026002E3AA9 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -344,7 +397,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				7E7C63D52A7D233700AB05BC /* Preview Assets.xcassets in Resources */,
-				7E7C63D22A7D233700AB05BC /* Assets.xcassets in Resources */,
+				7E6BC5142A8126B500D2A871 /* Assets.xcassets in Resources */,
+				7E28FA052A80A026002E3AA9 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -362,8 +416,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7E6BC5112A81265A00D2A871 /* Logger.swift in Sources */,
+				7E6BC5102A81261100D2A871 /* MeetingRoomFeature.swift in Sources */,
+				7E6BC5122A81265D00D2A871 /* MeetingRoom.swift in Sources */,
 				7E7C639C2A7D17AA00AB05BC /* ContentView.swift in Sources */,
+				7E6BC5182A81277700D2A871 /* Constants.swift in Sources */,
 				7E7C639A2A7D17AA00AB05BC /* TCAWorkshopApp.swift in Sources */,
+				7E28FA0D2A80A0DD002E3AA9 /* AppDelegate+Firebase.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -383,7 +442,9 @@
 				7E7C63D02A7D233600AB05BC /* ContentView.swift in Sources */,
 				7E612C312A7E660600E4EC21 /* MeetingRoomListViewModel.swift in Sources */,
 				7E7C63CE2A7D233600AB05BC /* BeforeTCAApp.swift in Sources */,
+				7E6BC5192A81277700D2A871 /* Constants.swift in Sources */,
 				7E612C2F2A7E65BF00E4EC21 /* MeetingRoom.swift in Sources */,
+				7E28FA0E2A80A0DD002E3AA9 /* AppDelegate+Firebase.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -532,7 +593,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"TCAWorkshop/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"Common/Preview Content\"";
 				DEVELOPMENT_TEAM = 67M6ZS7KS6;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -561,7 +622,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"TCAWorkshop/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"Common/Preview Content\"";
 				DEVELOPMENT_TEAM = 67M6ZS7KS6;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -630,7 +691,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"BeforeTCA/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"Common/Preview Content\"";
 				DEVELOPMENT_TEAM = 67M6ZS7KS6;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -659,7 +720,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"BeforeTCA/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"Common/Preview Content\"";
 				DEVELOPMENT_TEAM = 67M6ZS7KS6;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -772,6 +833,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		7E28FA062A80A09A002E3AA9 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 		7E7C63C32A7D17F200AB05BC /* XCRemoteSwiftPackageReference "swift-composable-architecture" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture/";
@@ -783,6 +852,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		7E28FA072A80A09A002E3AA9 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7E28FA062A80A09A002E3AA9 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+		7E28FA092A80A09A002E3AA9 /* FirebaseFirestoreSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7E28FA062A80A09A002E3AA9 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestoreSwift;
+		};
 		7E7C63C42A7D17F200AB05BC /* ComposableArchitecture */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 7E7C63C32A7D17F200AB05BC /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
