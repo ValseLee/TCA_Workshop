@@ -92,3 +92,6 @@ iOSInjectionProject/
 # DS_Store
 .DS_Store
 **/.DS_Store
+
+# google-info.plist
+GoogleService-Info.plist
