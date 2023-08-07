@@ -8,18 +8,6 @@
 import SwiftUI
 
 final class MeetingRoomListViewModel: ObservableObject {
-    @frozen enum MeetingRoomCondition {
-        case available
-        case unavailable
-        case booked
-    }
-    
-    private let DUMMIES = [
-        "CURRENT_USER",
-        "OTHERS",
-        "AVAILABLE"
-    ]
-    
     @Published var availableRoomArray: [MeetingRoom] = []
     @Published var unavailableMeetingRoomArray: [MeetingRoom] = []
     @Published var bookedMeetingRoomArray: [MeetingRoom] = []
@@ -33,7 +21,7 @@ final class MeetingRoomListViewModel: ObservableObject {
     public func fetchAllMeetingRoom() async {
         var fetched = [MeetingRoom]()
         for _ in 0..<10 {
-            fetched.append(MeetingRoom(id: .init(), date: .now, rentBy: DUMMIES.randomElement()!))
+            fetched.append(MeetingRoom(id: .init(), date: .now, rentBy: Constants.DUMMY_MEETINGROOM_RENTNAMES.randomElement()!))
         }
         
         await withTaskGroup(of: Void.self) { group in
@@ -68,7 +56,7 @@ final class MeetingRoomListViewModel: ObservableObject {
         }
     }
     
-    public func getRoomArray(with condition: MeetingRoomCondition) -> [MeetingRoom] {
+    public func getRoomArray(with condition: Constants.MeetingRoomCondition) -> [MeetingRoom] {
         switch condition {
         case .available:
             return availableRoomArray
@@ -82,7 +70,7 @@ final class MeetingRoomListViewModel: ObservableObject {
     
     @MainActor
     private func appendRoomArray(
-        by condition: MeetingRoomCondition,
+        by condition: Constants.MeetingRoomCondition,
         with meetingRoom: MeetingRoom
     ) {
         switch condition {
