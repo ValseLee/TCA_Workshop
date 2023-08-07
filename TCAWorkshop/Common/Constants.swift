@@ -6,3 +6,17 @@
 //
 
 import Foundation
+
+public enum Constants {
+    @frozen enum MeetingRoomCondition {
+        case available
+        case unavailable
+        case booked
+    }
+    
+    static let DUMMY_MEETINGROOM_RENTNAMES: [String] = [
+        "CURRENT_USER",
+        "OTHERS",
+        "AVAILABLE",
+    ]
+}

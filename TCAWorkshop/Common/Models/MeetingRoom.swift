@@ -7,8 +7,9 @@
 
 import Foundation
 
-struct MeetingRoom: Identifiable, Hashable {
+struct MeetingRoom: Identifiable, Hashable, Codable {
     var id: UUID
-    var date: Date
+    var meetingRoomName: String
+    var rentDate: Date
     var rentBy: String
 }
