@@ -7,51 +7,26 @@
 
 import SwiftUI
 import ComposableArchitecture
+import FirebaseFirestore
 
-struct MeetingRoom: Identifiable, Hashable {
-    var id: UUID
-    var date: Date
-    var rentBy: String
-}
-
-
-struct MeetingRoomStore: Reducer {
-    struct State: Equatable {
-        var meetingRoom: MeetingRoom
-    }
+struct ContentView: View {
+    let store: StoreOf<MeetingRoomFeature>
     
-    @frozen enum Action: Equatable {
-        case meetingRoomCellTapped
-    }
-    
-    var body: some ReducerOf<MeetingRoomStore> {
-        Reduce { state, action in
-            switch action {
-            case .meetingRoomCellTapped:
-                state.meetingRoom.rentBy = ""
-                
-                return .run { send in
-                    await send(.meetingRoomCellTapped)
-                }
+    var body: some View {
+        WithViewStore(self.store, observe: { $0 }) { viewStore in
+            VStack {
+                // TODO: 동일 뷰 구성
             }
         }
     }
 }
 
-struct ContentView: View {
-    var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
-        }
-        .padding()
-    }
-}
-
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        ContentView(
+            store: Store(initialState: MeetingRoomFeature.State()) {
+                MeetingRoomFeature()
+            }
+        )
     }
 }
