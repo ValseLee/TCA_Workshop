@@ -63,8 +63,7 @@
     > A protocol that describes how to evolve the current state of an application to the next state, given an action, and describes what Effects should be executed later by the store, if any.
 - 애플리케이션의 상태(State)를 함수형으로, 알아보기 쉽게 작성할 수 없을까? 라는 고민으로 고안된 개념
 - 클라이언트의 입장에서 유저의 상호작용에 따라 상태를 변형(mutate)할 수 있도록 돕는 프로토콜
-// TODO: Store 설명 수정 -> Store는 앱이 살아있는 상태에서의 Feature를 의미한다(Recall that the Store represents the runtime of the feature. )(https://www.pointfree.co/collections/tours/composable-architecture-1-0/ep244-tour-of-the-composable-architecture-1-0-standups-part-1#t331).
-- `Reducer` 프로토콜을 채택하는 인스턴스(대체로 `store`가 역할을 수행)는 하나의 기능을 대변하는 상태(`State`)와 액션(`Action`)을 갖는다.
+- `Reducer` 프로토콜을 채택하는 인스턴스(대체로 기능을 수행한다는 의미로 `__Feature`라는 이름을 갖는다) 하나의 기능을 대변하는 상태(`State`)와 액션(`Action`)을 갖는다.
 - 스토어는 `reduce(into:action:)` 메소드 혹은 `ReducerOf<SomeType: Reducer>`를 리턴하는 계산 속성`body`를 갖는다.
     - 전자의 경우, Domain Feature에 해당하는 하나의 Reducer를 가지며, 후자의 경우, Global Feature가 다른 Domain Feature를 combine 용도로 활용할 수 있다. 즉, 여러 개의 Reducer를 가질 수 있다.
     - `Reducer`를 채택하는 인스턴스는 `Store`의 생성자에서 초기화한다.
