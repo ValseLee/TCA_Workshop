@@ -63,12 +63,14 @@
     > A protocol that describes how to evolve the current state of an application to the next state, given an action, and describes what Effects should be executed later by the store, if any.
 - 애플리케이션의 상태(State)를 함수형으로, 알아보기 쉽게 작성할 수 없을까? 라는 고민으로 고안된 개념
 - 클라이언트의 입장에서 유저의 상호작용에 따라 상태를 변형(mutate)할 수 있도록 돕는 프로토콜
+// TODO: Store 설명 수정 -> Store는 앱이 살아있는 상태에서의 Feature를 의미한다(Recall that the Store represents the runtime of the feature. )(https://www.pointfree.co/collections/tours/composable-architecture-1-0/ep244-tour-of-the-composable-architecture-1-0-standups-part-1#t331).
 - `Reducer` 프로토콜을 채택하는 인스턴스(대체로 `store`가 역할을 수행)는 하나의 기능을 대변하는 상태(`State`)와 액션(`Action`)을 갖는다.
 - 스토어는 `reduce(into:action:)` 메소드 혹은 `ReducerOf<SomeType: Reducer>`를 리턴하는 계산 속성`body`를 갖는다.
     - 전자의 경우, Domain Feature에 해당하는 하나의 Reducer를 가지며, 후자의 경우, Global Feature가 다른 Domain Feature를 combine 용도로 활용할 수 있다. 즉, 여러 개의 Reducer를 가질 수 있다.
+    - `Reducer`를 채택하는 인스턴스는 `Store`의 생성자에서 초기화한다.
 - `reduce(into:action:)` 혹은 `body`의 클로저 내에서 상태와 액션을 처리한다.
 ```Swift
-struct AStore: Reducer {
+struct AFeature: Reducer {
     /// Reducer 프로토콜은 State와 Action을 요구한다.
     /// 이 둘을 활용하여 어떤 비즈니스 로직을 가질 것인지
     /// body 혹은 func reduce(into:action)에서 구체화한다.
@@ -98,13 +100,74 @@ func reduce(
 
 ```
 ---
+### Store
+- 앱의 런타임 동안 `Reducer` 인스턴스를 관리하는 `class` 객체이다.
+    - View 혹은 다른 Effect에서 파생된 Action에 따라 State를 처리하고, 사이드 이펙트를 실행하고 다시 시스템으로 되돌리는 등의 책임을 갖는다.
+    > It is the thing that is responsible for actually mutating the feature’s state when actions are sent, executing the side effects, and feeding their data back into the system.
+- 각각의 기능을 관리하는 `Store`를 하위 뷰로 전달하기 위해 `scope(state:action:)` 메소드를 호출할 수 있다.
+    - Child Feature의 State와 Action을 상위 Feature에서 관리할 수 있다.
+    - 앱 전체의 기능 중 특정 뷰에서 특정 기능만을 담당해야 할 때 주요하게 활용할 수 있다.
+- `Store`는 참조 타입이며, Thread-Safe 하지 않기 때문에 각 store 인스턴스에 대한 상호작용은 main Thread에서 진행하는 것을 권장한다.
+- 값 타입 State는 current State를 갖는 Reducer에서 처리되고, 다른 다수의 Thread에서 이에 접근할 수 없기 때문이다.
+    - 이에 따라 `send()`는 main Thread에서 처리되어야 한다.
+    - Effect의 비동기 작업이 output를 non-main Thread에서 처리할 경우에는 main Thread로 되돌리기 위해 `receive(on:)`에서 main Thread를 지정해야 한다.
+
+```swift
+struct ParentFeature: Reducer {
+    /// 하위 기능을 갖는 ParentFeature는 내부에 ChilFeature가 관리하는 State와 Action 타입을 가질 수 있고,
+    /// 이를 scope하여 하위 뷰에 전달할 수 있다.
+    struct State: Equatable {
+        var childState: ChildFeature.State
+    }
+    
+    enum Action: Equatable {
+        var childAction: ChildFeature.Action
+    }
+    
+    var body: some ReducerOf<AStore> {
+        Reduce { state, action in }
+    }
+}
+        
+struct ChildFeature: Reducer {
+    struct State: Equatable { /* code */ }
+    enum Action: Equatable { /* code */ }
+    
+    var body: some ReducerOf<AStore> {
+        Reduce { state, action in }
+    }
+}
+        
+
+struct AppIntroView: View {
+    /// store는 State와 Reducer를 초기화하는 것으로 생성할 수 있다.
+    /// 제너릭 파라미터는 어떤 타입의 Store를 초기화할 것인지를 정의한다.
+    let store: StoreOf<ParentFeature> = Store(initialState: ParentFeature.State()) {
+      ParentFeature()
+    }
+    
+    var body: some View {
+        NavigationStack {
+            ChildView(
+                /// childView가 필요로하는 ChildFeature는 ParentFeature의 하위 기능이며,
+                /// 의존성을 전달할 때에는 아래와 같은 방식으로 scope하여 전달한다.
+                store: self.store.scope(
+                    state: \.childState,
+                    action: ParentFeature.Action.childAction
+                )
+            )
+        }
+    }
+}
+```
+---
 ### State
 - `Reducer`의 현 상태를 보관하는 구조체를 일컫는다.
 - 비즈니스 로직과 UI 렌더링에 필요한 데이터를 갖는다.
     > A type that describes the data your feature needs to perform its logic and render its UI.
 - `Reducer` 프로토콜의 요구사항이다.
 ```swift
-struct AStore: Reducer {
+struct AFeature: Reducer {
     /// Equatable 프로토콜을 채택함으로써 View가 State의 변화를 감지할 수 있다.
     struct State: Equatable {
         var id: UUID?
@@ -133,7 +196,7 @@ struct AStore: Reducer {
 - `Reducer` 프로토콜의 요구사항이다.
 
 ```swift
-struct AStore: Reducer {
+struct AFeature: Reducer {
     struct State: Equatable {
         var id: UUID?
         var name: String = ""
@@ -165,7 +228,7 @@ struct AStore: Reducer {
         - 클로저 내부에서 원칙적으로 `throw` 한 작업을 호출할 수 있으며, non-cancellation 메소드들은 catch handler로 에러에 대한 처리가 필요하다.
 
 ```swift
-struct AStore: Reducer {
+struct AFeature: Reducer {
     struct State: Equatable {
         var id: UUID?
         var name: String = ""
