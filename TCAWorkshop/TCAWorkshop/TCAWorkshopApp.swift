@@ -17,6 +17,7 @@ struct TCAWorkshopApp: App {
             ContentView(
                 store: Store(initialState: MeetingRoomFeature.State()) {
                     MeetingRoomFeature()
+                        ._printChanges()
                 }
             )
         }
