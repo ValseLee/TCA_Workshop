@@ -8,7 +8,7 @@
 import Foundation
 
 public enum Constants {
-    @frozen enum MeetingRoomCondition {
+    @frozen enum MeetingRoomCondition: CaseIterable {
         case available
         case unavailable
         case booked
