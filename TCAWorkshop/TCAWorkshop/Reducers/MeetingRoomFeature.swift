@@ -14,22 +14,19 @@ struct MeetingRoomFeature: Reducer {
     private let collection = Firestore.firestore().collection("MeetingRooms")
     
     struct State: Equatable {
-        static func == (lhs: MeetingRoomFeature.State, rhs: MeetingRoomFeature.State) -> Bool {
-            lhs.availableRoomArray == rhs.availableRoomArray &&
-            lhs.bookedMeetingRoomArray == rhs.bookedMeetingRoomArray &&
-            lhs.unavailableMeetingRoomArray == rhs.unavailableMeetingRoomArray
-        }
-        
-        var firebaseListener: ListenerRegistration?
         var availableRoomArray: [MeetingRoom] = []
         var unavailableMeetingRoomArray: [MeetingRoom] = []
         var bookedMeetingRoomArray: [MeetingRoom] = []
+        var isMeetingRoomFetching: Bool = false
     }
     
     @frozen enum Action: Equatable {
         case meetingRoomCellTapped
         case onMeetingRoomListViewAppear
+        case meetingRoomFetchResponse
+        case processFetchedMeetingRoom(with: MeetingRoom)
         case makeMeetingRoomButtonTapped
+        case bookMeetingRoom(with: MeetingRoom)
     }
     
     public func reduce(
@@ -42,12 +39,17 @@ struct MeetingRoomFeature: Reducer {
             return .none
             
         case .onMeetingRoomListViewAppear:
+            state.isMeetingRoomFetching = true
             
             return .run { send in
+                let start = Date()
+                defer { Logger.methodExecTimePrint(start) }
                 let querySnapshot = try await collection.getDocuments()
                 for doc in querySnapshot.documents {
-                    // TODO: 비동기로 각 배열에 fetched된 meetingRoom을 추가해주세요
+                    let fetchedMeetingRoom = try doc.data(as: MeetingRoom.self)
+                    await send(.processFetchedMeetingRoom(with: fetchedMeetingRoom))
                 }
+                await send(.meetingRoomFetchResponse, animation: .easeInOut)
             }
             
         case .makeMeetingRoomButtonTapped:
@@ -71,12 +73,62 @@ struct MeetingRoomFeature: Reducer {
                         "meetingRoomName": newMeetingRoom.meetingRoomName
                     ])
             }
+            
+        case let .processFetchedMeetingRoom(meetingRoom):
+            self.updateMeetingRoomArray(&state, with: meetingRoom)
+            return .none
+            
+        case .meetingRoomFetchResponse:
+            state.isMeetingRoomFetching = false
+            
+            return .none
+        
+        case let .bookMeetingRoom(meetingRoom):
+            
+            return .run { send in
+                try self.collection
+                    .document(meetingRoom.id.uuidString)
+                    .setData(from: meetingRoom.self, merge: true)
+            }
+            .merge(with: .send(.processFetchedMeetingRoom(with: meetingRoom)))
         }
     }
     
-    @MainActor
-    private func appendValues(_ state: inout State) async {
-        
+    private func updateMeetingRoomArray(
+        _ state: inout State,
+        with meetingRoom: MeetingRoom
+    ) {
+        switch meetingRoom.rentBy {
+        case "CURRENT_USER":
+            if state.bookedMeetingRoomArray.contains(where: { $0.id == meetingRoom.id }) {
+                if let idx = state.bookedMeetingRoomArray.firstIndex(where: { $0.id == meetingRoom.id }) {
+                    state.bookedMeetingRoomArray[idx] = meetingRoom
+                }
+            } else {
+                state.bookedMeetingRoomArray.append(meetingRoom)
+            }
+                
+        case "OTHERS":
+            if state.unavailableMeetingRoomArray.contains(where: { $0.id == meetingRoom.id }) {
+                if let idx = state.unavailableMeetingRoomArray.firstIndex(where: { $0.id == meetingRoom.id }) {
+                    state.unavailableMeetingRoomArray[idx] = meetingRoom
+                }
+            } else {
+                state.unavailableMeetingRoomArray.append(meetingRoom)
+            }
+            
+        case "AVAILABLE":
+            if state.availableRoomArray.contains(where: { $0.id == meetingRoom.id }) {
+                if let idx = state.availableRoomArray.firstIndex(where: { $0.id == meetingRoom.id }) {
+                    state.availableRoomArray[idx] = meetingRoom
+                }
+            } else {
+                state.availableRoomArray.append(meetingRoom)
+            }
+            
+        default:
+            return
+        }
     }
 }
 
