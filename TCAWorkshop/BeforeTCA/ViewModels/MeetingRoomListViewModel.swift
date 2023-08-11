@@ -21,7 +21,7 @@ final class MeetingRoomListViewModel: ObservableObject {
     public func fetchAllMeetingRoom() async {
         var fetched = [MeetingRoom]()
         for _ in 0..<10 {
-            fetched.append(MeetingRoom(id: .init(), date: .now, rentBy: Constants.DUMMY_MEETINGROOM_RENTNAMES.randomElement()!))
+//            fetched.append(MeetingRoom(id: .init(), date: .now, rentBy: Constants.DUMMY_MEETINGROOM_RENTNAMES.randomElement()!))
         }
         
         await withTaskGroup(of: Void.self) { group in

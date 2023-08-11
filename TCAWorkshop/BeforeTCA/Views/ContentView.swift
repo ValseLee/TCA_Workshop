@@ -38,7 +38,7 @@ struct ContentView: View {
                         VStack(alignment: .leading, spacing: 4) {
                             Text("\(meetingRoom.rentBy)")
                             
-                            Text("\(meetingRoom.date.formatted())")
+                            Text("\(meetingRoom.rentDate.formatted())")
                                 .font(.footnote)
                                 .foregroundColor(.secondary)
                         }
