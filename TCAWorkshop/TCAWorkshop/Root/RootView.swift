@@ -10,7 +10,7 @@ import ComposableArchitecture
 import FirebaseFirestore
 
 struct RootView: View {
-    let store: StoreOf<MeetingRoomFeature>
+    let store: StoreOf<MeetingRoomListDomain>
     
     var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
@@ -41,16 +41,16 @@ struct RootView: View {
     /// - Returns: 해당 미팅룸의 타입에 따라 뷰 리턴
     private func meetingRoomSectionBuilder(
         type: Constants.MeetingRoomCondition,
-        viewStore: ViewStoreOf<MeetingRoomFeature>
+        viewStore: ViewStoreOf<MeetingRoomListDomain>
     ) -> some View {
         Section {
             switch type {
             case .available:
                 if viewStore.state.availableRoomArray.isEmpty {
                     Text("예약 가능한 회의실이 없어요!")
-                } else {
+                } else {                    
                     ForEach(viewStore.state.availableRoomArray) { meetingRoom in
-                        Text(meetingRoom.rentBy)
+                        
                     }
                 }
                 
@@ -89,8 +89,8 @@ struct RootView: View {
 struct RootView_Previews: PreviewProvider {
     static var previews: some View {
         RootView(
-            store: Store(initialState: MeetingRoomFeature.State()) {
-                MeetingRoomFeature()
+            store: Store(initialState: MeetingRoomListDomain.State()) {
+                MeetingRoomListDomain()
             }
         )
     }

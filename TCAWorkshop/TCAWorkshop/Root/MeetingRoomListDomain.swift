@@ -10,11 +10,13 @@ import FirebaseFirestore
 import FirebaseFirestoreSwift
 import Foundation
 
-struct MeetingRoomList: Reducer {
+struct MeetingRoomListDomain: Reducer {
     struct State: Equatable {
-        var availableRoomArray: [MeetingRoom] = []
-        var unavailableMeetingRoomArray: [MeetingRoom] = []
-        var bookedMeetingRoomArray: [MeetingRoom] = []
+        var meetingRoomArray: IdentifiedArrayOf<MeetingRoomDomain.State> = []
+        
+        var availableRoomArray: IdentifiedArrayOf<MeetingRoom> = []
+        var unavailableMeetingRoomArray: IdentifiedArrayOf<MeetingRoom> = []
+        var bookedMeetingRoomArray: IdentifiedArrayOf<MeetingRoom> = []
         var isMeetingRoomFetching: Bool = false
     }
     
@@ -27,7 +29,7 @@ struct MeetingRoomList: Reducer {
         case bookMeetingRoom(with: MeetingRoom)
     }
     
-    var body: some ReducerOf<MeetingRoomList> {
+    var body: some ReducerOf<MeetingRoomListDomain> {
         Reduce { state, action in
             switch action {
             case .meetingRoomCellTapped:
@@ -65,6 +67,7 @@ struct MeetingRoomList: Reducer {
                         .setData(from: meetingRoom.self, merge: true)
                 }
                 .merge(with: .send(.processFetchedMeetingRoom(with: meetingRoom)))
+                
             }
         }
     }
@@ -82,7 +85,7 @@ struct MeetingRoomList: Reducer {
             } else {
                 state.bookedMeetingRoomArray.append(meetingRoom)
             }
-                
+
         case "OTHERS":
             if state.unavailableMeetingRoomArray.contains(where: { $0.id == meetingRoom.id }) {
                 if let idx = state.unavailableMeetingRoomArray.firstIndex(where: { $0.id == meetingRoom.id }) {
@@ -91,7 +94,7 @@ struct MeetingRoomList: Reducer {
             } else {
                 state.unavailableMeetingRoomArray.append(meetingRoom)
             }
-            
+
         case "AVAILABLE":
             if state.availableRoomArray.contains(where: { $0.id == meetingRoom.id }) {
                 if let idx = state.availableRoomArray.firstIndex(where: { $0.id == meetingRoom.id }) {
@@ -100,7 +103,7 @@ struct MeetingRoomList: Reducer {
             } else {
                 state.availableRoomArray.append(meetingRoom)
             }
-            
+
         default:
             return
         }
