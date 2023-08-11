@@ -67,7 +67,6 @@ struct MeetingRoomListDomain: Reducer {
                         .setData(from: meetingRoom.self, merge: true)
                 }
                 .merge(with: .send(.processFetchedMeetingRoom(with: meetingRoom)))
-                
             }
         }
     }
@@ -85,7 +84,7 @@ struct MeetingRoomListDomain: Reducer {
             } else {
                 state.bookedMeetingRoomArray.append(meetingRoom)
             }
-
+                
         case "OTHERS":
             if state.unavailableMeetingRoomArray.contains(where: { $0.id == meetingRoom.id }) {
                 if let idx = state.unavailableMeetingRoomArray.firstIndex(where: { $0.id == meetingRoom.id }) {
@@ -94,7 +93,7 @@ struct MeetingRoomListDomain: Reducer {
             } else {
                 state.unavailableMeetingRoomArray.append(meetingRoom)
             }
-
+            
         case "AVAILABLE":
             if state.availableRoomArray.contains(where: { $0.id == meetingRoom.id }) {
                 if let idx = state.availableRoomArray.firstIndex(where: { $0.id == meetingRoom.id }) {
@@ -103,7 +102,7 @@ struct MeetingRoomListDomain: Reducer {
             } else {
                 state.availableRoomArray.append(meetingRoom)
             }
-
+            
         default:
             return
         }

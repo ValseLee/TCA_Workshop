@@ -48,9 +48,9 @@ struct RootView: View {
             case .available:
                 if viewStore.state.availableRoomArray.isEmpty {
                     Text("예약 가능한 회의실이 없어요!")
-                } else {                    
+                } else {
                     ForEach(viewStore.state.availableRoomArray) { meetingRoom in
-                        
+                        Text(meetingRoom.rentBy)
                     }
                 }
                 
