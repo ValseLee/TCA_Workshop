@@ -10,42 +10,47 @@ import FirebaseFirestore
 import FirebaseFirestoreSwift
 import Foundation
 
-struct ManageMeetingRoom: Reducer {
-    struct State: Equatable {
+struct MeetingRoomDomain: Reducer {
+    struct State: Equatable, Identifiable {
         @BindingState var rentLearnerName: String
         @BindingState var rentDate: Date
         
+        var id: UUID
         var selectedMeetingRoom: MeetingRoom
+        var isReservationButtonTapped: Bool = false
     }
     
     @frozen enum Action: Equatable {
-        case reservationButtonTapped
+        case reservationButtonTapped(MeetingRoom)
+        case reservationResponse
     }
     
-    var body: some ReducerOf<ManageMeetingRoom> {
+    var body: some ReducerOf<MeetingRoomDomain> {
         Reduce { state, action in
             switch action {
-            case .reservationButtonTapped:
-                let newMeetingRoom = MeetingRoom(
-                    id: .init(),
-                    meetingRoomName: "Test",
-                    rentDate: .now,
-                    rentBy: Constants.DUMMY_MEETINGROOM_RENTNAMES.randomElement()!
-                )
+            case let .reservationButtonTapped(meetingRoom):
+                state.isReservationButtonTapped = true
+                state.selectedMeetingRoom.rentBy = state.rentLearnerName
+                state.selectedMeetingRoom.rentDate = state.rentDate
                 
                 return .run { send in
-                    /// <NSThread: 0x600000b96080>{number = 6, name = (null)}
-                    /// <NSThread: 0x600000bd1300>{number = 10, name = (null)}
-                    /// .run의 클로저는 그 자체로 Task를 생성하여 동시성 작업을 실행한다.
                     try await Constants.FIREBASE_COLLECTION
-                        .document(newMeetingRoom.id.uuidString)
+                        .document(meetingRoom.id.uuidString)
                         .setData([
-                            "id": newMeetingRoom.id.uuidString,
-                            "rentDate": Timestamp(date: newMeetingRoom.rentDate),
-                            "rentBy": newMeetingRoom.rentBy,
-                            "meetingRoomName": newMeetingRoom.meetingRoomName
+                            "id": meetingRoom.id.uuidString,
+                            "rentDate": Timestamp(date: meetingRoom.rentDate),
+                            "rentBy": meetingRoom.rentBy,
+                            "meetingRoomName": meetingRoom.meetingRoomName
                         ])
+                    await send(.reservationResponse)
                 }
+                
+            case .reservationResponse:
+                state.isReservationButtonTapped = false
+                
+                return .none
+            default:
+                fatalError()
             }
         }
     }
