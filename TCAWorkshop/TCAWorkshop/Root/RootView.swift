@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  RootView.swift
 //  TCAWorkshop
 //
 //  Created by Celan on 2023/08/04.
@@ -9,7 +9,7 @@ import SwiftUI
 import ComposableArchitecture
 import FirebaseFirestore
 
-struct ContentView: View {
+struct RootView: View {
     let store: StoreOf<MeetingRoomFeature>
     
     var body: some View {
@@ -86,9 +86,9 @@ struct ContentView: View {
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
+struct RootView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView(
+        RootView(
             store: Store(initialState: MeetingRoomFeature.State()) {
                 MeetingRoomFeature()
             }
