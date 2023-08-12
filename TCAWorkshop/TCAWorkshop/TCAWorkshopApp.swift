@@ -14,9 +14,9 @@ struct TCAWorkshopApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ContentView(
-                store: Store(initialState: MeetingRoomFeature.State()) {
-                    MeetingRoomFeature()
+            RootView(
+                store: Store(initialState: MeetingRoomListDomain.State()) {
+                    MeetingRoomListDomain()
                         ._printChanges()
                 }
             )
