@@ -12,4 +12,13 @@ struct MeetingRoom: Identifiable, Hashable, Codable {
     var meetingRoomName: String
     var rentDate: Date
     var rentBy: String
+    
+    static func testInstance() -> Self {
+        MeetingRoom(
+            id: .init(),
+            meetingRoomName: "TEST",
+            rentDate: .now,
+            rentBy: Constants.DUMMY_MEETINGROOM_RENTNAMES.randomElement()!
+        )
+    }
 }
