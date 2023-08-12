@@ -1,7 +1,8 @@
 # TCA_Workshop
 📍  Apple Developer Academy 2nd, TCA Workshop
-> Version Infos:
-> \- Swift 5 ++, Deploy iOS 16.2, Xcode 14.2, TCA 1.0
+> Workshop Version Infos:
+> 본 워크숍 문서는 공시된 하단의 버전을 바탕으로 작성되었으며, 해당 버전에서 최적화되어 있습니다.
+> \- Swift 5 ++, Deploy iOS 16.2, Xcode 14.2, TCA 1.0.0
 
 ---
 ## Architecture?
@@ -26,28 +27,50 @@
 
 - **상태 관리(State management)**
   - 단순한 '값 타입'을 활용해서 애플리케이션의 상태를 관리하는 방법, 한 화면에서의 상태 변화를 다른 화면에서 곧바로 관찰할 수 있는 방법
-  - How to manage the state of your application using simple value types, and share state across many screens so that mutations in one screen can be immediately observed in another screen.
+  > How to manage the state of your application using simple value types, and share state across many screens so that mutations in one screen can be immediately observed in another screen.
 
 - **합성(Composition)**
   - 거대한 기능을 독립된 컴포넌트로 추출하는 방법, 그리고 이들을 다시 합쳐서 기능을 구성하는 방법(모듈화)
-  - How to break down large features into smaller components that can be extracted to their own, isolated modules and be easily glued back together to form the feature.
+  > How to break down large features into smaller components that can be extracted to their own, isolated modules and be easily glued back together to form the feature.
 
 - **사이드 이펙트(Side effects)**
   - 외부 세계와의 통신을 가장 테스터블하고 이해하기 쉬운 방식으로 구현하는 방법
-  - How to let certain parts of the application talk to the outside world in the most testable and understandable way possible.
+  > How to let certain parts of the application talk to the outside world in the most testable and understandable way possible.
 
 - **테스트(Testing)**
   - 아키텍쳐 내부의 코드 테스트 방법과 여러 파트로 구성된 기능들의 통합 테스트를 작성하는 방법, 끝점 테스트를 작성하여 사이드 이펙트가 애플리케이션이 끼칠 영향을 이해하는 방법,
   - 이는 우리의 비즈니스 로직이 예상대로 작동할 것이라는 확신을 보장을 갖도록 한다.
-  - How to not only test a feature built in the architecture, but also write integration tests for features that have been composed of many parts, and write end-to-end tests to understand how side effects influence your application. This allows you to make strong guarantees that your business logic is running in the way you expect.
+  > How to not only test a feature built in the architecture, but also write integration tests for features that have been composed of many parts, and write end-to-end tests to understand how side effects influence your application. This allows you to make strong guarantees that your business logic is running in the way you expect.
 
 - **인체공학적(Ergonomics)**
   - 가능한 한 적은 개념과 부분들의 이동을 통해 위의 모든 내용을 달성할 수 있는지에 대한 설명
-  - How to accomplish all of the above in a simple API with as few concepts and moving parts as possible.
+  > How to accomplish all of the above in a simple API with as few concepts and moving parts as possible.
+
+영어 원문 출처: [pointfree 공식 레포지토리](https://github.com/pointfreeco/swift-composable-architecture/blob/main/README.md)
 
 ---
-## 기본 개념
+## The Composable Architecture 기본 개념
+> 하단의 장단점은 글쓴이의 **개인적인 견해**이며, SwiftUI 를 기준으로 작성되었습니다.
+> 영어 원문의 출처는 [**ComposableArchitecture 공식 문서**](https://pointfreeco.github.io/swift-composable-architecture/main/documentation/composablearchitecture/)에서 발췌하였습니다.
 
+### 장점
+- 작은 단위의 기능을 설계하고 큰 단위의 기능에 합치기가 쉽다.
+    - Scalable하고 Composable한 프로젝트를 설계할 수 있다.
+- 각 기능이 유기적으로 맞물리지만 테스트는 독립적으로 실행할 수 있다.
+- 객체 간 데이터 및 기능의 공유를 `Reducer` 단위에서 쉽게 구현할 수 있다.
+    - 하나의 Global Store가 Domain Store를 가질 수 있고, 부모-자식 간 `State` 구조체를 통해 안정적인 상태 공유 가능
+
+### 단점
+- 프레임워크의 유연한 사용을 위해 이해해야 하는 특정 타입과 메소드가 분명하기 때문에 일정 수준 이상의 숙련도를 요구한다.
+    - `IdentfiedArrayOf<Array<Element>>`, `.forEach(_:action:element)` 등의 API에 대한 기본적인 이해 필요
+- SwiftUI의 기본 API 대신 프레임워크의 API를 활용하는 것이 대부분의 상황에서 강제된다.
+    - `@State`는 값 타입인 `State` 구조체에 래핑되고, 뷰에 직접 바인딩하기 위해선 viewStore를 `WithViewStore` 등으로 접근하는 `@BindingState` 를 활용해야 한다는 점
+    - `WithViewStore` 자체가 복잡한 뷰를 래핑할 경우, 컴파일러 자체의 연산을 느리게 할 수 있다는 단점 또한 존재
+    - 위 단점을 해결하기 위해서 `ViewStoreOf<Reducer>` 타입의 `viewStore`를 직접 할당해야 하는 등의 번거로움
+- App의 Action Flow 및 Data Flow에 대한 이해가 선행되어야 코드를 작성할 수 있다.
+    - 각 화면의 기능과 데이터 전달, 기능의 공유를 바탕으로 모듈화와 합성(compose)이 이루어지기 때문
+
+---
 ### 데이터 플로우
 - **The Composable Architecture**는 여타 다른 클라이언트 아키텍쳐와 같이 단방향 플로우를 지향한다.
 - `MVVM`이나 `MVC` 처럼 특정 역할을 수행해야 하는 객체가 존재하는 형태가 아닌, 각 기능의 상태와 액션을 관리하는 domain store의 집합 혹은 global store로 애플리케이션을 구성한다.
@@ -63,9 +86,9 @@
     > A protocol that describes how to evolve the current state of an application to the next state, given an action, and describes what Effects should be executed later by the store, if any.
 - 애플리케이션의 상태(State)를 함수형으로, 알아보기 쉽게 작성할 수 없을까? 라는 고민으로 고안된 개념
 - 클라이언트의 입장에서 유저의 상호작용에 따라 상태를 변형(mutate)할 수 있도록 돕는 프로토콜
-- `Reducer` 프로토콜을 채택하는 인스턴스(대체로 기능을 수행한다는 의미로 `__Feature`라는 이름을 갖는다) 하나의 기능을 대변하는 상태(`State`)와 액션(`Action`)을 갖는다.
-- 스토어는 `reduce(into:action:)` 메소드 혹은 `ReducerOf<SomeType: Reducer>`를 리턴하는 계산 속성`body`를 갖는다.
-    - 전자의 경우, Domain Feature에 해당하는 하나의 Reducer를 가지며, 후자의 경우, Global Feature가 다른 Domain Feature를 combine 용도로 활용할 수 있다. 즉, 여러 개의 Reducer를 가질 수 있다.
+- `Reducer` 프로토콜을 채택하는 인스턴스(대체로 `store`가 역할을 수행)는 하나의 기능을 대변하는 상태(`State`)와 액션(`Action`)을 갖는다.
+- `Feature Reducer`는 `reduce(into:action:)` 메소드 혹은 `ReducerOf<SomeType: Reducer>`를 리턴하는 계산 속성`body`를 갖는다.
+    - 전자의 경우, Domain Feature Store에 해당하는 하나의 Reducer를 가지며, 후자의 경우, Global Feature Store가 다른 Domain Reducer 인스턴스를 combine 할 수 있다. 즉, 여러 개의 Reducer를 가질 수 있다.
     - `Reducer`를 채택하는 인스턴스는 `Store`의 생성자에서 초기화한다.
 - `reduce(into:action:)` 혹은 `body`의 클로저 내에서 상태와 액션을 처리한다.
 ```Swift
@@ -100,7 +123,7 @@ func reduce(
 ```
 ---
 ### Store
-- 앱의 런타임 동안 `Reducer` 인스턴스를 관리하는 `class` 객체이다.
+- 앱의 런타임 동안 `Reducer` 인스턴스를 관리하는 참조 타입의 `class` 객체이다.
     - View 혹은 다른 Effect에서 파생된 Action에 따라 State를 처리하고, 사이드 이펙트를 실행하고 다시 시스템으로 되돌리는 등의 책임을 갖는다.
     > It is the thing that is responsible for actually mutating the feature’s state when actions are sent, executing the side effects, and feeding their data back into the system.
 - 각각의 기능을 관리하는 `Store`를 하위 뷰로 전달하기 위해 `scope(state:action:)` 메소드를 호출할 수 있다.
@@ -123,7 +146,7 @@ struct ParentFeature: Reducer {
         var childAction: ChildFeature.Action
     }
     
-    var body: some ReducerOf<AStore> {
+    var body: some ReducerOf<ParentFeature> {
         Reduce { state, action in }
     }
 }
@@ -132,7 +155,7 @@ struct ChildFeature: Reducer {
     struct State: Equatable { /* code */ }
     enum Action: Equatable { /* code */ }
     
-    var body: some ReducerOf<AStore> {
+    var body: some ReducerOf<ChildFeature> {
         Reduce { state, action in }
     }
 }
@@ -165,6 +188,10 @@ struct AppIntroView: View {
 - 비즈니스 로직과 UI 렌더링에 필요한 데이터를 갖는다.
     > A type that describes the data your feature needs to perform its logic and render its UI.
 - `Reducer` 프로토콜의 요구사항이다.
+- `@BindingState` 등의 프로퍼티 래퍼를 활용하여 View에서 직접 접근하고 binding할 수 있다.
+    - SwiftUI의 `TextField`나 `Toggle` 등의 View에 전달할 binding을 위해 주로 사용할 수 있다.
+    - 이 경우, binding된 `State` 속성에 대한 처리가 필요하며, `Action` 열거형 타입이 `BindableAction` 프로토콜을 채택하고 `Reducer`가 `BindingReducer()`를 초기화해야 한다(Effect에 대한 처리는 필요하지 않다면 수행하지 않는다).
+    - 가능하면 **사용하지 않는 것**을 [공식 문서](https://pointfreeco.github.io/swift-composable-architecture/main/documentation/composablearchitecture/bindings/)에서 권장한다.
 ```swift
 struct AFeature: Reducer {
     /// Equatable 프로토콜을 채택함으로써 View가 State의 변화를 감지할 수 있다.
@@ -176,7 +203,7 @@ struct AFeature: Reducer {
     
     enum Action: Equatable { /* code */ }
     
-    var body: some ReducerOf<AStore> {
+    var body: some ReducerOf<AFeature> {
         Reduce { state, action in
             // code
         }
@@ -202,14 +229,13 @@ struct AFeature: Reducer {
         var startDate: Date = .now
     }
     
-    
     enum Action: Equatable {
         /* ✅ */ case registerButtonTapped(startDate: Date) // 예시1
         /* ❌ */ case createNewUser(startDate: Date) // 예시1
         case alertDismissed
     }
     
-    var body: some ReducerOf<AStore> {
+    var body: some ReducerOf<AFeature> {
         Reduce { state, action in
             // code
         }
@@ -234,7 +260,6 @@ struct AFeature: Reducer {
         var startDate: Date = .now
     }
     
-    
     enum Action: Equatable {
         case registerButtonTapped(startDate: Date)
         case filterButtonTapped
@@ -242,7 +267,7 @@ struct AFeature: Reducer {
         case doNothing
     }
     
-    var body: some ReducerOf<AStore> {
+    var body: some ReducerOf<AFeature> {
         Reduce { state, action in
             switch action {
             case let .registerButtonTapped(startDate):
@@ -259,6 +284,7 @@ struct AFeature: Reducer {
             case .alertDismissed:
                 print("Alert Dismissed")
                 return .none
+                
             case .doNothing:
                 print("Do Nothing!")
                 return .none
@@ -268,5 +294,5 @@ struct AFeature: Reducer {
 }
 ```
 ### Etc
-- Environment
+- Environment(DEPRECATED?)
 - Dependency
