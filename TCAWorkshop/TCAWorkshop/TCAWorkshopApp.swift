@@ -14,12 +14,14 @@ struct TCAWorkshopApp: App {
     
     var body: some Scene {
         WindowGroup {
-            RootView(
-                store: Store(initialState: MeetingRoomListDomain.State()) {
-                    MeetingRoomListDomain()
-                        ._printChanges()
-                }
-            )
+            NavigationStack {
+                RootView(
+                    store: Store(initialState: MeetingRoomListDomain.State()) {
+                        MeetingRoomListDomain()
+                            ._printChanges()
+                    }
+                )
+            }
         }
     }
 }
