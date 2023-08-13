@@ -13,8 +13,8 @@ import SwiftUI
 
 struct MeetingRoomDomain: Reducer {
     struct State: Equatable, Identifiable {
-        @BindingState var rentLearnerName: String
-        @BindingState var rentDate: Date
+        @BindingState var rentLearnerName: String = ""
+        @BindingState var rentDate: Date = .now
         
         var id: UUID
         var selectedMeetingRoom: MeetingRoom
@@ -66,7 +66,6 @@ struct MeetingRoomDomain: Reducer {
             case let .reservationResponse(.success(meetingRoom)):
                 state.isReservationButtonTapped = false
                 state.isReservationCompleted = true
-                
                 print("RESERVATION SUCCESS at", meetingRoom.rentDate)
                 return .none
                 

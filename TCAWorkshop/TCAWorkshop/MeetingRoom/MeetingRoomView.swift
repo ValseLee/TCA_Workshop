@@ -77,21 +77,22 @@ struct MeetingRoomView: View {
                 .datePickerStyle(.graphical)
                 
                 HStack {
-                    VStack(alignment: .leading) {
-                        Text("대여 시간")
+                    VStack(
+                        alignment: .leading,
+                        spacing: 8
+                    ) {
+                        /// TCA의 API로 구현하는 Transition은 insertion이 제대로 되지 않는다
+                        /// Issue로 제보 필요
+                        Text("**대여 시간:** ") +
+                        Text("**\(viewStore.state.rentHourAndMinute) 시간**")
                             .bold()
+                            .monospacedDigit()
+                            .foregroundColor(.green)
                         
                         Text("최대 3시간(베타는 종일 대여)")
                             .font(.footnote)
                             .foregroundColor(.secondary)
                     }
-                    
-                    Spacer()
-                    
-                    /// TCA의 API로 구현하는 Transition은 insertion이 제대로 되지 않는다
-                    /// Issue로 제보 필요
-                    Text("**\(viewStore.state.rentHourAndMinute) 시간**")
-                        .monospacedDigit()
                     
                     Spacer()
                     
@@ -125,19 +126,11 @@ struct MeetingRoomView: View {
                         
                     } else if viewStore.state.isReservationCompleted {
                         Text("예약이 완료되었습니다! 🎉")
-                            .bold()
-                            .foregroundColor(.primary)
-                            .padding(.vertical, 8)
-                            .frame(maxWidth: .infinity)
-                            .shadow(radius: 10)
+                            .makeButtonLabelWithStyle()
                         
                     } else {
                         Text("예약하기")
-                            .bold()
-                            .foregroundColor(.primary)
-                            .padding(.vertical, 8)
-                            .frame(maxWidth: .infinity)
-                            .shadow(radius: 10)
+                            .makeButtonLabelWithStyle()
                     }
                 }
                 .buttonStyle(.borderedProminent)
@@ -168,5 +161,22 @@ struct MeetingRoomView_Previews: PreviewProvider {
                 }
             )
         )
+    }
+}
+
+struct ButtonLabelModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .bold()
+            .foregroundColor(.primary)
+            .padding(.vertical, 8)
+            .frame(maxWidth: .infinity)
+            .shadow(radius: 10)
+    }
+}
+
+extension View {
+    public func makeButtonLabelWithStyle() -> some View {
+        modifier(ButtonLabelModifier())
     }
 }
