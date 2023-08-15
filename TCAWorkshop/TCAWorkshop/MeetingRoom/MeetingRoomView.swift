@@ -47,6 +47,25 @@ struct MeetingRoomView: View {
                     alignment: .leading
                 )
                 
+                HStack {
+                    Text("회의실 대여자")
+                        .bold()
+                    
+                    Spacer()
+                    
+                    Text(viewStore.selectedMeetingRoom.rentBy)
+                        .padding(.horizontal)
+                        .padding(.vertical, 8)
+                        .background {
+                            Capsule()
+                                .foregroundColor(.green)
+                        }
+                }
+                .frame(
+                    maxWidth: .infinity,
+                    alignment: .leading
+                )
+                
                 DatePicker(
                     // TCA의 State Binding 예시
                     selection: viewStore.binding(
