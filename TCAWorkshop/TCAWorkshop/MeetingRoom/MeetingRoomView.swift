@@ -133,28 +133,39 @@ struct MeetingRoomView: View {
 
                 Spacer()
                 
-                Button {
-                    viewStore.send(.reservationButtonTapped)
-                } label: {
-                    if viewStore.state.isReservationButtonTapped {
-                        ProgressView()
-                            .tint(.primary)
-                            .padding(.vertical, 8)
-                            .frame(maxWidth: .infinity)
-                            .progressViewStyle(.circular)
-                        
-                    } else if viewStore.state.isReservationCompleted {
-                        Text("예약이 완료되었습니다! 🎉")
-                            .makeButtonLabelWithStyle()
-                        
-                    } else {
-                        Text("예약하기")
-                            .makeButtonLabelWithStyle()
+                if viewStore.state.selectedMeetingRoom.rentBy == "CURRENT_USER" {
+                    primaryButtonBuilder {
+                        viewStore.send(.cancelReservationButtonTapped)
+                    } label: {
+                        if viewStore.state.isCancelReservationButtonTapped {
+                            ProgressView()
+                                .tint(.primary)
+                                .padding(.vertical, 8)
+                                .frame(maxWidth: .infinity)
+                                .progressViewStyle(.circular)
+                        } else if viewStore.state.isCancelReservationCompleted {
+                            Text("예약이 취소되었습니다. ✅")
+                        } else {
+                            Text("예약 취소하기")
+                        }
+                    }
+                } else {
+                    primaryButtonBuilder {
+                        viewStore.send(.reservationButtonTapped)
+                    } label: {
+                        if viewStore.state.isReservationButtonTapped {
+                            ProgressView()
+                                .tint(.primary)
+                                .padding(.vertical, 8)
+                                .frame(maxWidth: .infinity)
+                                .progressViewStyle(.circular)
+                        } else if viewStore.state.isReservationCompleted {
+                            Text("예약이 완료되었습니다! 🎉")
+                        } else {
+                            Text("예약하기")
+                        }
                     }
                 }
-                .buttonStyle(.borderedProminent)
-                .buttonBorderShape(.roundedRectangle)
-                .tint(.green)
             }
             .padding()
             .frame(
@@ -163,6 +174,22 @@ struct MeetingRoomView: View {
                 alignment: .top
             )
         }
+    }
+    
+    // MARK: Methods
+    private func primaryButtonBuilder(
+        action: @escaping () -> StoreTask,
+        @ViewBuilder label: () -> some View
+    ) -> some View {
+        Button {
+            let _ = action()
+        } label: {
+            label()
+                .makeButtonLabelWithStyle()
+        }
+        .buttonStyle(.borderedProminent)
+        .buttonBorderShape(.roundedRectangle)
+        .tint(.green)
     }
 }
 
