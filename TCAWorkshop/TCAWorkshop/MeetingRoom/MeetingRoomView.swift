@@ -27,7 +27,7 @@ struct MeetingRoomView: View {
                     }
                 
                 Divider()
-                
+                                
                 HStack {
                     Text("회의실 이름")
                         .bold()
@@ -67,11 +67,8 @@ struct MeetingRoomView: View {
                 )
                 
                 DatePicker(
-                    // TCA의 State Binding 예시
-                    selection: viewStore.binding(
-                        get: { $0.rentDate },
-                        send: { .rentDatePicked($0) }
-                    ),
+                    // TCA의 State Binding 예시 1
+                    selection: viewStore.$rentDate,
                     in: Date()...,
                     displayedComponents: .date
                 ) {
@@ -82,10 +79,7 @@ struct MeetingRoomView: View {
                 .datePickerStyle(.compact)
                 
                 DatePicker(
-                    selection: viewStore.binding(
-                        get: { $0.rentDate },
-                        send: { .rentDatePicked($0) }
-                    ),
+                    selection: viewStore.$rentDate,
                     in: Date()...,
                     displayedComponents: .hourAndMinute
                 ) {
@@ -116,6 +110,7 @@ struct MeetingRoomView: View {
                     Spacer()
                     
                     Stepper(
+                        // TCA의 State Binding 예시 2
                         value: viewStore.binding(
                             get: { $0.rentHourAndMinute },
                             send: { .rentHourAndMinutePicked($0) }
@@ -140,7 +135,6 @@ struct MeetingRoomView: View {
                         if viewStore.state.isCancelReservationButtonTapped {
                             ProgressView()
                                 .tint(.primary)
-                                .padding(.vertical, 8)
                                 .frame(maxWidth: .infinity)
                                 .progressViewStyle(.circular)
                         } else if viewStore.state.isCancelReservationCompleted {
@@ -149,14 +143,13 @@ struct MeetingRoomView: View {
                             Text("예약 취소하기")
                         }
                     }
-                } else {
+                } else if viewStore.state.selectedMeetingRoom.rentBy == "AVAILABLE" {
                     primaryButtonBuilder {
                         viewStore.send(.reservationButtonTapped)
                     } label: {
                         if viewStore.state.isReservationButtonTapped {
                             ProgressView()
                                 .tint(.primary)
-                                .padding(.vertical, 8)
                                 .frame(maxWidth: .infinity)
                                 .progressViewStyle(.circular)
                         } else if viewStore.state.isReservationCompleted {
@@ -165,6 +158,8 @@ struct MeetingRoomView: View {
                             Text("예약하기")
                         }
                     }
+                } else {
+                    Text(viewStore.state.selectedMeetingRoom.id.uuidString)
                 }
             }
             .padding()
@@ -198,7 +193,6 @@ struct MeetingRoomView_Previews: PreviewProvider {
         MeetingRoomView(
             store: Store(
                 initialState: MeetingRoomDomain.State(
-                    rentLearnerName: "CURRENT_USER",
                     rentDate: .now,
                     id: .init(),
                     selectedMeetingRoom: MeetingRoom.testInstance()

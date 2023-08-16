@@ -12,19 +12,22 @@ import Foundation
 import SwiftUI
 
 struct MeetingRoomDomain: Reducer {
+    @frozen enum MeetingRoomStatus {
+        case reservation
+        case cancelation
+    }
+    
     struct State: Equatable, Identifiable {
-        @BindingState var rentLearnerName: String = ""
         @BindingState var rentDate: Date = .now
+        @BindingState var rentHourAndMinute: Int = 1
         
         var id: UUID
         var selectedMeetingRoom: MeetingRoom
+        
         var isReservationButtonTapped: Bool = false
         var isReservationCompleted: Bool = false
-        
         var isCancelReservationButtonTapped: Bool = false
         var isCancelReservationCompleted: Bool = false
-        
-        var rentHourAndMinute: Int = 1
     }
     
     @frozen enum Action: Equatable, BindableAction {
@@ -32,14 +35,14 @@ struct MeetingRoomDomain: Reducer {
         // 이후에 viewStore.$_ 로 접근할 수 있다.
         case binding(BindingAction<State>)
         case reservationButtonTapped
-        // !!!: TaskResult는 리턴 타입이 있는 Side Effect에 적합함
-        // 수정 필요
-        case reservationResponse(TaskResult<MeetingRoom>)
-        case rentDatePicked(Date)
-        case rentHourAndMinutePicked(Int)
+        case reservationResponse
         
         case cancelReservationButtonTapped
         case cancelReservationResponse
+        
+        case rentDatePicked(Date)
+        case rentHourAndMinutePicked(Int)
+        case onMeetingRoomViewAppear
     }
     
     var body: some ReducerOf<MeetingRoomDomain> {
@@ -47,52 +50,60 @@ struct MeetingRoomDomain: Reducer {
         
         Reduce { state, action in
             switch action {
+            case .onMeetingRoomViewAppear:
+                state.rentDate = state.selectedMeetingRoom.rentDate
+                state.rentHourAndMinute = state.selectedMeetingRoom.rentHourAndMinute
+                
+                state.isReservationButtonTapped = false
+                state.isReservationCompleted = false
+                state.isCancelReservationButtonTapped = false
+                state.isCancelReservationCompleted = false
+                
+                return .none
+            
+                // MARK: - RESERVATION
             case .reservationButtonTapped:
                 state.isReservationButtonTapped = true
                 state.selectedMeetingRoom.rentDate = state.rentDate
-                state.selectedMeetingRoom.rentBy = state.rentLearnerName
+                state.selectedMeetingRoom.rentHourAndMinute = state.rentHourAndMinute
                 
                 return .run { [meetingRoom = state.selectedMeetingRoom] send in
-                    try await updateMeetingRooms(by: meetingRoom)
-                    await send(.reservationResponse(.success(meetingRoom)), animation: .easeInOut)
+                    try await Task.sleep(for: .seconds(0.5))
+                    try await updateMeetingRooms(by: meetingRoom, with: .reservation)
+                    await send(.reservationResponse, animation: .easeInOut)
                 } catch: { error, send in
-                    await send(
-                        .reservationResponse(.failure(error)),
-                        animation: .easeInOut
-                    )
+                    print("RESERVATION FAILED")
+                    await send(.reservationResponse, animation: .easeInOut)
                 }
                 
-            case let .reservationResponse(.success(meetingRoom)):
+            case .reservationResponse:
                 state.isReservationButtonTapped = false
                 state.isReservationCompleted = true
-                print("RESERVATION SUCCESS at", meetingRoom.rentDate)
-                return .none
-                
-            case let .reservationResponse(.failure(error)):
-                state.isReservationButtonTapped = false
-                print("RESERVATION FAILED", error.localizedDescription)
+                Task { try await Task.sleep(for: .seconds(0.5)) }
+                state.selectedMeetingRoom.rentBy = "CURRENT_USER"
                 return .none
             
-                
+                // MARK: - CANCELATION
             case .cancelReservationButtonTapped:
                 state.isCancelReservationButtonTapped = true
-                state.selectedMeetingRoom.rentBy = "AVAILABLE"
                 
                 return .run { [meetingRoom = state.selectedMeetingRoom] send in
-                    try await updateMeetingRooms(by: meetingRoom)
+                    try await Task.sleep(for: .seconds(0.5))
+                    try await updateMeetingRooms(by: meetingRoom, with: .cancelation)
                     await send(.cancelReservationResponse, animation: .easeInOut)
                 } catch: { error, send in
-                    await send(
-                        .reservationResponse(.failure(error)),
-                        animation: .easeInOut
-                    )
+                    print("CANCEL FAILED")
+                    await send(.cancelReservationResponse, animation: .easeInOut)
                 }
                 
             case .cancelReservationResponse:
                 state.isCancelReservationButtonTapped = false
                 state.isCancelReservationCompleted = true
+                Task { try await Task.sleep(for: .seconds(0.5)) }
+                state.selectedMeetingRoom.rentBy = "AVAILABLE"
                 return .none
                 
+                // MARK: - VIEW BINDING
             case let .rentDatePicked(date):
                 state.rentDate = date
                 return .none
@@ -109,7 +120,8 @@ struct MeetingRoomDomain: Reducer {
     
     // MARK: - Methods
     private func updateMeetingRooms(
-        by meetingRoom: MeetingRoom
+        by meetingRoom: MeetingRoom,
+        with condition: MeetingRoomStatus
     ) async throws {
         let start = Date()
         defer { Logger.methodExecTimePrint(start) }
@@ -119,12 +131,10 @@ struct MeetingRoomDomain: Reducer {
             .setData(
                 [
                     "rentDate": Timestamp(date: meetingRoom.rentDate),
-                    "rentBy": meetingRoom.rentBy,
+                    "rentBy": condition == .reservation ? "CURRENT_USER" : "AVAILABLE",
                     "rentHourAndMinute": meetingRoom.rentHourAndMinute,
                 ],
                 merge: true
             )
-        
-        try await Task.sleep(for: .seconds(0.5))
     }
 }
