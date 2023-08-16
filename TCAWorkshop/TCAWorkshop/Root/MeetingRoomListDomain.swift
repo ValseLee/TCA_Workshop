@@ -16,9 +16,14 @@ struct MeetingRoomListDomain: Reducer {
         var unavailableMeetingRoomArray: IdentifiedArrayOf<MeetingRoomDomain.State> = []
         var bookedMeetingRoomArray: IdentifiedArrayOf<MeetingRoomDomain.State> = []
         
+        var isMeetingRoomInitOnce: Bool = false
         var isMeetingRoomFetching: Bool = false
         var isMeetingRoomFetchFailed: Bool = false
         var isFetchAvailable: Bool = true
+        
+        var isAvailableMeetingRoomArrayEmpty: Bool = true
+        var isUnavailableMeetingRoomArrayEmpty: Bool = true
+        var isBookedMeetingRoomArrayEmpty: Bool = true
     }
     
     @frozen enum Action: Equatable {
@@ -38,17 +43,19 @@ struct MeetingRoomListDomain: Reducer {
         )
         
         case onMeetingRoomListViewAppear
-        case meetingRoomFetchResponse
         case processFetchedMeetingRoomIntoState(with: MeetingRoom)
-        case fetchFailed
+        case meetingRoomFetchComplete
+        case meetingRoomFetchFailed
         case listRefreshed
         case confirmationDialogRetryButtonTapped
-        case confirmationDialogDismissed
+        case confirmationDialogDismissed(Bool)
+        case fetchUnavailableResponse
     }
     
     var body: some ReducerOf<MeetingRoomListDomain> {
         Reduce { state, action in
-        switch action {
+            switch action {
+                // MARK: - .forEach
             case .bookedMeetingRoom:
                 return .none
                 
@@ -57,127 +64,142 @@ struct MeetingRoomListDomain: Reducer {
                 
             case .unavailableMeetingRoom:
                 return .none
-            
+                
+                // MARK: - Render
             case .onMeetingRoomListViewAppear:
-                state.isMeetingRoomFetching = true
-            
-                return .run {
-                    try await fetchMeetingRooms(send: $0)
+                checkIfMeetingRoomArrayIsEmpty(&state)
+                
+                guard state.isMeetingRoomInitOnce else {
+                    state.isMeetingRoomFetching = true
+                    return .run {
+                        try await Task.sleep(for: .seconds(0.5))
+                        try await fetchMeetingRooms(send: $0)
+                    }
+                    catch: { error, send in
+                        print("FETCH FAILED: ", error)
+                        await send(.meetingRoomFetchFailed, animation: .easeInOut)
+                    }
                 }
-                catch: { error, send in
-                    print("FETCH FAILED: ", error)
-                    await send(.fetchFailed)
-                }
+                
+                return .none
                 
             case .listRefreshed:
                 state.isMeetingRoomFetching = true
-                return .run { try await fetchMeetingRooms(send: $0) }
+                return .run {
+                    try await Task.sleep(for: .seconds(0.5))
+                    try await fetchMeetingRooms(send: $0)
+                }
                 catch: { error, send in
                     print("REFRESH FAILED: ", error)
-                    await send(.fetchFailed)
+                    await send(.meetingRoomFetchFailed, animation: .easeInOut)
                 }
                 
-            case let .processFetchedMeetingRoomIntoState(meetingRoom):
-                self.makeMeetingRoom(&state, with: meetingRoom)
+            case let .processFetchedMeetingRoomIntoState(fetchedMeetingRoom):
+                self.makeMeetingRoom(&state, with: fetchedMeetingRoom)
                 return .none
                 
-            case .meetingRoomFetchResponse:
+            case .meetingRoomFetchComplete:
                 state.isMeetingRoomFetching = false
                 state.isMeetingRoomFetchFailed = false
+                state.isMeetingRoomInitOnce = true
+                checkIfMeetingRoomArrayIsEmpty(&state)
+                
                 return .none
                 
-            case .fetchFailed:
+            case .meetingRoomFetchFailed:
+                state.isMeetingRoomFetchFailed = true
                 state.isMeetingRoomFetching = false
-                if state.isMeetingRoomFetchFailed {
-                    state.isFetchAvailable = false
-                    return .none
-                } else { state.isMeetingRoomFetchFailed = true }
                 
                 return .none
                 
             case .confirmationDialogRetryButtonTapped:
                 state.isMeetingRoomFetching = true
+                state.isMeetingRoomFetchFailed = false
                 
-                return .run { try await fetchMeetingRooms(send: $0) }
+                return .run {
+                    try await Task.sleep(for: .seconds(0.5))
+                    try await fetchMeetingRooms(send: $0)
+                }
                 catch: { error, send in
                     print("FETCH FAILED AGAIN: ", error)
-                    await send(.fetchFailed)
+                    await send(.fetchUnavailableResponse, animation: .easeInOut)
                 }
                 
-            case .confirmationDialogDismissed:
+            case let .confirmationDialogDismissed(dismissed):
+                state.isMeetingRoomFetchFailed = dismissed
+                return .none
+                
+            case .fetchUnavailableResponse:
+                state.isFetchAvailable = false
+                state.isMeetingRoomFetching = false
                 return .none
             }
         }
-        /// 여러 State를 관리하는 child Reducer는 하나여도 된다.
-        /// 그러나 각 State에 대한 액션은 서로 다른 ``case``로 처리해야 한다.
-        /// State의 변경이 action을 트리거할 때, id에 해당하는 element를 찾지 못하기 때문
         .forEach(
             \.bookedMeetingRoomArray,
              action: /Action.bookedMeetingRoom(id:action:)
-        ) { MeetingRoomDomain() }
+        ) {
+            MeetingRoomDomain()
+        }
         .forEach(
             \.unavailableMeetingRoomArray,
              action: /Action.unavailableMeetingRoom(id:action:)
-        ) { MeetingRoomDomain() }
+        ) {
+            MeetingRoomDomain()
+            
+        }
         .forEach(
             \.availableMeetingRoomArray,
              action: /Action.availableMeetingRoom(id:action:)
-        ) { MeetingRoomDomain() }
+        ) {
+            MeetingRoomDomain()
+        }
     }
     
     // MARK: - METHODS
     private func makeMeetingRoom(
         _ state: inout State,
-        with meetingRoom: MeetingRoom
+        with fetchedMeetingRoom: MeetingRoom
     ) {
-        switch meetingRoom.rentBy {
+        switch fetchedMeetingRoom.rentBy {
         case "CURRENT_USER":
-            if state.bookedMeetingRoomArray.contains(
-                where: { $0.selectedMeetingRoom == meetingRoom }
+            if let idx = state.bookedMeetingRoomArray.firstIndex(
+                where: { $0.selectedMeetingRoom == fetchedMeetingRoom }
             ) {
-                if let idx = state.bookedMeetingRoomArray.firstIndex(
-                    where: { $0.selectedMeetingRoom == meetingRoom }) {
-                    state.bookedMeetingRoomArray[idx].selectedMeetingRoom = meetingRoom
-                }
+                state.bookedMeetingRoomArray[idx].selectedMeetingRoom = fetchedMeetingRoom
             } else {
                 state.bookedMeetingRoomArray.append(
                     MeetingRoomDomain.State(
-                        id: meetingRoom.id,
-                        selectedMeetingRoom: meetingRoom
+                        id: fetchedMeetingRoom.id,
+                        selectedMeetingRoom: fetchedMeetingRoom
                     )
                 )
             }
             
         case "OTHERS":
-            if state.unavailableMeetingRoomArray.contains(
-                where: { $0.selectedMeetingRoom == meetingRoom }
+            if let idx = state.unavailableMeetingRoomArray.firstIndex(
+                where: { $0.selectedMeetingRoom == fetchedMeetingRoom }
             ) {
-                if let idx = state.unavailableMeetingRoomArray.firstIndex(
-                    where: { $0.selectedMeetingRoom == meetingRoom }) {
-                    state.unavailableMeetingRoomArray[idx].selectedMeetingRoom = meetingRoom
-                }
+                state.unavailableMeetingRoomArray[idx].selectedMeetingRoom = fetchedMeetingRoom
             } else {
                 state.unavailableMeetingRoomArray.append(
                     MeetingRoomDomain.State(
-                        id: meetingRoom.id,
-                        selectedMeetingRoom: meetingRoom
+                        id: fetchedMeetingRoom.id,
+                        selectedMeetingRoom: fetchedMeetingRoom
                     )
                 )
             }
             
         case "AVAILABLE":
-            if state.availableMeetingRoomArray.contains(
-                where: { $0.selectedMeetingRoom == meetingRoom }
+            if let idx = state.availableMeetingRoomArray.firstIndex(
+                where: { $0.selectedMeetingRoom == fetchedMeetingRoom }
             ) {
-                if let idx = state.availableMeetingRoomArray.firstIndex(
-                    where: { $0.selectedMeetingRoom == meetingRoom }) {
-                    state.availableMeetingRoomArray[idx].selectedMeetingRoom = meetingRoom
-                }
+                state.availableMeetingRoomArray[idx].selectedMeetingRoom = fetchedMeetingRoom
             } else {
                 state.availableMeetingRoomArray.append(
                     MeetingRoomDomain.State(
-                        id: meetingRoom.id,
-                        selectedMeetingRoom: meetingRoom
+                        id: fetchedMeetingRoom.id,
+                        selectedMeetingRoom: fetchedMeetingRoom
                     )
                 )
             }
@@ -185,6 +207,20 @@ struct MeetingRoomListDomain: Reducer {
         default:
             return
         }
+    }
+    
+    
+    /// Fetch된 MeetingRoom 배열이 비어있는지 확인합니다.
+    /// - Parameter state: inout으로 mutate 할 현재 State
+    private func checkIfMeetingRoomArrayIsEmpty(_ state: inout State) {
+        if state.availableMeetingRoomArray.isEmpty { state.isAvailableMeetingRoomArrayEmpty = true }
+        else { state.isAvailableMeetingRoomArrayEmpty = false }
+        
+        if state.unavailableMeetingRoomArray.isEmpty { state.isUnavailableMeetingRoomArrayEmpty = true }
+        else { state.isUnavailableMeetingRoomArrayEmpty = false }
+        
+        if state.bookedMeetingRoomArray.isEmpty { state.isBookedMeetingRoomArrayEmpty = true }
+        else { state.isBookedMeetingRoomArrayEmpty = false }
     }
     
     private func fetchMeetingRooms(send: Send<MeetingRoomListDomain.Action>) async throws {
@@ -197,7 +233,7 @@ struct MeetingRoomListDomain: Reducer {
             await send(.processFetchedMeetingRoomIntoState(with: fetchedMeetingRoom))
         }
         
-        await send(.meetingRoomFetchResponse, animation: .easeInOut)
+        await send(.meetingRoomFetchComplete, animation: .easeInOut)
     }
 }
 
