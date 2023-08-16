@@ -16,42 +16,41 @@ struct RootView: View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             if viewStore.state.isFetchAvailable {
                 List {
-                    if viewStore.state.isMeetingRoomFetching {
-                        ProgressView()
-                    } else {
-                        ForEach(
-                            Constants.MeetingRoomCondition.allCases,
-                            id: \.hashValue
-                        ) { cases in
-                            meetingRoomSectionBuilder(
-                                type: cases,
-                                viewStore: viewStore
-                            )
-                        }
+                    ForEach(
+                        Constants.MeetingRoomCondition.allCases,
+                        id: \.hashValue
+                    ) { cases in
+                        meetingRoomSectionBuilder(
+                            with: cases,
+                            by: viewStore.state
+                        )
                     }
                 }
                 .onAppear {
                     viewStore.send(.onMeetingRoomListViewAppear)
                 }
-                .navigationTitle("회의실 예약")
+                .navigationTitle("회의쓱싹")
+                .refreshable {
+                    await viewStore.send(.listRefreshed).finish()
+                }
                 .confirmationDialog(
                     "",
                     isPresented: viewStore.binding(
                         get: { $0.isMeetingRoomFetchFailed },
-                        send: .confirmationDialogDismissed
+                        send: { .confirmationDialogDismissed($0) }
                     )
                 ) {
                     Button {
                         viewStore.send(.confirmationDialogRetryButtonTapped)
                     } label: {
                         Text("재시도")
-                            .bold()
                     }
                 } message: {
-                    Text("미팅룸 로딩에 실패했습니다.\n재시도 하시겠습니까?")
+                    Text("미팅룸을 불러오는 데에 실패했습니다.\n재시도 하시겠습니까?")
                 }
-            } else {
-                Text("회의실을 가져올 수 없습니다. \n앱을 재시동한 후, 네트워크 환경을 확인해 주세요 :)")
+            } else if !viewStore.state.isFetchAvailable {
+                Text("회의실을 가져올 수 없습니다.\n앱을 재시동한 후, 네트워크 환경을 확인해 주세요 :)")
+                    .multilineTextAlignment(.center)
                     .frame(
                         maxWidth: .infinity,
                         alignment: .center
@@ -65,88 +64,103 @@ struct RootView: View {
     /// - Parameter type: 어떤 타입의 미팅룸을 만들고 싶은지 전달
     /// - Returns: 해당 미팅룸의 타입에 따라 뷰 리턴
     private func meetingRoomSectionBuilder(
-        type: Constants.MeetingRoomCondition,
-        viewStore: ViewStoreOf<MeetingRoomListDomain>
+        with condition: Constants.MeetingRoomCondition,
+        by state: MeetingRoomListDomain.State
     ) -> some View {
         Section {
-            switch type {
-                case .available:
-                    if viewStore.state.availableRoomArray.isEmpty {
-                        Text("예약 가능한 회의실이 없어요!")
-                    } else {
-                        ForEach(viewStore.state.availableRoomArray) { meetingRoom in
-                            NavigationLink {
-                                MeetingRoomView(
-                                    store: Store(
-                                        initialState: MeetingRoomDomain.State(
-                                            id: meetingRoom.id,
-                                            selectedMeetingRoom: meetingRoom
-                                        ),
-                                        reducer: {
-                                            MeetingRoomDomain()
-                                        }
-                                    )
-                                )
-                            } label: {
-                                Text(meetingRoom.rentBy)
+            switch condition {
+            case .available:
+                if state.isAvailableMeetingRoomArrayEmpty {
+                    Text("예약할 수 있는 회의실이 없어요!")
+                        .redacted(
+                            reason: state.isMeetingRoomFetching
+                            ? .placeholder
+                            : []
+                        )
+                } else {
+                    ForEachStore(
+                        self.store.scope(
+                            state: { $0.availableMeetingRoomArray },
+                            action: MeetingRoomListDomain.Action.availableMeetingRoom(id:action:)
+                        )
+                    ) { store in
+                        NavigationLink {
+                            MeetingRoomView(store: store)
+                        } label: {
+                            WithViewStore(
+                                store,
+                                observe: { $0.selectedMeetingRoom }
+                            ) { selectedMeetingRoom in
+                                Text(selectedMeetingRoom.rentBy)
                             }
                         }
                     }
-                    
-                case .unavailable:
-                    if viewStore.state.unavailableMeetingRoomArray.isEmpty {
-                        Text("예약된 회의실이 없어요!")
-                    } else {
-                        ForEach(viewStore.state.unavailableMeetingRoomArray) { meetingRoom in
-                            NavigationLink {
-                                MeetingRoomView(
-                                    store: Store(
-                                        initialState: MeetingRoomDomain.State(
-                                            id: meetingRoom.id,
-                                            selectedMeetingRoom: meetingRoom
-                                        ),
-                                        reducer: {
-                                            MeetingRoomDomain()
-                                        }
-                                    )
-                                )
-                            } label: {
-                                Text(meetingRoom.rentBy)
+                }
+                
+            case .unavailable:
+                if state.isUnavailableMeetingRoomArrayEmpty {
+                    Text("다른 사람들이 예약한 회의실이 없어요!")
+                        .redacted(
+                            reason: state.isMeetingRoomFetching
+                            ? .placeholder
+                            : []
+                        )
+                } else {
+                    ForEachStore(
+                        self.store.scope(
+                            state: { $0.unavailableMeetingRoomArray },
+                            action: MeetingRoomListDomain.Action.unavailableMeetingRoom(id:action:)
+                        )
+                    ) { store in
+                        NavigationLink {
+                            MeetingRoomView(store: store)
+                        } label: {
+                            WithViewStore(
+                                store,
+                                observe: { $0.selectedMeetingRoom }
+                            ) { selectedMeetingRoom in
+                                Text(selectedMeetingRoom.rentBy)
                             }
                         }
                     }
-                    
-                case .booked:
-                    if viewStore.state.bookedMeetingRoomArray.isEmpty {
-                        Text("내가 예약한 회의실이 없어요!")
-                    } else {
-                        ForEach(viewStore.state.bookedMeetingRoomArray) { meetingRoom in
-                            NavigationLink {
-                                MeetingRoomView(
-                                    store: Store(
-                                        initialState: MeetingRoomDomain.State(
-                                            id: meetingRoom.id,
-                                            selectedMeetingRoom: meetingRoom
-                                        ),
-                                        reducer: {
-                                            MeetingRoomDomain()
-                                        }
-                                    )
-                                )
-                            } label: {
-                                Text(meetingRoom.rentBy)
+                }
+                
+            case .booked:
+                if state.isBookedMeetingRoomArrayEmpty {
+                    Text("내가 예약한 회의실이 없어요!")
+                        .redacted(
+                            reason: state.isMeetingRoomFetching
+                            ? .placeholder
+                            : []
+                        )
+                } else {
+                    ForEachStore(
+                        self.store.scope(
+                            state: { $0.bookedMeetingRoomArray },
+                            action: MeetingRoomListDomain.Action.bookedMeetingRoom(id:action:)
+                        )
+                    ) { store in
+                        NavigationLink {
+                            MeetingRoomView(store: store)
+                        } label: {
+                            WithViewStore(
+                                store,
+                                observe: { $0.selectedMeetingRoom }
+                            ) { selectedMeetingRoom in
+                                Text(selectedMeetingRoom.rentBy)
                             }
                         }
                     }
+                }
             }
         } header: {
-            switch type {
-                case .available:
-                    Text("예약할 수 있는 회의실")
-                case .unavailable:
-                    Text("다른 사람들이 예약한 회의실")
-                case .booked:
-                    Text("내가 예약한 회의실")
+            switch condition {
+            case .available:
+                Text("예약할 수 있는 회의실")
+            case .unavailable:
+                Text("다른 사람들이 예약한 회의실")
+            case .booked:
+                Text("내가 예약한 회의실")
             }
         }
     }

@@ -27,7 +27,7 @@ struct MeetingRoomView: View {
                     }
                 
                 Divider()
-                
+                                
                 HStack {
                     Text("회의실 이름")
                         .bold()
@@ -47,12 +47,28 @@ struct MeetingRoomView: View {
                     alignment: .leading
                 )
                 
+                HStack {
+                    Text("회의실 대여자")
+                        .bold()
+                    
+                    Spacer()
+                    
+                    Text(viewStore.selectedMeetingRoom.rentBy)
+                        .padding(.horizontal)
+                        .padding(.vertical, 8)
+                        .background {
+                            Capsule()
+                                .foregroundColor(.green)
+                        }
+                }
+                .frame(
+                    maxWidth: .infinity,
+                    alignment: .leading
+                )
+                
                 DatePicker(
-                    // TCA의 State Binding 예시
-                    selection: viewStore.binding(
-                        get: { $0.rentDate },
-                        send: { .rentDatePicked($0) }
-                    ),
+                    // TCA의 State Binding 예시 1
+                    selection: viewStore.$rentDate,
                     in: Date()...,
                     displayedComponents: .date
                 ) {
@@ -63,10 +79,7 @@ struct MeetingRoomView: View {
                 .datePickerStyle(.compact)
                 
                 DatePicker(
-                    selection: viewStore.binding(
-                        get: { $0.rentDate },
-                        send: { .rentDatePicked($0) }
-                    ),
+                    selection: viewStore.$rentDate,
                     in: Date()...,
                     displayedComponents: .hourAndMinute
                 ) {
@@ -97,6 +110,7 @@ struct MeetingRoomView: View {
                     Spacer()
                     
                     Stepper(
+                        // TCA의 State Binding 예시 2
                         value: viewStore.binding(
                             get: { $0.rentHourAndMinute },
                             send: { .rentHourAndMinutePicked($0) }
@@ -114,28 +128,39 @@ struct MeetingRoomView: View {
 
                 Spacer()
                 
-                Button {
-                    viewStore.send(.reservationButtonTapped)
-                } label: {
-                    if viewStore.state.isReservationButtonTapped {
-                        ProgressView()
-                            .tint(.primary)
-                            .padding(.vertical, 8)
-                            .frame(maxWidth: .infinity)
-                            .progressViewStyle(.circular)
-                        
-                    } else if viewStore.state.isReservationCompleted {
-                        Text("예약이 완료되었습니다! 🎉")
-                            .makeButtonLabelWithStyle()
-                        
-                    } else {
-                        Text("예약하기")
-                            .makeButtonLabelWithStyle()
+                if viewStore.state.selectedMeetingRoom.rentBy == "CURRENT_USER" {
+                    primaryButtonBuilder {
+                        viewStore.send(.cancelReservationButtonTapped)
+                    } label: {
+                        if viewStore.state.isCancelReservationButtonTapped {
+                            ProgressView()
+                                .tint(.primary)
+                                .frame(maxWidth: .infinity)
+                                .progressViewStyle(.circular)
+                        } else if viewStore.state.isCancelReservationCompleted {
+                            Text("예약이 취소되었습니다. ✅")
+                        } else {
+                            Text("예약 취소하기")
+                        }
                     }
+                } else if viewStore.state.selectedMeetingRoom.rentBy == "AVAILABLE" {
+                    primaryButtonBuilder {
+                        viewStore.send(.reservationButtonTapped)
+                    } label: {
+                        if viewStore.state.isReservationButtonTapped {
+                            ProgressView()
+                                .tint(.primary)
+                                .frame(maxWidth: .infinity)
+                                .progressViewStyle(.circular)
+                        } else if viewStore.state.isReservationCompleted {
+                            Text("예약이 완료되었습니다! 🎉")
+                        } else {
+                            Text("예약하기")
+                        }
+                    }
+                } else {
+                    Text(viewStore.state.selectedMeetingRoom.id.uuidString)
                 }
-                .buttonStyle(.borderedProminent)
-                .buttonBorderShape(.roundedRectangle)
-                .tint(.green)
             }
             .padding()
             .frame(
@@ -145,6 +170,22 @@ struct MeetingRoomView: View {
             )
         }
     }
+    
+    // MARK: Methods
+    private func primaryButtonBuilder(
+        action: @escaping () -> StoreTask,
+        @ViewBuilder label: () -> some View
+    ) -> some View {
+        Button {
+            let _ = action()
+        } label: {
+            label()
+                .makeButtonLabelWithStyle()
+        }
+        .buttonStyle(.borderedProminent)
+        .buttonBorderShape(.roundedRectangle)
+        .tint(.green)
+    }
 }
 
 struct MeetingRoomView_Previews: PreviewProvider {
@@ -152,7 +193,6 @@ struct MeetingRoomView_Previews: PreviewProvider {
         MeetingRoomView(
             store: Store(
                 initialState: MeetingRoomDomain.State(
-                    rentLearnerName: "CURRENT_USER",
                     rentDate: .now,
                     id: .init(),
                     selectedMeetingRoom: MeetingRoom.testInstance()
