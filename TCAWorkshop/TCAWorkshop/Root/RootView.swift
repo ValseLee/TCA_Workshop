@@ -91,8 +91,7 @@ struct RootView: View {
                                 store,
                                 observe: { $0.selectedMeetingRoom }
                             ) { selectedMeetingRoom in
-//                                Text(selectedMeetingRoom.rentBy)
-                                Text(selectedMeetingRoom.id.uuidString)
+                                Text(selectedMeetingRoom.rentBy)
                             }
                         }
                     }
@@ -120,8 +119,7 @@ struct RootView: View {
                                 store,
                                 observe: { $0.selectedMeetingRoom }
                             ) { selectedMeetingRoom in
-//                                Text(selectedMeetingRoom.rentBy)
-                                Text(selectedMeetingRoom.id.uuidString)
+                                Text(selectedMeetingRoom.rentBy)
                             }
                         }
                     }
@@ -149,8 +147,7 @@ struct RootView: View {
                                 store,
                                 observe: { $0.selectedMeetingRoom }
                             ) { selectedMeetingRoom in
-//                                Text(selectedMeetingRoom.rentBy)
-                                Text(selectedMeetingRoom.id.uuidString)
+                                Text(selectedMeetingRoom.rentBy)
                             }
                         }
                     }

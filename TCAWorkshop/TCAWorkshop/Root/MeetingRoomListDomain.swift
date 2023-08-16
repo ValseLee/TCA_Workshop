@@ -146,7 +146,6 @@ struct MeetingRoomListDomain: Reducer {
              action: /Action.unavailableMeetingRoom(id:action:)
         ) {
             MeetingRoomDomain()
-            
         }
         .forEach(
             \.availableMeetingRoomArray,
