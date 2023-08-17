@@ -1,7 +1,7 @@
 # TCA_Workshop
 📍  Apple Developer Academy 2nd, TCA Workshop
-> Workshop Version Infos:
-> 본 워크숍 문서는 공시된 하단의 버전을 바탕으로 작성되었으며, 해당 버전에서 최적화되어 있습니다.
+> Workshop Version Infos:<br>
+> 본 워크숍 문서는 공시된 하단의 버전을 바탕으로 작성되었으며, 해당 버전에서 최적화되어 있습니다.<br>
 > \- Swift 5.7.1 +, Deploy iOS 16.2, Xcode 14.2, TCA 1.0.0
 
 ---
@@ -50,7 +50,7 @@
 
 ---
 ## The Composable Architecture 기본 개념
-> 하단의 장단점은 글쓴이의 **개인적인 견해**이며, SwiftUI 를 기준으로 작성되었습니다.
+> 하단의 장단점은 글쓴이의 **개인적인 견해**이며, SwiftUI 를 기준으로 작성되었습니다.<br>
 > 영어 원문의 출처는 [**ComposableArchitecture 공식 문서**](https://pointfreeco.github.io/swift-composable-architecture/main/documentation/composablearchitecture/) 및 [**Pointfree.co Collection**](https://www.pointfree.co/collections)에서 발췌하였습니다.
 
 ### 장점
