@@ -1,8 +1,8 @@
 # TCA_Workshop
 📍  Apple Developer Academy 2nd, TCA Workshop
 > Workshop Version Infos:
-> 본 워크숍 문서는 공시된 하단의 버전을 바탕으로 작성되었으며, 해당 버전에서 최적화되어 있습니다. <br>
-> \- Swift 5 ++, Deploy iOS 16.2, Xcode 14.2, TCA 1.0.0
+> 본 워크숍 문서는 공시된 하단의 버전을 바탕으로 작성되었으며, 해당 버전에서 최적화되어 있습니다.
+> \- Swift 5.7.1 +, Deploy iOS 16.2, Xcode 14.2, TCA 1.0.0
 
 ---
 ## Architecture?
@@ -46,19 +46,20 @@
   - 가능한 한 적은 개념과 부분들의 이동을 통해 위의 모든 내용을 달성할 수 있는지에 대한 설명
   > How to accomplish all of the above in a simple API with as few concepts and moving parts as possible.
 
-영어 원문 출처: [pointfree 공식 레포지토리](https://github.com/pointfreeco/swift-composable-architecture/blob/main/README.md)
+- 영어 원문 출처: [pointfree 공식 레포지토리](https://github.com/pointfreeco/swift-composable-architecture/blob/main/README.md)
 
 ---
 ## The Composable Architecture 기본 개념
-> 하단의 장단점은 글쓴이의 **개인적인 견해**이며, SwiftUI 를 기준으로 작성되었습니다. <br>
-> 영어 원문의 출처는 [**ComposableArchitecture 공식 문서**](https://pointfreeco.github.io/swift-composable-architecture/main/documentation/composablearchitecture/)에서 발췌하였습니다.
+> 하단의 장단점은 글쓴이의 **개인적인 견해**이며, SwiftUI 를 기준으로 작성되었습니다.
+> 영어 원문의 출처는 [**ComposableArchitecture 공식 문서**](https://pointfreeco.github.io/swift-composable-architecture/main/documentation/composablearchitecture/) 및 [**Pointfree.co Collection**](https://www.pointfree.co/collections)에서 발췌하였습니다.
 
 ### 장점
 - 작은 단위의 기능을 설계하고 큰 단위의 기능에 합치기가 쉽다.
     - Scalable하고 Composable한 프로젝트를 설계할 수 있다.
 - 각 기능이 유기적으로 맞물리지만 테스트는 독립적으로 실행할 수 있다.
 - 객체 간 데이터 및 기능의 공유를 `Reducer` 단위에서 쉽게 구현할 수 있다.
-    - 하나의 Global Store가 Domain Store를 가질 수 있고, 부모-자식 간 `State` 구조체를 통해 안정적인 상태 공유 가능
+    - 하나의 Global Store가 Domain Store를 가질 수 있다.
+    - 부모-자식 간 `State` 구조체를 `.forEach()`, `.ifLet()` 등의 메소드로 안정적인 상태 공유 가능
 
 ### 단점
 - 프레임워크의 유연한 사용을 위해 이해해야 하는 특정 타입과 메소드가 분명하기 때문에 일정 수준 이상의 숙련도를 요구한다.
@@ -66,18 +67,20 @@
 - SwiftUI의 기본 API 대신 프레임워크의 API를 활용하는 것이 대부분의 상황에서 강제된다.
     - `@State`는 값 타입인 `State` 구조체에 래핑되고, 뷰에 직접 바인딩하기 위해선 viewStore를 `WithViewStore` 등으로 접근하는 `@BindingState` 를 활용해야 한다는 점
     - `WithViewStore` 자체가 복잡한 뷰를 래핑할 경우, 컴파일러 자체의 연산을 느리게 할 수 있다는 단점 또한 존재
-    - 위 단점을 해결하기 위해서 `ViewStoreOf<Reducer>` 타입의 `viewStore`를 직접 할당해야 하는 등의 번거로움
+- 컴파일러의 자동 완성이 아직 완전하지 않다.
+    - `Reducer` 클로저 내부에서 `state`에 대한 타입 추론이 제대로 되지 않는 경우 등 존재
 - App의 Action Flow 및 Data Flow에 대한 이해가 선행되어야 코드를 작성할 수 있다.
     - 각 화면의 기능과 데이터 전달, 기능의 공유를 바탕으로 모듈화와 합성(compose)이 이루어지기 때문
 
 ---
 ### 데이터 플로우
-- **The Composable Architecture**는 여타 다른 클라이언트 아키텍쳐와 같이 단방향 플로우를 지향한다.
-- `MVVM`이나 `MVC` 처럼 특정 역할을 수행해야 하는 객체가 존재하는 형태가 아닌, 각 기능의 상태와 액션을 관리하는 domain store의 집합 혹은 global store로 애플리케이션을 구성한다.
+- **Composable Architecture**는 여타 다른 클라이언트 아키텍쳐와 같이 단방향 플로우를 지향한다.
+- `MVVM`이나 `MVC` 처럼 특정 역할을 수행하는 객체로 아키텍쳐를 구성하는 형태가 아닌, 각 기능의 상태와 액션을 관리하는 domain store의 집합 혹은 global store로 아키텍쳐를 구성한다.
     - (검토 필요)
 - 기본적으로 값 타입(struct, enum)을 활용하여 State의 흐름을 제어한다.
     - 속도의 이점, 세밀한 컨트롤, 변형(mutation)에 대한 보장 등을 근거로 들 수 있다.
     ➡️ [관련 영상](https://www.pointfree.co/collections/composable-architecture/reducers-and-stores/ep68-composable-state-management-reducers)
+    - 값 타입의 capture를 통해 각 변형 단계에서의 State를 비교할 수 있기 때문에 테스트와 State의 흐름을 파악할 때 편리하다.
     - 값 타입의 변형에 대해 `inout`을 제안한다.
 - ![데이터 플로우 이미지가 위치할 자리]
 
