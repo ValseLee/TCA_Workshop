@@ -11,6 +11,8 @@ import FirebaseFirestoreSwift
 import Foundation
 
 struct MeetingRoomListDomain: Reducer {
+    @Dependency(\.date.now) var now
+    
     struct State: Equatable {
         var availableMeetingRoomArray: IdentifiedArrayOf<MeetingRoomDomain.State> = []
         var unavailableMeetingRoomArray: IdentifiedArrayOf<MeetingRoomDomain.State> = []
@@ -169,6 +171,7 @@ struct MeetingRoomListDomain: Reducer {
             } else {
                 state.bookedMeetingRoomArray.append(
                     MeetingRoomDomain.State(
+                        rentDate: self.now,
                         id: fetchedMeetingRoom.id,
                         selectedMeetingRoom: fetchedMeetingRoom
                     )
@@ -183,6 +186,7 @@ struct MeetingRoomListDomain: Reducer {
             } else {
                 state.unavailableMeetingRoomArray.append(
                     MeetingRoomDomain.State(
+                        rentDate: self.now,
                         id: fetchedMeetingRoom.id,
                         selectedMeetingRoom: fetchedMeetingRoom
                     )
@@ -197,6 +201,7 @@ struct MeetingRoomListDomain: Reducer {
             } else {
                 state.availableMeetingRoomArray.append(
                     MeetingRoomDomain.State(
+                        rentDate: self.now,
                         id: fetchedMeetingRoom.id,
                         selectedMeetingRoom: fetchedMeetingRoom
                     )
