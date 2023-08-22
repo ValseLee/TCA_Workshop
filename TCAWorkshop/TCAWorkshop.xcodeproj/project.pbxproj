@@ -46,6 +46,13 @@
 		7E9C0A402A84D6BC00A35BC6 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 7E9C0A3F2A84D6BC00A35BC6 /* FirebaseFirestore */; };
 		7E9C0A422A84D6BC00A35BC6 /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 7E9C0A412A84D6BC00A35BC6 /* FirebaseFirestoreSwift */; };
 		7EC289DD2A8385F1006C78CE /* MeetingRoomDomain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC289DC2A8385F1006C78CE /* MeetingRoomDomain.swift */; };
+		7EC40DD82A933399007007CE /* BookedMeetingRoomDomain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC40DD72A933399007007CE /* BookedMeetingRoomDomain.swift */; };
+		7EC40DDA2A9333A8007007CE /* UnavailableMeetingRoomDomain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC40DD92A9333A8007007CE /* UnavailableMeetingRoomDomain.swift */; };
+		7EC40DDC2A9333B4007007CE /* AvailableMeetingRoomDomain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC40DDB2A9333B4007007CE /* AvailableMeetingRoomDomain.swift */; };
+		7EC40DE02A9333F7007007CE /* View+ButtonLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC40DDF2A9333F7007007CE /* View+ButtonLabel.swift */; };
+		7EC40DE42A93392C007007CE /* BookedMeetingRoomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC40DE32A93392C007007CE /* BookedMeetingRoomView.swift */; };
+		7EC40DE62A933957007007CE /* UnavailableMeetingRoomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC40DE52A933957007007CE /* UnavailableMeetingRoomView.swift */; };
+		7EC40DE82A93395D007007CE /* AvailableMeetingRoomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC40DE72A93395D007007CE /* AvailableMeetingRoomView.swift */; };
 		7EECE09D2A860CF700C19D0D /* MeetingRoomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EECE09C2A860CF700C19D0D /* MeetingRoomView.swift */; };
 /* End PBXBuildFile section */
 
@@ -87,6 +94,13 @@
 		7E7C63DA2A7D233700AB05BC /* BeforeTCATests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BeforeTCATests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7E7C63DE2A7D233700AB05BC /* BeforeTCATests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeforeTCATests.swift; sourceTree = "<group>"; };
 		7EC289DC2A8385F1006C78CE /* MeetingRoomDomain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingRoomDomain.swift; sourceTree = "<group>"; };
+		7EC40DD72A933399007007CE /* BookedMeetingRoomDomain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookedMeetingRoomDomain.swift; sourceTree = "<group>"; };
+		7EC40DD92A9333A8007007CE /* UnavailableMeetingRoomDomain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnavailableMeetingRoomDomain.swift; sourceTree = "<group>"; };
+		7EC40DDB2A9333B4007007CE /* AvailableMeetingRoomDomain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvailableMeetingRoomDomain.swift; sourceTree = "<group>"; };
+		7EC40DDF2A9333F7007007CE /* View+ButtonLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+ButtonLabel.swift"; sourceTree = "<group>"; };
+		7EC40DE32A93392C007007CE /* BookedMeetingRoomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookedMeetingRoomView.swift; sourceTree = "<group>"; };
+		7EC40DE52A933957007007CE /* UnavailableMeetingRoomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnavailableMeetingRoomView.swift; sourceTree = "<group>"; };
+		7EC40DE72A93395D007007CE /* AvailableMeetingRoomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvailableMeetingRoomView.swift; sourceTree = "<group>"; };
 		7EECE09C2A860CF700C19D0D /* MeetingRoomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingRoomView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -141,6 +155,7 @@
 		7E28FA0B2A80A0BE002E3AA9 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				7EC40DDE2A9333F1007007CE /* Extensions */,
 				7E6BC5172A81277700D2A871 /* Constants.swift */,
 				7E7C63D32A7D233700AB05BC /* Preview Content */,
 				7E7C639D2A7D17AB00AB05BC /* Assets.xcassets */,
@@ -187,8 +202,8 @@
 		7E6BC50E2A8125FD00D2A871 /* Root */ = {
 			isa = PBXGroup;
 			children = (
-				7E7C639B2A7D17AA00AB05BC /* RootView.swift */,
 				7E6BC50F2A81261100D2A871 /* MeetingRoomListDomain.swift */,
+				7E7C639B2A7D17AA00AB05BC /* RootView.swift */,
 			);
 			path = Root;
 			sourceTree = "<group>";
@@ -239,6 +254,9 @@
 			children = (
 				7E7C63992A7D17AA00AB05BC /* TCAWorkshopApp.swift */,
 				7E6BC50E2A8125FD00D2A871 /* Root */,
+				7EC40DD62A933378007007CE /* BookedMeetingRoom */,
+				7EC40DD52A933373007007CE /* UnavailableMeetingRoom */,
+				7EC40DD42A93336C007007CE /* AvailableMeetingRoom */,
 				7E6BC50D2A8125F900D2A871 /* MeetingRoom */,
 			);
 			path = TCAWorkshop;
@@ -283,6 +301,41 @@
 			children = (
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		7EC40DD42A93336C007007CE /* AvailableMeetingRoom */ = {
+			isa = PBXGroup;
+			children = (
+				7EC40DDB2A9333B4007007CE /* AvailableMeetingRoomDomain.swift */,
+				7EC40DE72A93395D007007CE /* AvailableMeetingRoomView.swift */,
+			);
+			path = AvailableMeetingRoom;
+			sourceTree = "<group>";
+		};
+		7EC40DD52A933373007007CE /* UnavailableMeetingRoom */ = {
+			isa = PBXGroup;
+			children = (
+				7EC40DD92A9333A8007007CE /* UnavailableMeetingRoomDomain.swift */,
+				7EC40DE52A933957007007CE /* UnavailableMeetingRoomView.swift */,
+			);
+			path = UnavailableMeetingRoom;
+			sourceTree = "<group>";
+		};
+		7EC40DD62A933378007007CE /* BookedMeetingRoom */ = {
+			isa = PBXGroup;
+			children = (
+				7EC40DD72A933399007007CE /* BookedMeetingRoomDomain.swift */,
+				7EC40DE32A93392C007007CE /* BookedMeetingRoomView.swift */,
+			);
+			path = BookedMeetingRoom;
+			sourceTree = "<group>";
+		};
+		7EC40DDE2A9333F1007007CE /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				7EC40DDF2A9333F7007007CE /* View+ButtonLabel.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -479,10 +532,17 @@
 				7EC289DD2A8385F1006C78CE /* MeetingRoomDomain.swift in Sources */,
 				7E6BC5102A81261100D2A871 /* MeetingRoomListDomain.swift in Sources */,
 				7E6BC5122A81265D00D2A871 /* MeetingRoom.swift in Sources */,
+				7EC40DE62A933957007007CE /* UnavailableMeetingRoomView.swift in Sources */,
+				7EC40DDC2A9333B4007007CE /* AvailableMeetingRoomDomain.swift in Sources */,
+				7EC40DE42A93392C007007CE /* BookedMeetingRoomView.swift in Sources */,
 				7EECE09D2A860CF700C19D0D /* MeetingRoomView.swift in Sources */,
 				7E7C639C2A7D17AA00AB05BC /* RootView.swift in Sources */,
+				7EC40DD82A933399007007CE /* BookedMeetingRoomDomain.swift in Sources */,
+				7EC40DE02A9333F7007007CE /* View+ButtonLabel.swift in Sources */,
+				7EC40DE82A93395D007007CE /* AvailableMeetingRoomView.swift in Sources */,
 				7E6BC5182A81277700D2A871 /* Constants.swift in Sources */,
 				7E7C639A2A7D17AA00AB05BC /* TCAWorkshopApp.swift in Sources */,
+				7EC40DDA2A9333A8007007CE /* UnavailableMeetingRoomDomain.swift in Sources */,
 				7E28FA0D2A80A0DD002E3AA9 /* AppDelegate+Firebase.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
