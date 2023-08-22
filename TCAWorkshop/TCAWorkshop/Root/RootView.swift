@@ -85,7 +85,7 @@ struct RootView: View {
                         )
                     ) { store in
                         NavigationLink {
-                            MeetingRoomView(store: store)
+                            AvailableMeetingRoomView(store: store)
                         } label: {
                             WithViewStore(
                                 store,
@@ -113,7 +113,7 @@ struct RootView: View {
                         )
                     ) { store in
                         NavigationLink {
-                            MeetingRoomView(store: store)
+                            UnavailableMeetingRoomView(store: store)
                         } label: {
                             WithViewStore(
                                 store,
@@ -141,7 +141,7 @@ struct RootView: View {
                         )
                     ) { store in
                         NavigationLink {
-                            MeetingRoomView(store: store)
+                            BookedMeetingRoomView(store: store)
                         } label: {
                             WithViewStore(
                                 store,
