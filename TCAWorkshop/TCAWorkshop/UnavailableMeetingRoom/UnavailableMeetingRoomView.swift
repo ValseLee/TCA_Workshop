@@ -14,18 +14,18 @@ struct UnavailableMeetingRoomView: View {
     var body: some View {
         WithViewStore(
             self.store,
-            observe: { $0.selectedMeetingRoom }
-        ) { selectedMeetingRoom in
+            observe: { $0 }
+        ) { viewStore in
             VStack(spacing: 24) {
                 Image(systemName: "calendar")
                     .resizable()
                     .frame(width: 150, height: 150)
                     .padding(.vertical)
                     .overlay(alignment: .topTrailing) {
-                        Image(systemName: "checkmark.circle")
+                        Image(systemName: "person.2.fill")
                             .resizable()
-                            .frame(width: 50, height: 50)
-                            .offset(x: 20)
+                            .frame(width: 75, height: 50)
+                            .offset(x: 30)
                             .foregroundColor(.green)
                     }
                 
@@ -37,7 +37,7 @@ struct UnavailableMeetingRoomView: View {
                     
                     Spacer()
                     
-                    Text(selectedMeetingRoom.meetingRoomName)
+                    Text(viewStore.selectedMeetingRoom.meetingRoomName)
                         .padding(.horizontal)
                         .padding(.vertical, 8)
                         .background {
@@ -56,7 +56,7 @@ struct UnavailableMeetingRoomView: View {
                     
                     Spacer()
                     
-                    Text(selectedMeetingRoom.rentBy)
+                    Text(viewStore.selectedMeetingRoom.rentBy)
                         .padding(.horizontal)
                         .padding(.vertical, 8)
                         .background {
@@ -69,35 +69,48 @@ struct UnavailableMeetingRoomView: View {
                     alignment: .leading
                 )
                 
-                DatePicker(
-                    selection: .constant(selectedMeetingRoom.rentDate),
-                    in: Date()...,
-                    displayedComponents: .date
-                ) {
-                    Text("대여 희망일")
+                HStack {
+                    Text("대여 일자")
                         .bold()
+                    
+                    Spacer()
+                    
+                    Text(viewStore.dayformatter.string(
+                        from: viewStore.selectedMeetingRoom.rentDate)
+                    )
+                    .padding(.horizontal)
+                    .padding(.vertical, 4)
+                    .background {
+                        RoundedRectangle(cornerRadius: 5)
+                            .foregroundColor(Color(.systemGray5))
+                    }
                 }
-                .environment(\.locale, .current)
-                .datePickerStyle(.compact)
                 
-                DatePicker(
-                    selection: .constant(selectedMeetingRoom.rentDate),
-                    in: Date()...,
-                    displayedComponents: .hourAndMinute
-                ) {
+                
+                HStack {
                     Text("대여 시작 시간")
                         .bold()
+                    
+                    Spacer()
+                    
+                    Text(viewStore.minuteHourformatter.string(
+                        from: viewStore.selectedMeetingRoom.rentDate)
+                    )
+                    .padding(.horizontal)
+                    .padding(.vertical, 4)
+                    .background {
+                        RoundedRectangle(cornerRadius: 5)
+                            .foregroundColor(Color(.systemGray5))
+                    }
                 }
-                .environment(\.locale, .current)
-                .datePickerStyle(.graphical)
                 
                 HStack {
                     VStack(
                         alignment: .leading,
-                        spacing: 8
+                        spacing: 4
                     ) {
                         Text("**대여 시간:** ") +
-                        Text("**\(selectedMeetingRoom.rentHourAndMinute) 시간**")
+                        Text("**\(viewStore.selectedMeetingRoom.rentHourAndMinute) 시간**")
                             .bold()
                             .monospacedDigit()
                             .foregroundColor(.green)
@@ -110,11 +123,12 @@ struct UnavailableMeetingRoomView: View {
                     Spacer()
                     
                     Stepper(
-                        value: .constant(selectedMeetingRoom.rentHourAndMinute),
+                        value: .constant(viewStore.selectedMeetingRoom.rentHourAndMinute),
                         in: 1...3
                     ) {
                         // Text("LABLES HIDDEN")
                     }
+                    .disabled(true)
                     .labelsHidden()
                 }
                 .frame(
@@ -125,10 +139,16 @@ struct UnavailableMeetingRoomView: View {
                 Spacer()
                 
                 Button {
-                    //
+                    // disabled
                 } label: {
-                    Text("크킥")
+                    Text("회의실을 예약할 수 없습니다.")
+                        .padding(.vertical, 8)
+                        .frame(maxWidth: .infinity)
+                        .shadow(radius: 10)
                 }
+                .buttonStyle(.borderedProminent)
+                .buttonBorderShape(.roundedRectangle)
+                .disabled(true)
             }
             .padding()
             .frame(

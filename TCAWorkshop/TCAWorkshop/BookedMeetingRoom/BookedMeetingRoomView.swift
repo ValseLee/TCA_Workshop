@@ -143,6 +143,12 @@ struct BookedMeetingRoomView: View {
                     }
                 }
             }
+            .onDisappear {
+                guard viewStore.state.isCancelReservationCompleted else {
+                    viewStore.send(.onViewDisappear)
+                    return
+                }
+            }
             .padding()
             .frame(
                 maxWidth: .infinity,

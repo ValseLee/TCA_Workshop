@@ -9,6 +9,8 @@ import ComposableArchitecture
 import Foundation
 
 struct BookedMeetingRoomFeature: Reducer {
+    let meetingRoomClient: MeetingRoomClient = .live
+    
     struct State: Equatable, Identifiable {
         @BindingState var selectedMeetingRoom: MeetingRoom
         var id: UUID
@@ -19,7 +21,7 @@ struct BookedMeetingRoomFeature: Reducer {
     
     enum Action: Equatable, BindableAction {
         case binding(BindingAction<State>)
-        case onMeetingRoomViewAppear
+        case onViewDisappear
         case cancelReservationButtonTapped
         case cancelReservationResponse
     }
@@ -32,13 +34,31 @@ struct BookedMeetingRoomFeature: Reducer {
             case .binding:
                 return .none
                 
-            case .onMeetingRoomViewAppear:
-                return .none
+            case .onViewDisappear:
+                state.isCancelReservationCompleted = false
+                state.isCancelReservationButtonTapped = false
+                return .cancel(id: Constants.CANCELABLE_RESERVATION_CANCEL_ID)
                 
             case .cancelReservationButtonTapped:
-                return .none
+                guard state.isCancelReservationCompleted else {
+                    state.isCancelReservationButtonTapped = true
+                    state.selectedMeetingRoom.rentBy = "AVAILABLE"
+                    
+                    return .run { [selectedMeetingRoom = state.selectedMeetingRoom] send in
+                        try await meetingRoomClient.update(selectedMeetingRoom)
+                        try! await Task.sleep(for: .seconds(0.5))
+                        await send(.cancelReservationResponse, animation: .easeInOut)
+                    } catch: { error, send in
+                        print("RESERVATION CANCEL FAILED", error.localizedDescription)
+                    }
+                        .cancellable(id: Constants.CANCELABLE_RESERVATION_CANCEL_ID)
+                }
+                
+                return .send(.cancelReservationResponse, animation: .easeInOut)
                 
             case .cancelReservationResponse:
+                state.isCancelReservationButtonTapped = false
+                state.isCancelReservationCompleted = true
                 return .none
             }
         }

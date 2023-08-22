@@ -70,7 +70,6 @@ struct AvailableMeetingRoomView: View {
                 )
                 
                 DatePicker(
-                    // TCA의 State Binding 예시 1
                     selection: viewStore.$selectedMeetingRoom.rentDate,
                     in: Date()...,
                     displayedComponents: .date
@@ -97,8 +96,6 @@ struct AvailableMeetingRoomView: View {
                         alignment: .leading,
                         spacing: 8
                     ) {
-                        /// TCA의 API로 구현하는 Transition은 insertion이 제대로 되지 않는다
-                        /// Issue로 제보 필요
                         Text("**대여 시간:** ") +
                         Text("**\(viewStore.state.selectedMeetingRoom.rentHourAndMinute) 시간**")
                             .bold()
@@ -141,6 +138,12 @@ struct AvailableMeetingRoomView: View {
                     } else {
                         Text("예약하기")
                     }
+                }
+            }
+            .onDisappear {
+                guard viewStore.state.isReservationCompleted else {
+                    viewStore.send(.onViewDisappear)
+                    return
                 }
             }
             .padding()
