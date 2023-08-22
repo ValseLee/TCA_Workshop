@@ -53,6 +53,8 @@
 		7EC40DE42A93392C007007CE /* BookedMeetingRoomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC40DE32A93392C007007CE /* BookedMeetingRoomView.swift */; };
 		7EC40DE62A933957007007CE /* UnavailableMeetingRoomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC40DE52A933957007007CE /* UnavailableMeetingRoomView.swift */; };
 		7EC40DE82A93395D007007CE /* AvailableMeetingRoomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC40DE72A93395D007007CE /* AvailableMeetingRoomView.swift */; };
+		7EE5F9332A9482B500371EEE /* DateFormatter+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE5F9322A9482B500371EEE /* DateFormatter+Init.swift */; };
+		7EE5F9352A94887E00371EEE /* FirebaseClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE5F9342A94887E00371EEE /* FirebaseClient.swift */; };
 		7EECE09D2A860CF700C19D0D /* MeetingRoomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EECE09C2A860CF700C19D0D /* MeetingRoomView.swift */; };
 /* End PBXBuildFile section */
 
@@ -101,6 +103,8 @@
 		7EC40DE32A93392C007007CE /* BookedMeetingRoomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookedMeetingRoomView.swift; sourceTree = "<group>"; };
 		7EC40DE52A933957007007CE /* UnavailableMeetingRoomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnavailableMeetingRoomView.swift; sourceTree = "<group>"; };
 		7EC40DE72A93395D007007CE /* AvailableMeetingRoomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvailableMeetingRoomView.swift; sourceTree = "<group>"; };
+		7EE5F9322A9482B500371EEE /* DateFormatter+Init.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormatter+Init.swift"; sourceTree = "<group>"; };
+		7EE5F9342A94887E00371EEE /* FirebaseClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseClient.swift; sourceTree = "<group>"; };
 		7EECE09C2A860CF700C19D0D /* MeetingRoomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingRoomView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -202,8 +206,8 @@
 		7E6BC50E2A8125FD00D2A871 /* Root */ = {
 			isa = PBXGroup;
 			children = (
-				7E6BC50F2A81261100D2A871 /* MeetingRoomListDomain.swift */,
 				7E7C639B2A7D17AA00AB05BC /* RootView.swift */,
+				7E6BC50F2A81261100D2A871 /* MeetingRoomListDomain.swift */,
 			);
 			path = Root;
 			sourceTree = "<group>";
@@ -211,6 +215,7 @@
 		7E6BC5132A81267100D2A871 /* Firebase */ = {
 			isa = PBXGroup;
 			children = (
+				7EE5F9342A94887E00371EEE /* FirebaseClient.swift */,
 				7E28FA0C2A80A0DD002E3AA9 /* AppDelegate+Firebase.swift */,
 				7E6BC51A2A81382400D2A871 /* GoogleService-Info.plist */,
 			);
@@ -334,6 +339,7 @@
 			isa = PBXGroup;
 			children = (
 				7EC40DDF2A9333F7007007CE /* View+ButtonLabel.swift */,
+				7EE5F9322A9482B500371EEE /* DateFormatter+Init.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -533,6 +539,7 @@
 				7E6BC5102A81261100D2A871 /* MeetingRoomListDomain.swift in Sources */,
 				7E6BC5122A81265D00D2A871 /* MeetingRoom.swift in Sources */,
 				7EC40DE62A933957007007CE /* UnavailableMeetingRoomView.swift in Sources */,
+				7EE5F9352A94887E00371EEE /* FirebaseClient.swift in Sources */,
 				7EC40DDC2A9333B4007007CE /* AvailableMeetingRoomDomain.swift in Sources */,
 				7EC40DE42A93392C007007CE /* BookedMeetingRoomView.swift in Sources */,
 				7EECE09D2A860CF700C19D0D /* MeetingRoomView.swift in Sources */,
@@ -542,6 +549,7 @@
 				7EC40DE82A93395D007007CE /* AvailableMeetingRoomView.swift in Sources */,
 				7E6BC5182A81277700D2A871 /* Constants.swift in Sources */,
 				7E7C639A2A7D17AA00AB05BC /* TCAWorkshopApp.swift in Sources */,
+				7EE5F9332A9482B500371EEE /* DateFormatter+Init.swift in Sources */,
 				7EC40DDA2A9333A8007007CE /* UnavailableMeetingRoomDomain.swift in Sources */,
 				7E28FA0D2A80A0DD002E3AA9 /* AppDelegate+Firebase.swift in Sources */,
 			);
