@@ -35,19 +35,21 @@ extension MeetingRoomClient {
                 merge: true
             )
     }, fetch: {
-        var fetchedMeetingRooms = [MeetingRoom]()
-                
+        /// 속도 개선의 역사... 1.1초 -> 0.6초 -> 0.3초
+        /// withTaskGroup으로 멀티 쓰레딩하겠다고 까불다가 1.1초 맞았다.
+        /// 각 메소드를 group task로 추가하지 않고 멀티쓰레딩이라고 까불었던것.
+        /// 기존엔 for 문도 돌리고 Store에 send도 같이 엮여있었다.
+        /// 0.6초가 나왔다. 로직이 서로 엮이는 게 성능 저하의 원인으로 보였다.
+        /// 로직 책임을 명확히 나누고 fetch는 fetch만 하게 하고 store는 그 데이터를 따로 처리하도록 했다.
+        /// 0.3초 진입 성공🎉
         async let docSnapshot = try Constants.FIREBASE_COLLECTION
             .getDocuments()
         
-        for doc in try await docSnapshot.documents {
-            let fetchedMeetingRoom = try doc.data(as: MeetingRoom.self)
-            /// 굳이 store의 action을 여기서 억지로 처리할 필요가 있을까
-            /// 'fetch' 이상의 역할을 하게 되는데 왜?
-            fetchedMeetingRooms.append(fetchedMeetingRoom)
+        let result = try await docSnapshot.documents.map {
+            try $0.data(as: MeetingRoom.self)
         }
         
-        return fetchedMeetingRooms
+        return result
     })
 
     static let test = Self(
@@ -56,5 +58,6 @@ extension MeetingRoomClient {
         }, fetch: {
             print("Fetch Start in: \(Constants.FIREBASE_COLLECTION.description)")
             return [MeetingRoom.testInstance()]
-        })
+        }
+    )
 }
