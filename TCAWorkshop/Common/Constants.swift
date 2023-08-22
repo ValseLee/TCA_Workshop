@@ -23,4 +23,7 @@ public enum Constants {
         "OTHERS",
         "AVAILABLE",
     ]
+    
+    static let CANCELABLE_RESERVATION_ID = "RESERVATION"
+    static let CANCELABLE_RESERVATION_CANCEL_ID = "RESERVATION_CANCEL"
 }
