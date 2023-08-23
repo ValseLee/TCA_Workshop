@@ -14,9 +14,9 @@ struct MeetingRoomListDomain: Reducer {
     @Dependency(\.date.now) var now
     
     struct State: Equatable {
-        var availableMeetingRoomArray: IdentifiedArrayOf<MeetingRoomDomain.State> = []
-        var unavailableMeetingRoomArray: IdentifiedArrayOf<MeetingRoomDomain.State> = []
-        var bookedMeetingRoomArray: IdentifiedArrayOf<MeetingRoomDomain.State> = []
+        var availableMeetingRoomArray: IdentifiedArrayOf<AvailableMeetingRoomFeature.State> = []
+        var unavailableMeetingRoomArray: IdentifiedArrayOf<UnavabilableMeetingRoomFeature.State> = []
+        var bookedMeetingRoomArray: IdentifiedArrayOf<BookedMeetingRoomFeature.State> = []
         
         var isMeetingRoomInitOnce: Bool = false
         var isMeetingRoomFetching: Bool = false
@@ -30,18 +30,18 @@ struct MeetingRoomListDomain: Reducer {
     
     @frozen enum Action: Equatable {
         case bookedMeetingRoom(
-            id: MeetingRoomDomain.State.ID,
-            action: MeetingRoomDomain.Action
+            id: BookedMeetingRoomFeature.State.ID,
+            action: BookedMeetingRoomFeature.Action
         )
         
         case availableMeetingRoom(
-            id: MeetingRoomDomain.State.ID,
-            action: MeetingRoomDomain.Action
+            id: AvailableMeetingRoomFeature.State.ID,
+            action: AvailableMeetingRoomFeature.Action
         )
         
         case unavailableMeetingRoom(
-            id: MeetingRoomDomain.State.ID,
-            action: MeetingRoomDomain.Action
+            id: UnavabilableMeetingRoomFeature.State.ID,
+            action: UnavabilableMeetingRoomFeature.Action
         )
         
         case onMeetingRoomListViewAppear
@@ -141,19 +141,19 @@ struct MeetingRoomListDomain: Reducer {
             \.bookedMeetingRoomArray,
              action: /Action.bookedMeetingRoom(id:action:)
         ) {
-            MeetingRoomDomain()
+            BookedMeetingRoomFeature()
         }
         .forEach(
             \.unavailableMeetingRoomArray,
              action: /Action.unavailableMeetingRoom(id:action:)
         ) {
-            MeetingRoomDomain()
+            UnavabilableMeetingRoomFeature()
         }
         .forEach(
             \.availableMeetingRoomArray,
              action: /Action.availableMeetingRoom(id:action:)
         ) {
-            MeetingRoomDomain()
+            AvailableMeetingRoomFeature()
         }
     }
     
@@ -170,10 +170,9 @@ struct MeetingRoomListDomain: Reducer {
                 state.bookedMeetingRoomArray[idx].selectedMeetingRoom = fetchedMeetingRoom
             } else {
                 state.bookedMeetingRoomArray.append(
-                    MeetingRoomDomain.State(
-                        rentDate: self.now,
-                        id: fetchedMeetingRoom.id,
-                        selectedMeetingRoom: fetchedMeetingRoom
+                    BookedMeetingRoomFeature.State(
+                        selectedMeetingRoom: fetchedMeetingRoom,
+                        id: fetchedMeetingRoom.id
                     )
                 )
             }
@@ -185,10 +184,9 @@ struct MeetingRoomListDomain: Reducer {
                 state.unavailableMeetingRoomArray[idx].selectedMeetingRoom = fetchedMeetingRoom
             } else {
                 state.unavailableMeetingRoomArray.append(
-                    MeetingRoomDomain.State(
-                        rentDate: self.now,
-                        id: fetchedMeetingRoom.id,
-                        selectedMeetingRoom: fetchedMeetingRoom
+                    UnavabilableMeetingRoomFeature.State(
+                        selectedMeetingRoom: fetchedMeetingRoom,
+                        id: fetchedMeetingRoom.id
                     )
                 )
             }
@@ -200,10 +198,9 @@ struct MeetingRoomListDomain: Reducer {
                 state.availableMeetingRoomArray[idx].selectedMeetingRoom = fetchedMeetingRoom
             } else {
                 state.availableMeetingRoomArray.append(
-                    MeetingRoomDomain.State(
-                        rentDate: self.now,
-                        id: fetchedMeetingRoom.id,
-                        selectedMeetingRoom: fetchedMeetingRoom
+                    AvailableMeetingRoomFeature.State(
+                        selectedMeetingRoom: fetchedMeetingRoom,
+                        id: fetchedMeetingRoom.id
                     )
                 )
             }
