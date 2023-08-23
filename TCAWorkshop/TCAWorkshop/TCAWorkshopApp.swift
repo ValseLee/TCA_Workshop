@@ -7,6 +7,7 @@
 
 import SwiftUI
 import ComposableArchitecture
+import XCTestDynamicOverlay
 
 @main
 struct TCAWorkshopApp: App {
@@ -14,13 +15,15 @@ struct TCAWorkshopApp: App {
     
     var body: some Scene {
         WindowGroup {
-            NavigationStack {
-                RootView(
-                    store: Store(initialState: MeetingRoomListDomain.State()) {
-                        MeetingRoomListDomain()
-                            ._printChanges()
-                    }
-                )
+            if !_XCTIsTesting {
+                NavigationStack {
+                    RootView(
+                        store: Store(initialState: MeetingRoomListDomain.State()) {
+                            MeetingRoomListDomain()
+                                ._printChanges()
+                        }
+                    )
+                }
             }
         }
     }
