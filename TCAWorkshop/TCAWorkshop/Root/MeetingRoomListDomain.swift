@@ -11,7 +11,10 @@ import FirebaseFirestoreSwift
 import Foundation
 
 struct MeetingRoomListDomain: Reducer {
+<<<<<<< HEAD
     let firebaseClient: MeetingRoomClient = .live
+=======
+>>>>>>> 3fc1f83 ([Update])
     @Dependency(\.date.now) var now
     
     struct State: Equatable {
