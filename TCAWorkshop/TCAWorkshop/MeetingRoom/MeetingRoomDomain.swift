@@ -18,8 +18,8 @@ struct MeetingRoomDomain: Reducer {
     }
     
     struct State: Equatable, Identifiable {
-        @BindingState var rentDate: Date = .now
         @BindingState var rentHourAndMinute: Int = 1
+        @BindingState var rentDate: Date
         
         var id: UUID
         var selectedMeetingRoom: MeetingRoom

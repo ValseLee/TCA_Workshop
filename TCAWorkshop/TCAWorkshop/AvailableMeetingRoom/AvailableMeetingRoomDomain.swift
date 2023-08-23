@@ -9,7 +9,8 @@ import ComposableArchitecture
 import Foundation
 
 struct AvailableMeetingRoomFeature: Reducer {
-    let meetingRoomClient: MeetingRoomClient = .live
+    @Dependency(\.meetingRoomClient)
+    var meetingRoomClient: MeetingRoomClient
     
     struct State: Equatable, Identifiable {
         @BindingState var selectedMeetingRoom: MeetingRoom

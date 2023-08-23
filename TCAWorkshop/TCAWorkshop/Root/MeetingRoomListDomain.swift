@@ -11,8 +11,8 @@ import FirebaseFirestoreSwift
 import Foundation
 
 struct MeetingRoomListDomain: Reducer {
-    let firebaseClient: MeetingRoomClient = .live
-    @Dependency(\.date.now) var now
+    @Dependency(\.meetingRoomClient)
+    var firebaseClient: MeetingRoomClient
     
     struct State: Equatable {
         var availableMeetingRoomArray: IdentifiedArrayOf<AvailableMeetingRoomFeature.State> = []
