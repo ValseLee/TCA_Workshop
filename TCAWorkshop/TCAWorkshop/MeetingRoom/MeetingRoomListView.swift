@@ -170,7 +170,9 @@ struct RootView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
             RootView(
-                store: Store(initialState: MeetingRoomListDomain.State()) {
+                store: Store(
+                    initialState: MeetingRoomListDomain.State(isFetchAvailable: false)
+                ) {
                     // PREVIEW는 Test용으로 client를 초기화합니다.
                     MeetingRoomListDomain()
                         .dependency(\.meetingRoomClient, .test)
