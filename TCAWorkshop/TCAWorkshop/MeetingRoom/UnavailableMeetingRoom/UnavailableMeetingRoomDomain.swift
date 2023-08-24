@@ -10,9 +10,8 @@ import Foundation
 
 struct UnavabilableMeetingRoomFeature: Reducer {
     struct State: Equatable, Identifiable {
-        var minuteHourformatter: DateFormatter = DateFormatter(dateFormat: "HH:mm a", calendar: .autoupdatingCurrent)
-        var dayformatter: DateFormatter = DateFormatter(dateFormat: "YY년 MM월 dd일")
-        
+        var minuteHourFormatter: DateFormatter
+        var dayFormatter: DateFormatter
         var selectedMeetingRoom: MeetingRoom
         var id: UUID
     }

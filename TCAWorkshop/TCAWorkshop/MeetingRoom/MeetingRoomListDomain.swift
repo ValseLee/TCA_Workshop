@@ -14,6 +14,12 @@ struct MeetingRoomListDomain: Reducer {
     @Dependency(\.meetingRoomClient)
     var firebaseClient: MeetingRoomClient
     
+    @Dependency(\.customDateFormatter.minuteHourFormatter)
+    var minuteDateFormatter
+    
+    @Dependency(\.customDateFormatter.dayFormatter)
+    var dayFormatter
+    
     struct State: Equatable {
         var availableMeetingRoomArray: IdentifiedArrayOf<AvailableMeetingRoomFeature.State> = []
         var unavailableMeetingRoomArray: IdentifiedArrayOf<UnavabilableMeetingRoomFeature.State> = []
@@ -224,9 +230,11 @@ struct MeetingRoomListDomain: Reducer {
                     where: { $0.selectedMeetingRoom == fetchedMeetingRoom }
                 ) {
                     state.unavailableMeetingRoomArray[idx].selectedMeetingRoom = fetchedMeetingRoom
-                } else {
+                } else {                    
                     state.unavailableMeetingRoomArray.append(
                         UnavabilableMeetingRoomFeature.State(
+                            minuteHourFormatter: minuteDateFormatter,
+                            dayFormatter: dayFormatter,
                             selectedMeetingRoom: fetchedMeetingRoom,
                             id: fetchedMeetingRoom.id
                         )

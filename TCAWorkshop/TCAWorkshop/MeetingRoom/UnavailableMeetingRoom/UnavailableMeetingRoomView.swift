@@ -75,7 +75,7 @@ struct UnavailableMeetingRoomView: View {
                     
                     Spacer()
                     
-                    Text(viewStore.dayformatter.string(
+                    Text(viewStore.dayFormatter.string(
                         from: viewStore.selectedMeetingRoom.rentDate)
                     )
                     .padding(.horizontal)
@@ -93,7 +93,7 @@ struct UnavailableMeetingRoomView: View {
                     
                     Spacer()
                     
-                    Text(viewStore.minuteHourformatter.string(
+                    Text(viewStore.minuteHourFormatter.string(
                         from: viewStore.selectedMeetingRoom.rentDate)
                     )
                     .padding(.horizontal)
@@ -165,6 +165,8 @@ struct UnavailableMeetingRoomView_Previews: PreviewProvider {
         UnavailableMeetingRoomView(
             store: Store(
                 initialState: UnavabilableMeetingRoomFeature.State(
+                    minuteHourFormatter: .init(),
+                    dayFormatter: .init(),
                     selectedMeetingRoom: .testInstance(),
                     id: .init(0)
                 ), reducer: {
