@@ -23,3 +23,9 @@ extension DateFormatter {
         self.calendar = calendar
     }
 }
+
+/// App 내에서 사용할 Formatter들을 보관하는 Container
+struct DateFormatters {
+    let minuteHourFormatter = DateFormatter(dateFormat: "HH:mm a", calendar: .autoupdatingCurrent)
+    let dayFormatter = DateFormatter(dateFormat: "YY년 MM월 dd일", calendar: .autoupdatingCurrent)
+}
