@@ -52,14 +52,14 @@ struct MeetingRoomListDomain: Reducer {
         
         case meetingRoomFetchComplete
         case meetingRoomFetchFailed
+        case fetchUnavailableResponse
         
         case listRefreshed
         case confirmationDialogRetryButtonTapped
         case confirmationDialogDismissed(Bool)
-        case fetchUnavailableResponse
     }
     
-    var body: some ReducerOf<MeetingRoomListDomain> {
+    var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
                 // MARK: - .forEach
@@ -140,17 +140,17 @@ struct MeetingRoomListDomain: Reducer {
                 return .send(.meetingRoomFetchComplete, animation: .easeInOut)
                 
             case .meetingRoomFetchComplete:
+                state.isMeetingRoomInitOnce = true
                 state.isMeetingRoomFetching = false
                 state.isMeetingRoomFetchFailed = false
-                state.isMeetingRoomInitOnce = true
                 state.hasMeetingRoomChanged = false
                 checkIfMeetingRoomArrayIsEmpty(&state)
                 
                 return .none
                 
             case .meetingRoomFetchFailed:
-                state.isMeetingRoomFetchFailed = true
                 state.isMeetingRoomFetching = false
+                state.isMeetingRoomFetchFailed = true
                 
                 return .none
                 
