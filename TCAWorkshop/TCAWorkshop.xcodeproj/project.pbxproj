@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7E0F9DA32A97827200A1475A /* Dependency+DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E0F9DA22A97827200A1475A /* Dependency+DateFormatter.swift */; };
 		7E28FA082A80A09A002E3AA9 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 7E28FA072A80A09A002E3AA9 /* FirebaseFirestore */; };
 		7E28FA0A2A80A09A002E3AA9 /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 7E28FA092A80A09A002E3AA9 /* FirebaseFirestoreSwift */; };
 		7E28FA0D2A80A0DD002E3AA9 /* AppDelegate+Firebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E28FA0C2A80A0DD002E3AA9 /* AppDelegate+Firebase.swift */; };
@@ -45,6 +46,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		7E0F9DA22A97827200A1475A /* Dependency+DateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Dependency+DateFormatter.swift"; sourceTree = "<group>"; };
 		7E28FA0C2A80A0DD002E3AA9 /* AppDelegate+Firebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+Firebase.swift"; sourceTree = "<group>"; };
 		7E612C2E2A7E65BF00E4EC21 /* MeetingRoom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingRoom.swift; sourceTree = "<group>"; };
 		7E612C322A7E69DD00E4EC21 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
@@ -92,9 +94,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7E0F9DA12A97825800A1475A /* Dependencies */ = {
+			isa = PBXGroup;
+			children = (
+				7EDCDBBC2A95F2BD0018AF04 /* DependencyValue+MeetingRoomClient.swift */,
+				7E0F9DA22A97827200A1475A /* Dependency+DateFormatter.swift */,
+			);
+			path = Dependencies;
+			sourceTree = "<group>";
+		};
 		7E28FA0B2A80A0BE002E3AA9 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				7E0F9DA12A97825800A1475A /* Dependencies */,
 				7EC40DDE2A9333F1007007CE /* Extensions */,
 				7E6BC5172A81277700D2A871 /* Constants.swift */,
 				7E7C63D32A7D233700AB05BC /* Preview Content */,
@@ -228,7 +240,6 @@
 			children = (
 				7EC40DDF2A9333F7007007CE /* View+ButtonLabel.swift */,
 				7EE5F9322A9482B500371EEE /* DateFormatter+Init.swift */,
-				7EDCDBBC2A95F2BD0018AF04 /* DependencyValue+MeetingRoomClient.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -357,6 +368,7 @@
 				7EC40DD82A933399007007CE /* BookedMeetingRoomDomain.swift in Sources */,
 				7EC40DE02A9333F7007007CE /* View+ButtonLabel.swift in Sources */,
 				7EC40DE82A93395D007007CE /* AvailableMeetingRoomView.swift in Sources */,
+				7E0F9DA32A97827200A1475A /* Dependency+DateFormatter.swift in Sources */,
 				7EDCDBBD2A95F2BD0018AF04 /* DependencyValue+MeetingRoomClient.swift in Sources */,
 				7E6BC5182A81277700D2A871 /* Constants.swift in Sources */,
 				7E7C639A2A7D17AA00AB05BC /* TCAWorkshopApp.swift in Sources */,
