@@ -1,8 +1,8 @@
 # TCA_Workshop
 📍  Apple Developer Academy 2nd, TCA Workshop
-> Workshop Version Infos:<br>
-> 본 워크숍 문서는 공시된 하단의 버전을 바탕으로 작성되었으며, 해당 버전에서 최적화되어 있습니다.<br>
-> \- Swift 5.7.1 +, Deploy iOS 16.2, Xcode 14.2, TCA 1.0.0
+> Workshop Version Infos: <br>
+> 본 워크숍 문서는 공시된 하단의 버전을 바탕으로 작성되었으며, 해당 버전에서 최적화되어 있습니다. <br>
+> \- Swift 5.7.1 +, Deploy iOS 16.2, Xcode 14.2, TCA 1.0.0 <br>
 
 ---
 ## Architecture?
@@ -50,7 +50,7 @@
 
 ---
 ## The Composable Architecture 기본 개념
-> 하단의 장단점은 글쓴이의 **개인적인 견해**이며, SwiftUI 를 기준으로 작성되었습니다.<br>
+> 하단의 장단점은 글쓴이의 **개인적인 견해**이며, SwiftUI 를 기준으로 작성되었습니다. <br>
 > 영어 원문의 출처는 [**ComposableArchitecture 공식 문서**](https://pointfreeco.github.io/swift-composable-architecture/main/documentation/composablearchitecture/) 및 [**Pointfree.co Collection**](https://www.pointfree.co/collections)에서 발췌하였습니다.
 
 ### 장점
@@ -62,9 +62,9 @@
     - 부모-자식 간 `State` 구조체를 `.forEach()`, `.ifLet()` 등의 메소드로 안정적인 상태 공유 가능
 
 ### 단점
-- 프레임워크의 유연한 사용을 위해 이해해야 하는 특정 타입과 메소드가 분명하기 때문에 일정 수준 이상의 숙련도를 요구한다.
+- TCA의 유연한 사용을 위해 이해해야 하는 특정 타입과 메소드가 분명하기 때문에 일정 수준 이상의 숙련도를 요구한다.
     - `IdentfiedArrayOf<Array<Element>>`, `.forEach(_:action:element)` 등의 API에 대한 기본적인 이해 필요
-- SwiftUI의 기본 API 대신 프레임워크의 API를 활용하는 것이 대부분의 상황에서 강제된다.
+- SwiftUI의 기본 API 대신 TCA의 API를 활용하는 것이 대부분의 상황에서 강제된다.
     - `@State`는 값 타입인 `State` 구조체에 래핑되고, 뷰에 직접 바인딩하기 위해선 viewStore를 `WithViewStore` 등으로 접근하는 `@BindingState` 를 활용해야 한다는 점
     - `WithViewStore` 자체가 복잡한 뷰를 래핑할 경우, 컴파일러 자체의 연산을 느리게 할 수 있다는 단점 또한 존재
 - 컴파일러의 자동 완성이 아직 완전하지 않다.
@@ -109,7 +109,7 @@ struct AFeature: Reducer {
 }
 ```
 ---
-#### `func reduce(into:action:)`와 body
+#### `func reduce(into:action:)`와 `body`
 - `reduce(into:action:)`은 인스턴스의 상태와 액션을 아규먼트로 받아서 이를 `Effect` 타입으로 반환한다.
 - 단일한 `Effect` 타입의 리턴을 통해 애플리케이션 전체의 일관성을 높일 수 있다.
     - 상태에 대한 리턴이 아닌 액션에 대한 리턴으로서, 해당 액션이 그 다음에 어떤 액션을 수행하는지를 정의한다.
@@ -194,7 +194,7 @@ struct AppIntroView: View {
 - `@BindingState` 등의 프로퍼티 래퍼를 활용하여 View에서 직접 접근하고 binding할 수 있다.
     - SwiftUI의 `TextField`나 `Toggle` 등의 View에 전달할 binding을 위해 주로 사용할 수 있다.
     - 이 경우, binding된 `State` 속성에 대한 처리가 필요하며, `Action` 열거형 타입이 `BindableAction` 프로토콜을 채택하고 `Reducer`가 `BindingReducer()`를 초기화해야 한다(Effect에 대한 처리는 필요하지 않다면 수행하지 않는다).
-    - 가능하면 **사용하지 않는 것**을 [공식 문서](https://pointfreeco.github.io/swift-composable-architecture/main/documentation/composablearchitecture/bindings/)에서 권장한다.
+<!--     - 가능하면 **사용하지 않는 것**을 [공식 문서](https://pointfreeco.github.io/swift-composable-architecture/main/documentation/composablearchitecture/bindingstate)에서 권장한다. // 이거 주장의 출처를 못찾아서 각주처리 -->
 ```swift
 struct AFeature: Reducer {
     /// Equatable 프로토콜을 채택함으로써 View가 State의 변화를 감지할 수 있다.
@@ -248,12 +248,20 @@ struct AFeature: Reducer {
 ---
 ### Effect
 - `Action` 타입을 제너릭으로 받는 '구조체'이다.
-- 크게 3가지의 타입 속성 및 메소드를 갖고 있다.
+- 크게 4가지의 타입 속성 및 메소드를 갖고 있다.
     - `.none`: 특정 액션이 끝나고 아무런 추가 액션이 필요하지 않을 때의 리턴 값으로 활용한다.
     - `.send(_:Action)`: 특정 액션 이후, 추가적인 동기 액션이 필요할 때 리턴한다. 다만 부모-자식 간의 로직 공유의 목적으로 활용하는 것을 권장한다. 액션이 전달될 때, 여러 층의 레이어를 경유하기 때문이다.
-    - `run(priority:operation:catch:fileID:line:) -> Effect<Action>`: 비동기 작업을 리턴한다.
-        - 각 핸들러 클로저에 전달되는 `Send` 구조체는 `MainActor`이지만 메소드처럼 호출할 수 있다.
+    - `.run(priority:operation:catch:fileID:line:) -> Effect<Action>`: 비동기 작업을 리턴한다.
+        - 각 핸들러 클로저에 전달되는 `Send` 구조체는 `MainActor`이며 `callAsFunction`으로 호출할 수 있다.
         - 클로저 내부에서 원칙적으로 `throw` 한 작업을 호출할 수 있으며, non-cancellation 메소드들은 catch handler로 에러에 대한 처리가 필요하다.
+    - `.cancel(id:)`: 주어진 identifier를 갖는 비동기 작업을 취소한다.
+    - `.cancellable(id:)`: 취소될 수 있는 비동기 작업이 되도록 identifier를 제공한다. TCA 내부의 취소 작업은 `NSRecursiveLock` 및 `Combine` 프레임워크와 연계되어 처리된다.
+- `Effect`는 다른 `Effect`와의 구조화된 작업을 처리할 수 있는 메소드를 제공한다.
+    - `.merge(_:)`: 하나의 `Effect`와 다른 모든 `Effect`를 동시에 처리한다. `Sequence`를 만족하는 배열도 파라미터로 전달할 수 있으며, 가변 파라미터를 받는다.
+    - `.merge(with:)`: 하나의 `Effect`와 다른 `Effect`를 동시에 처리한다. 각 `Effect`가 비동기 작업 혹은 동기 작업이어도 내부 Combine 프레임워크와의 연계로 작업을 합칠 수 있다.
+    - `.concatenate(_:)`: 하나의 `Effect`와 다른 모든 `Effect`가 파라미터로 전달되는 순서대로 처리한다. 가변 파라미터를 받는다.
+    - `.map(_:)`: 업스트림의 `Effect` 요소를 처리할 클로저를 통해 요소들을 처리한다.
+        - TODO: 예시 코드 구현해두기
 
 ```swift
 struct AFeature: Reducer {
@@ -286,7 +294,7 @@ struct AFeature: Reducer {
                 
             case .alertDismissed:
                 print("Alert Dismissed")
-                return .none
+                return .merge(.send(.doNothing))
                 
             case .doNothing:
                 print("Do Nothing!")
@@ -296,6 +304,46 @@ struct AFeature: Reducer {
     }
 }
 ```
-### Etc
-- Environment(DEPRECATED?)
-- Dependency
+---
+### Dependency
+> 하단의 모든 내용은 [라이브러리]((https://github.com/pointfreeco/swift-dependencies))의 내용을 참고했습니다. <br>
+> 관련 내용을 자세하게 다루지는 않으며, TCA에서의 간단한 활용법을 다룹니다.
+
+- 애플리케이션이 사용하는 외부 의존성을 효율적이고 인체공학적인 방식으로 처리할 수 있도록 제안하는 Pointfree의 또 다른 라이브러리이다.
+- 특히 Test 코드를 작성할 때에 자주 활용하게 되며, 각 인스턴스 간의 동일성을 보장하고 개발자가 편하게 의존성을 제어할 수 있다.
+    - 10분을 기다려서 확인해야 하는 로직을 1초 내에 처리할 수 있다거나, `UUID`의 랜덤 생성을 제어할 수 있다거나 등의 장점이 있다.
+    - 서버 의존성을 최소화한 테스트, Preview를 구성할 수 있다.
+- TCA에서만 사용될 수 있는 라이브러리는 아니지만, TCA의 Test를 위해서는 반강제적으로 사용법을 익혀야 한다.
+- `UUID`, `Date`, `Clock` 등등의 기본 Dependency가 주어지며, 원한다면 추가할 수 있다.
+    - 이 경우, `DependencyValue`와 `DependencyKey`로 관리해야 하며, `Reducer` 내애서도 `Dependency`를 따라야 한다.
+
+```swift
+// DependencyValues의 확장에 커스텀한 Dependency를 보관
+extension DependencyValues {
+    var myDependency: MyDependencyType {
+        get { self[MyDependencyKey.self] }
+        set { self[MyDependencyKey.self] = newValue }
+    }
+}
+
+// Dependency로 접근하여 `get`할 liveValue와 testValue를 지정
+// testValue가 없으면 test 시에 에러가 발생할 수 있음
+fileprivate enum MyDependencyKey: DependencyKey {
+    static var liveValue: MyDependencyType = .live
+    static var testValue: MyDependencyType = .test
+}
+
+// REDUCER
+struct MyReducer: Reducer {
+    // SwiftUI 가 제안하는 `environment`의 사용과 매우 유사
+    @Dependency(\.myDependency)
+    var myDependency: MyDependencyType
+    
+    struct State: Equatable { /* code */ }
+    enum Action: Equatable { /* code */ }
+    var body: some RedcuerOf<Self> { /* code */ }
+}
+```
+---
+### Testable Code
+- 내용 추가 예정!
