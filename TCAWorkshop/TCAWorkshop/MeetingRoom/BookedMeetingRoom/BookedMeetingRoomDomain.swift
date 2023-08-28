@@ -12,6 +12,9 @@ struct BookedMeetingRoomFeature: Reducer {
     @Dependency(\.meetingRoomClient)
     var meetingRoomClient: MeetingRoomClient
     
+    @Dependency(\.continuousClock)
+    var clock: any Clock<Duration>
+    
     struct State: Equatable, Identifiable {
         @BindingState var selectedMeetingRoom: MeetingRoom
         var id: UUID
@@ -47,7 +50,7 @@ struct BookedMeetingRoomFeature: Reducer {
                     
                     return .run { [selectedMeetingRoom = state.selectedMeetingRoom] send in
                         try await meetingRoomClient.update(selectedMeetingRoom)
-                        try! await Task.sleep(for: .seconds(0.5))
+                        try await clock.sleep(for: .seconds(0.5))
                         await send(.cancelReservationResponse, animation: .easeInOut)
                     } catch: { error, send in
                         print("RESERVATION CANCEL FAILED", error.localizedDescription)
