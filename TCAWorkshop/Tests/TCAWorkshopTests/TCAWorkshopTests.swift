@@ -71,4 +71,30 @@ final class TCAWorkshopTests: XCTestCase {
             $0.isMeetingRoomInitOnce = true
         }
     }
+    
+    func testTakeLongLongTimeTask() async throws {
+        let store = TestStore(initialState: MeetingRoomListDomain.State()) {
+            MeetingRoomListDomain()
+        } withDependencies: {
+            $0.continuousClock = ContinuousClock()
+        }
+        
+        await store.send(.takeLongLongTimeTaskButtonTapped)
+        await store.receive(.takeLongLongTimeTaskResponse("COMPLETE"), timeout: .seconds(120.0)) {
+            $0.takeLongLongTimeTaskResult = "COMPLETE"
+        }
+    }
+    
+    func testTakeLongLongTimeTaskInShort() async throws {
+        let store = TestStore(initialState: MeetingRoomListDomain.State()) {
+            MeetingRoomListDomain()
+        } withDependencies: {
+            $0.continuousClock = ImmediateClock()
+        }
+        
+        await store.send(.takeLongLongTimeTaskButtonTapped)
+        await store.receive(.takeLongLongTimeTaskResponse("COMPLETE"), timeout: .seconds(1.0)) {
+            $0.takeLongLongTimeTaskResult = "COMPLETE"
+        }
+    }
 }

@@ -14,6 +14,9 @@ struct MeetingRoomListDomain: Reducer {
     @Dependency(\.meetingRoomClient)
     var firebaseClient: MeetingRoomClient
     
+    @Dependency(\.continuousClock)
+    var clock: any Clock<Duration>
+    
     struct State: Equatable {
         var availableMeetingRoomArray: IdentifiedArrayOf<AvailableMeetingRoomFeature.State> = []
         var unavailableMeetingRoomArray: IdentifiedArrayOf<UnavabilableMeetingRoomFeature.State> = []
@@ -29,6 +32,8 @@ struct MeetingRoomListDomain: Reducer {
         var isAvailableMeetingRoomArrayEmpty: Bool = true
         var isUnavailableMeetingRoomArrayEmpty: Bool = true
         var isBookedMeetingRoomArrayEmpty: Bool = true
+        
+        var takeLongLongTimeTaskResult: String = ""
     }
     
     @frozen enum Action: Equatable {
@@ -57,6 +62,9 @@ struct MeetingRoomListDomain: Reducer {
         case listRefreshed
         case confirmationDialogRetryButtonTapped
         case confirmationDialogDismissed(Bool)
+        
+        case takeLongLongTimeTaskButtonTapped
+        case takeLongLongTimeTaskResponse(String)
     }
     
     var body: some ReducerOf<Self> {
@@ -160,8 +168,11 @@ struct MeetingRoomListDomain: Reducer {
                 
                 return .run { send in
                     let fetchedMeetingRooms = try await self.firebaseClient.fetch()
-                    try await Task.sleep(for: .seconds(0.5))
-                    await send(.meetingRoomFetchComplete, animation: .easeInOut)
+                    try await clock.sleep(for: .seconds(0.5))
+                    await send(
+                        .processFetchedMeetingRooms(with: fetchedMeetingRooms),
+                        animation: .easeInOut
+                    )
                 }
                 catch: { error, send in
                     print("FETCH FAILED AGAIN: ", error)
@@ -175,6 +186,16 @@ struct MeetingRoomListDomain: Reducer {
             case .fetchUnavailableResponse:
                 state.isFetchAvailable = false
                 state.isMeetingRoomFetching = false
+                return .none
+                
+            case .takeLongLongTimeTaskButtonTapped:
+                return .run { send in
+                    try await clock.sleep(for: .seconds(120))
+                    print("정말 오래 걸렸다!")
+                    await send(.takeLongLongTimeTaskResponse("COMPLETE"))
+                }
+            case let .takeLongLongTimeTaskResponse(result):
+                state.takeLongLongTimeTaskResult = result
                 return .none
             }
         }
