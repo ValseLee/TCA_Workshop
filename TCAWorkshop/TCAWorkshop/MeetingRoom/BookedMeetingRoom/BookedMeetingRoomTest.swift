@@ -6,30 +6,63 @@
 //
 
 import XCTest
+import ComposableArchitecture
+import XCTestDynamicOverlay
+@testable import TCAWorkshop
 
+@MainActor
 final class BookedMeetingRoomTest: XCTestCase {
-
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
-
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
-    }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
+    let testInstance = MeetingRoom.testInstance()
+    
+    func testOnBookedMeetingRoomCancelButtonTapped() async throws {
+        let store = TestStore(
+            initialState: BookedMeetingRoomFeature.State(
+                selectedMeetingRoom: testInstance,
+                id: testInstance.id
+            )) {
+                BookedMeetingRoomFeature()
+            } withDependencies: {
+                $0.continuousClock = ImmediateClock()
+            }
+        
+        await store.send(.cancelReservationButtonTapped) {
+            $0.isCancelReservationButtonTapped = true
+            $0.selectedMeetingRoom.rentBy = "AVAILABLE"
+        }
+        
+        await store.receive(.cancelReservationResponse) {
+            $0.isCancelReservationButtonTapped = false
+            $0.isCancelReservationCompleted = true
         }
     }
+    
+    /// Task가 정상적으로 취소되는지 확인하는 테스트 코드
+    func testOnBookedMeetingRoomCancelButtonTappedFailed() async throws {
+        let store = TestStore(
+            initialState: BookedMeetingRoomFeature.State(
+                selectedMeetingRoom: testInstance,
+                id: testInstance.id
+            )) {
+                BookedMeetingRoomFeature()
+            } withDependencies: {
+                $0.continuousClock = ContinuousClock()
+                // 만약 테스트가 실패한다면!
+                $0.meetingRoomClient.update = { _ in throw CancelError.cancelled }
+            }
+        
+        await store.send(.cancelReservationButtonTapped) {
+            try Task.checkCancellation()
+            $0.isCancelReservationButtonTapped = true
+            $0.selectedMeetingRoom.rentBy = "AVAILABLE"
+        }
+        
+        await store.receive(.cancelReservationCancelled, timeout: .seconds(1.0)) {
+            $0.isCancelReservationCancelled = true
+            $0.isCancelReservationButtonTapped = false
+        }
+    }
+}
 
+enum CancelError: Error {
+    case cancelled
 }

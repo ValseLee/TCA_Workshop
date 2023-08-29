@@ -12,12 +12,16 @@ struct BookedMeetingRoomFeature: Reducer {
     @Dependency(\.meetingRoomClient)
     var meetingRoomClient: MeetingRoomClient
     
+    @Dependency(\.continuousClock)
+    var clock: any Clock<Duration>
+    
     struct State: Equatable, Identifiable {
         @BindingState var selectedMeetingRoom: MeetingRoom
         var id: UUID
         
         var isCancelReservationButtonTapped: Bool = false
         var isCancelReservationCompleted: Bool = false
+        var isCancelReservationCancelled: Bool = false
     }
     
     enum Action: Equatable, BindableAction {
@@ -25,6 +29,7 @@ struct BookedMeetingRoomFeature: Reducer {
         case onViewDisappear
         case cancelReservationButtonTapped
         case cancelReservationResponse
+        case cancelReservationCancelled
     }
     
     var body: some ReducerOf<Self> {
@@ -38,6 +43,7 @@ struct BookedMeetingRoomFeature: Reducer {
             case .onViewDisappear:
                 state.isCancelReservationCompleted = false
                 state.isCancelReservationButtonTapped = false
+                state.isCancelReservationCancelled = false
                 return .cancel(id: Constants.CANCELABLE_RESERVATION_CANCEL_ID)
                 
             case .cancelReservationButtonTapped:
@@ -45,12 +51,17 @@ struct BookedMeetingRoomFeature: Reducer {
                     state.isCancelReservationButtonTapped = true
                     state.selectedMeetingRoom.rentBy = "AVAILABLE"
                     
-                    return .run { [selectedMeetingRoom = state.selectedMeetingRoom] send in
-                        try await meetingRoomClient.update(selectedMeetingRoom)
-                        try! await Task.sleep(for: .seconds(0.5))
-                        await send(.cancelReservationResponse, animation: .easeInOut)
+                    return .run { [state = state] send in
+                        try await withTaskCancellation(id: Constants.CANCELABLE_RESERVATION_CANCEL_ID) {
+                            // 업데이트가 외부적 요인에 의해 취소된다면 error 를 throw 한다.
+                            try Task.checkCancellation()
+                            try await meetingRoomClient.update(state.selectedMeetingRoom)
+                            try await clock.sleep(for: .seconds(0.5))
+                            await send(.cancelReservationResponse, animation: .easeInOut)
+                        }
                     } catch: { error, send in
                         print("RESERVATION CANCEL FAILED", error.localizedDescription)
+                        await send(.cancelReservationCancelled)
                     }
                         .cancellable(id: Constants.CANCELABLE_RESERVATION_CANCEL_ID)
                 }
@@ -60,6 +71,11 @@ struct BookedMeetingRoomFeature: Reducer {
             case .cancelReservationResponse:
                 state.isCancelReservationButtonTapped = false
                 state.isCancelReservationCompleted = true
+                return .none
+                
+            case .cancelReservationCancelled:
+                state.isCancelReservationButtonTapped = false
+                state.isCancelReservationCancelled = true
                 return .none
             }
         }
