@@ -16,6 +16,7 @@
 		7E6BC5152A8126C300D2A871 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7E7C63D42A7D233700AB05BC /* Preview Assets.xcassets */; };
 		7E6BC5182A81277700D2A871 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E6BC5172A81277700D2A871 /* Constants.swift */; };
 		7E6BC51B2A81382400D2A871 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7E6BC51A2A81382400D2A871 /* GoogleService-Info.plist */; };
+		7E6C63E42AA057FD0061548B /* AvailableMeetingRoomTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E6C63E32AA057FD0061548B /* AvailableMeetingRoomTest.swift */; };
 		7E7C639A2A7D17AA00AB05BC /* TCAWorkshopApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7C63992A7D17AA00AB05BC /* TCAWorkshopApp.swift */; };
 		7E7C639C2A7D17AA00AB05BC /* MeetingRoomListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7C639B2A7D17AA00AB05BC /* MeetingRoomListView.swift */; };
 		7E7C639E2A7D17AB00AB05BC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7E7C639D2A7D17AB00AB05BC /* Assets.xcassets */; };
@@ -33,6 +34,8 @@
 		7EDCDBBD2A95F2BD0018AF04 /* DependencyValue+MeetingRoomClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EDCDBBC2A95F2BD0018AF04 /* DependencyValue+MeetingRoomClient.swift */; };
 		7EE5F9332A9482B500371EEE /* DateFormatter+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE5F9322A9482B500371EEE /* DateFormatter+Init.swift */; };
 		7EE5F9352A94887E00371EEE /* FirebaseClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE5F9342A94887E00371EEE /* FirebaseClient.swift */; };
+		7EED7E9A2A9DD2DD00981004 /* UnavailableMeetingRoomTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EED7E992A9DD2DD00981004 /* UnavailableMeetingRoomTest.swift */; };
+		7EED7E9C2A9DD35700981004 /* BookedMeetingRoomTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EED7E9B2A9DD35700981004 /* BookedMeetingRoomTest.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +55,7 @@
 		7E612C322A7E69DD00E4EC21 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		7E6BC5172A81277700D2A871 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		7E6BC51A2A81382400D2A871 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		7E6C63E32AA057FD0061548B /* AvailableMeetingRoomTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvailableMeetingRoomTest.swift; sourceTree = "<group>"; };
 		7E7C63962A7D17AA00AB05BC /* TCAWorkshop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TCAWorkshop.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7E7C63992A7D17AA00AB05BC /* TCAWorkshopApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCAWorkshopApp.swift; sourceTree = "<group>"; };
 		7E7C639B2A7D17AA00AB05BC /* MeetingRoomListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingRoomListView.swift; sourceTree = "<group>"; };
@@ -70,6 +74,8 @@
 		7EDCDBBC2A95F2BD0018AF04 /* DependencyValue+MeetingRoomClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DependencyValue+MeetingRoomClient.swift"; sourceTree = "<group>"; };
 		7EE5F9322A9482B500371EEE /* DateFormatter+Init.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormatter+Init.swift"; sourceTree = "<group>"; };
 		7EE5F9342A94887E00371EEE /* FirebaseClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseClient.swift; sourceTree = "<group>"; };
+		7EED7E992A9DD2DD00981004 /* UnavailableMeetingRoomTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnavailableMeetingRoomTest.swift; sourceTree = "<group>"; };
+		7EED7E9B2A9DD35700981004 /* BookedMeetingRoomTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookedMeetingRoomTest.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -211,6 +217,7 @@
 		7EC40DD42A93336C007007CE /* AvailableMeetingRoom */ = {
 			isa = PBXGroup;
 			children = (
+				7E6C63E32AA057FD0061548B /* AvailableMeetingRoomTest.swift */,
 				7EC40DDB2A9333B4007007CE /* AvailableMeetingRoomDomain.swift */,
 				7EC40DE72A93395D007007CE /* AvailableMeetingRoomView.swift */,
 			);
@@ -220,6 +227,7 @@
 		7EC40DD52A933373007007CE /* UnavailableMeetingRoom */ = {
 			isa = PBXGroup;
 			children = (
+				7EED7E992A9DD2DD00981004 /* UnavailableMeetingRoomTest.swift */,
 				7EC40DD92A9333A8007007CE /* UnavailableMeetingRoomDomain.swift */,
 				7EC40DE52A933957007007CE /* UnavailableMeetingRoomView.swift */,
 			);
@@ -229,6 +237,7 @@
 		7EC40DD62A933378007007CE /* BookedMeetingRoom */ = {
 			isa = PBXGroup;
 			children = (
+				7EED7E9B2A9DD35700981004 /* BookedMeetingRoomTest.swift */,
 				7EC40DD72A933399007007CE /* BookedMeetingRoomDomain.swift */,
 				7EC40DE32A93392C007007CE /* BookedMeetingRoomView.swift */,
 			);
@@ -382,6 +391,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7E6C63E42AA057FD0061548B /* AvailableMeetingRoomTest.swift in Sources */,
+				7EED7E9C2A9DD35700981004 /* BookedMeetingRoomTest.swift in Sources */,
+				7EED7E9A2A9DD2DD00981004 /* UnavailableMeetingRoomTest.swift in Sources */,
 				7E7C63AB2A7D17AB00AB05BC /* TCAWorkshopTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
