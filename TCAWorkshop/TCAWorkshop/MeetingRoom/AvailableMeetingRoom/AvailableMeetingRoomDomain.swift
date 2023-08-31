@@ -21,13 +21,16 @@ struct AvailableMeetingRoomFeature: Reducer {
         
         var isReservationButtonTapped: Bool = false
         var isReservationCompleted: Bool = false
+        var isReservationFailed: Bool = false
     }
     
     enum Action: Equatable, BindableAction {
         case binding(BindingAction<State>)
         case onViewDisappear
+        
         case reservationButtonTapped
         case reservationResponse
+        case reservationFailed
     }
     
     
@@ -48,14 +51,13 @@ struct AvailableMeetingRoomFeature: Reducer {
                 guard state.isReservationCompleted else {
                     state.isReservationButtonTapped = true
                     state.selectedMeetingRoom.rentBy = "CURRENT_USER"
-                    /// 현 시점의 State를 immutable하게 capture copy해서 전달한다.
-                    /// inout value type 의 Data race를 방지
                     return .run { [selectedMeetingRoom = state.selectedMeetingRoom] send in
                         try await self.meetingRoomClient.update(selectedMeetingRoom)
                         try await clock.sleep(for: .seconds(0.5))
                         await send(.reservationResponse, animation: .easeInOut)
                     } catch: { error, send in
                         print("UPDATE FAILED", error.localizedDescription)
+                        await send(.reservationFailed)
                     }
                         .cancellable(id: Constants.CANCELABLE_RESERVATION_ID)
                 }
@@ -65,6 +67,11 @@ struct AvailableMeetingRoomFeature: Reducer {
             case .reservationResponse:
                 state.isReservationButtonTapped = false
                 state.isReservationCompleted = true
+                return .none
+                
+            case .reservationFailed:
+                state.isReservationButtonTapped = false
+                state.isReservationFailed = true
                 return .none
             }
         }
