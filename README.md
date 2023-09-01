@@ -306,15 +306,15 @@ struct AFeature: Reducer {
 ```
 ---
 ### Dependency
-> 하단의 모든 내용은 [라이브러리]((https://github.com/pointfreeco/swift-dependencies))의 내용을 참고했습니다. <br>
+> 하단의 모든 내용은 [**swift-dependencies**](https://github.com/pointfreeco/swift-dependencies)의 내용을 참고했습니다. <br>
 > 관련 내용을 자세하게 다루지는 않으며, TCA에서의 간단한 활용법을 다룹니다.
 
 - 애플리케이션이 사용하는 외부 의존성을 효율적이고 인체공학적인 방식으로 처리할 수 있도록 제안하는 Pointfree의 또 다른 라이브러리이다.
-- 특히 Test 코드를 작성할 때에 자주 활용하게 되며, 각 인스턴스 간의 동일성을 보장하고 개발자가 편하게 의존성을 제어할 수 있다.
+- 특히, Test 코드를 작성할 때에 자주 활용하게 되며 각 인스턴스 간의 동일성을 보장하고 개발자가 편하게 의존성을 제어할 수 있다.
     - 10분을 기다려서 확인해야 하는 로직을 1초 내에 처리할 수 있다거나, `UUID`의 랜덤 생성을 제어할 수 있다거나 등의 장점이 있다.
     - 서버 의존성을 최소화한 테스트, Preview를 구성할 수 있다.
 - TCA에서만 사용될 수 있는 라이브러리는 아니지만, TCA의 Test를 위해서는 반강제적으로 사용법을 익혀야 한다.
-- `UUID`, `Date`, `Clock` 등등의 기본 Dependency가 주어지며, 원한다면 추가할 수 있다.
+- `UUID`, `Date`, `Clock(pointfree의 라이브러리)` 등등의 기본 Dependency가 주어지며, 원한다면 추가할 수 있다.
     - 이 경우, `DependencyValue`와 `DependencyKey`로 관리해야 하며, `Reducer` 내애서도 `Dependency`를 따라야 한다.
 
 ```swift
@@ -345,5 +345,130 @@ struct MyReducer: Reducer {
 }
 ```
 ---
-### Testable Code
-- 내용 추가 예정!
+## TCA가 지향하는 Testable Code
+> 하단의 내용은 SwiftUI와 각 기능별 Unit Test를 중심으로 작성되었습니다. <br>
+> Test Code에 대한 전반적인 내용은 생략되어 있습니다.
+
+- TCA 공식 레포지토리에서 밝히듯, TCA 아키텍쳐로 SwiftUI 클라이언트를 개발한다면 Test 코드를 각 기능별로 효율적으로 작성할 수 있다.
+- TCA가 지향하는 테스트 코드에 능숙해진다면 다음의 이점을 가져갈 수 있다.
+    - Test 하고 싶은 기능을 빠르게 구현할 수 있고, `Action`의 흐름을 점검할 수 있다.
+    - `Dependency`의 커스터마이징을 통해 서버 의존성을 완전히 배제한 Test가 가능하다.
+    - `Action`의 기본 플로우를 벗어나는 사용 플로우를 Test할 수 있다.
+    - `Action`의 `send`와 `receive`를 제어할 수 있는 기능을 제공한다(`withExhaustivity`)
+    - 친절하고 명확한 test fail 메시지를 볼 수 있다.
+- Test는 크게 2가지로 구별할 수 있다(경우에 따라 더 세분화될 수 있다).
+    - `State`의 변화를 확인하는 Test와 `Side Effect` 처리에 대한 Test가 있다.
+- 모든 변화를 `main` 쓰레드에서 확인하고 비동기 작업에 대응할 수 있도록 `XCTestCase` 를 상속하는 test case class가 `@MainActor`를 갖는다.
+- 
+```swift
+@MainActor
+final class TCAWorkshopTests: XCTestCase {
+    // code
+}
+```
+
+### `TestStore`
+- Test를 진행하기 위해 기존의 `Store` 타입을 대체하여 생성하는 `Store` 타입
+- `TestStore`를 초기화할 때 제공하는 `Reducer`가 `Dependency`를 갖고 있다면, 해당 `Dependency`를 커스터마이징 할 수 있고, test에 사용할 경우 새롭게 정의해야 한다.
+    - 이 경우, `Dependency`는 `testValue`를 갖고 있어야 한다.
+    - `Dependency` 없이 특정 객체를 생성하고 `State`의 동등성을 비교하면 값 자체가 동일하더라도 테스트에 실패할 수 있다. 즉, `Reducer` 내부의 인스턴스와 TestStore `Reducer` 내부의 인스턴스가 달라지는 경우, 테스트는 실패한다.
+
+```swift
+func testLoginFeature() async throws {
+    let store = TestStore(
+        // 1️⃣ Test 시점에 어떤 State를 갖고 있는지 정의할 수 있다.
+        initialState: LoginFeature.State()
+    ) {
+        // 2️⃣ State를 Reduce하는 Reducer를 호출한다.
+        LoginFeature()
+    } withDependencies: { inout DependencyValues in
+        // 3️⃣ Dependency를 새로 할당하고 정의할 수 있다.
+    }
+}
+```
+---
+
+### State Test와 `.send(_:)`
+- `Action`으로 인해 `State`가 어떻게 변화하는지 비교하는 방식으로 테스트한다.
+- **통과 조건**: 실제 변화된 `State`가 변하리라고 예상했던 `State`와 동일할 때 테스트를 통과한다.
+- `State`의 동일성을 기준으로 테스트의 통과 유무가 정해지기 때문에 개발자가 제어할 수 없는 외부 의존성의 차이가 테스트를 방해하기도 한다.
+    - 값 타입 State의 동등성은 모든 저장 속성이 Equatable을 채택해야 보장된다.
+-> [Apple-Eqautable](https://developer.apple.com/documentation/swift/equatable)
+- 값의 변화가 일어나는 것에 대한 test를 진행하기 때문에 `initialState`의 상태가 변하지 않는다면 test는 `Action`의 여부에 무관하게 '변화가 없다'고 인지한다.
+
+```swift
+@MainActor
+final class LoginFeature_Test: XCTestCase {
+    func testIsLoginPossible() async throws {
+        let store = TestStore(
+            initialState: LoginFeature.State()
+        ) {
+            LoginFeature()
+        }
+
+        // 1️⃣ 특정 action이 트리거되었음을 알리는 .send(_:) 호출
+        // 2️⃣ 후행 클로저에서 State가 예상 변경 값 할당
+        // 3️⃣ send된 액션이 실제로 예상 변경 값과 동일한 변화를 만들 경우,
+        // State Test 통과 ✅
+        await store.send(.idStringEdited("ID")) {
+            $0.idString = "ID"
+        }
+    }
+}
+```
+
+### Side Effect Test와 `.receive(_:)`
+- `Action`이나 `Effect`로 인해 `Action`의 연쇄가 올바르게 일어나는지, 그 과정에서 `State`는 올바르게 변형되는지 확인하는 Test이다.
+- `.withExhaustivity(_:operation:)`을 호출하는 양상에 따라 `receive` 받는 모든 `Action`을 무시하고 test를 진행할 수 있다.
+- `.receive(_:)` 는 특정 `Action`이 리턴하는 `Effect`가 또 다른 `Action`일 때, 해당 `Action`을 수신한다.
+
+```swift
+/* Action과 Reduce의 일부 */ 
+Reduce { action, state in
+    switch action { 
+    // 1️⃣ 해당 Action이 트리거 되면 이미지를 fetch하는 비동기 작업을 실행한다.
+    case .requestButtonTapped:
+    return .run { send in
+        let fetchedImage = try await requestImages()
+        // 2️⃣ 비동기 작업이 마무리되면 어플리케이션에 
+        // ``.requestResponse(Image)`` Action을 되먹인다.
+        await send(.requestResponse(fetchedImage))
+    }
+    .cancellable(id: "REQUEST_IMAGE", cancelInFlight: true)
+
+    // 3️⃣ 되먹임 되며 받아온 연관값을 State에 할당한다.
+    case let .requestResponse(image):
+        state.image = image
+        return .none
+    }    
+}
+
+/* Fetch 테스트 */
+func testFetchImage() async throws {
+    // 1️⃣ 해당 이미지가 fetch가 될 것이라 가정한다.
+    // 이것이 mock 이 된다.
+    let testImage = Image(systemName: "checkmark.circle.fill")
+
+    let store = TestStore(
+        initialState: CartFeature.State()
+    ) {
+        CartFeature()
+    }
+    
+    // 2️⃣ FetchRequest를 수행하는 Button을 누르는 액션을 트리거한다.
+    await store.send(.fetchRequestButtonTapped)
+    // 3️⃣ State의 변화가 예상되지 않는다면 클로저를 생략한다.
+
+    // 4️⃣ 위의 Action이 1초의 유예를 두고
+    // `.requestResponse(Image)`를 되먹임한다.
+    await store.receive(
+        .requestResponse(testImage),
+        timeout: .seconds(1.0)
+    ) {
+        // 5️⃣ 그리고 그 결과, 받아온 testImage를
+        // State의 이미지에 할당할 것임을 예상한다.
+        $0.image = testImage
+    }
+}
+
+```
