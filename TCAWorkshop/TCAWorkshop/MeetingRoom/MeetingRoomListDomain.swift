@@ -14,6 +14,12 @@ struct MeetingRoomListDomain: Reducer {
     @Dependency(\.meetingRoomClient)
     var firebaseClient: MeetingRoomClient
     
+    @Dependency(\.customDateFormatter.minuteHourFormatter)
+    var minuteDateFormatter
+    
+    @Dependency(\.customDateFormatter.dayFormatter)
+    var dayFormatter
+    
     @Dependency(\.continuousClock)
     var clock: any Clock<Duration>
     
@@ -194,6 +200,7 @@ struct MeetingRoomListDomain: Reducer {
                     print("정말 오래 걸렸다!")
                     await send(.takeLongLongTimeTaskResponse("COMPLETE"))
                 }
+                
             case let .takeLongLongTimeTaskResponse(result):
                 state.takeLongLongTimeTaskResult = result
                 return .none
@@ -245,9 +252,11 @@ struct MeetingRoomListDomain: Reducer {
                     where: { $0.selectedMeetingRoom == fetchedMeetingRoom }
                 ) {
                     state.unavailableMeetingRoomArray[idx].selectedMeetingRoom = fetchedMeetingRoom
-                } else {
+                } else {                    
                     state.unavailableMeetingRoomArray.append(
                         UnavabilableMeetingRoomFeature.State(
+                            minuteHourFormatter: minuteDateFormatter,
+                            dayFormatter: dayFormatter,
                             selectedMeetingRoom: fetchedMeetingRoom,
                             id: fetchedMeetingRoom.id
                         )

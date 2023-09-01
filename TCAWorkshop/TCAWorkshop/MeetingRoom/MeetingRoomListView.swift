@@ -25,13 +25,6 @@ struct RootView: View {
                             by: viewStore.state
                         )
                     }
-                    
-                    Button {
-                        //
-                    } label: {
-                        Text("정말 오래 걸리는 작업!")
-                    }
-
                 }
                 .onAppear {
                     viewStore.send(.onMeetingRoomListViewAppear)

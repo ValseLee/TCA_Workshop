@@ -7,6 +7,7 @@
 
 import XCTest
 import ComposableArchitecture
+import XCTestDynamicOverlay
 @testable import TCAWorkshop
 
 @MainActor
@@ -14,7 +15,7 @@ final class TCAWorkshopTests: XCTestCase {
     func testFetchMeetingRoomSuccessfully() async throws {
         // 1️⃣ Test를 위한 Instance를 생성
         var testInstance = MeetingRoom.testInstance()
-        testInstance.rentBy = "CURRENT_USER"
+        testInstance.rentBy = "OTHERS"
         
         // 2️⃣ Test를 위한 Store를 선언하고 dependency의 fetch가 언제나 testInstance를 리턴하도록 구현
         // 원한다면 서버 테스트도 가능하다.
@@ -39,8 +40,10 @@ final class TCAWorkshopTests: XCTestCase {
             .processFetchedMeetingRooms(with: [testInstance]),
             timeout: .seconds(1.0)
         ) {
-            $0.bookedMeetingRoomArray = [
+            $0.unavailableMeetingRoomArray = [
                 .init(
+                    minuteHourFormatter: networkStore.dependencies.customDateFormatter.minuteHourFormatter,
+                    dayFormatter: networkStore.dependencies.customDateFormatter.dayFormatter,
                     selectedMeetingRoom: testInstance,
                     id: testInstance.id
                 )
@@ -56,7 +59,7 @@ final class TCAWorkshopTests: XCTestCase {
         ) {
             $0.isMeetingRoomInitOnce = true
             $0.isMeetingRoomFetching = false
-            $0.isBookedMeetingRoomArrayEmpty = false
+            $0.isUnavailableMeetingRoomArrayEmpty = false
         }
     }
     
