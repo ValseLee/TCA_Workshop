@@ -29,7 +29,7 @@ TCA Workshop Actor, 첼란 드림.
 ![Xcode 14.2](https://img.shields.io/badge/Xcode-14.2-blue?logo=xcode)
 ![TCA](https://img.shields.io/badge/TCA-1.0.0-blue)
 
-- [1. 아키텍쳐와 The Composable Architecture]([https://github.com/ValseLee/TCA_Workshop/wiki/%EC%95%84%ED%82%A4%ED%85%8D%EC%B3%90%EC%99%80-The-Composable-Architecture](https://github.com/ValseLee/TCA_Workshop/wiki/1.-%EC%95%84%ED%82%A4%ED%85%8D%EC%B3%90%EC%99%80-The-Composable-Architecture))
+- [1. 아키텍쳐와 The Composable Architecture](https://github.com/ValseLee/TCA_Workshop/wiki/1.-%EC%95%84%ED%82%A4%ED%85%8D%EC%B3%90%EC%99%80-The-Composable-Architecture)
 - [2. TCA의 기본 개념](https://github.com/ValseLee/TCA_Workshop/wiki/2.-TCA%EC%9D%98-%EA%B8%B0%EB%B3%B8-%EA%B0%9C%EB%85%90)
 - [3. TCA와 Testable Code](https://github.com/ValseLee/TCA_Workshop/wiki/3.-TCA%EC%99%80-Testable-Code)
 - 예시 프로젝트의 코드 구조 소개(진행 예정)
