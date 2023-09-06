@@ -29,7 +29,7 @@ extension MeetingRoomClient {
         
     }, fetch: {
         let (data, response) = try await URLSession.shared.data(
-            from: URL(string: "https://my-json-server.typicode.com/ValseLee/TCA_Workshop/")!
+            from: URL(string: "https://my-json-server.typicode.com/ValseLee/TCA_Workshop/meetingRooms")!
         )
         
         guard let httpResponse = response as? HTTPURLResponse,
