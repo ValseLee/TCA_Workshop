@@ -37,7 +37,7 @@ extension MeetingRoomClient {
         
         let result = try JSONDecoder().decode([MeetingRoom].self, from: data)
         
-        return [.testInstance()]
+        return result
     })
 
     static let test = Self(
