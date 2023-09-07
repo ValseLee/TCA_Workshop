@@ -11,8 +11,6 @@ import XCTestDynamicOverlay
 
 @main
 struct TCAWorkshopApp: App {
-    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
-    
     var body: some Scene {
         WindowGroup {
             if !_XCTIsTesting {
