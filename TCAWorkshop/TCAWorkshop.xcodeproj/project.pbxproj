@@ -10,12 +10,10 @@
 		7E0F9DA32A97827200A1475A /* Dependency+DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E0F9DA22A97827200A1475A /* Dependency+DateFormatter.swift */; };
 		7E28FA082A80A09A002E3AA9 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 7E28FA072A80A09A002E3AA9 /* FirebaseFirestore */; };
 		7E28FA0A2A80A09A002E3AA9 /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 7E28FA092A80A09A002E3AA9 /* FirebaseFirestoreSwift */; };
-		7E28FA0D2A80A0DD002E3AA9 /* AppDelegate+Firebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E28FA0C2A80A0DD002E3AA9 /* AppDelegate+Firebase.swift */; };
 		7E6BC5112A81265A00D2A871 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E612C322A7E69DD00E4EC21 /* Logger.swift */; };
 		7E6BC5122A81265D00D2A871 /* MeetingRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E612C2E2A7E65BF00E4EC21 /* MeetingRoom.swift */; };
 		7E6BC5152A8126C300D2A871 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7E7C63D42A7D233700AB05BC /* Preview Assets.xcassets */; };
 		7E6BC5182A81277700D2A871 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E6BC5172A81277700D2A871 /* Constants.swift */; };
-		7E6BC51B2A81382400D2A871 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7E6BC51A2A81382400D2A871 /* GoogleService-Info.plist */; };
 		7E6C63E42AA057FD0061548B /* AvailableMeetingRoomTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E6C63E32AA057FD0061548B /* AvailableMeetingRoomTest.swift */; };
 		7E7C639A2A7D17AA00AB05BC /* TCAWorkshopApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7C63992A7D17AA00AB05BC /* TCAWorkshopApp.swift */; };
 		7E7C639C2A7D17AA00AB05BC /* MeetingRoomListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7C639B2A7D17AA00AB05BC /* MeetingRoomListView.swift */; };
@@ -33,7 +31,7 @@
 		7EDCDBBB2A95E2B20018AF04 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 7EDCDBBA2A95E2B20018AF04 /* FirebaseFirestore */; };
 		7EDCDBBD2A95F2BD0018AF04 /* DependencyValue+MeetingRoomClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EDCDBBC2A95F2BD0018AF04 /* DependencyValue+MeetingRoomClient.swift */; };
 		7EE5F9332A9482B500371EEE /* DateFormatter+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE5F9322A9482B500371EEE /* DateFormatter+Init.swift */; };
-		7EE5F9352A94887E00371EEE /* FirebaseClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE5F9342A94887E00371EEE /* FirebaseClient.swift */; };
+		7EE5F9352A94887E00371EEE /* MeetingRoomClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE5F9342A94887E00371EEE /* MeetingRoomClient.swift */; };
 		7EED7E9A2A9DD2DD00981004 /* UnavailableMeetingRoomTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EED7E992A9DD2DD00981004 /* UnavailableMeetingRoomTest.swift */; };
 		7EED7E9C2A9DD35700981004 /* BookedMeetingRoomTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EED7E9B2A9DD35700981004 /* BookedMeetingRoomTest.swift */; };
 /* End PBXBuildFile section */
@@ -50,11 +48,9 @@
 
 /* Begin PBXFileReference section */
 		7E0F9DA22A97827200A1475A /* Dependency+DateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Dependency+DateFormatter.swift"; sourceTree = "<group>"; };
-		7E28FA0C2A80A0DD002E3AA9 /* AppDelegate+Firebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+Firebase.swift"; sourceTree = "<group>"; };
 		7E612C2E2A7E65BF00E4EC21 /* MeetingRoom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingRoom.swift; sourceTree = "<group>"; };
 		7E612C322A7E69DD00E4EC21 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		7E6BC5172A81277700D2A871 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
-		7E6BC51A2A81382400D2A871 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		7E6C63E32AA057FD0061548B /* AvailableMeetingRoomTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvailableMeetingRoomTest.swift; sourceTree = "<group>"; };
 		7E7C63962A7D17AA00AB05BC /* TCAWorkshop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TCAWorkshop.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7E7C63992A7D17AA00AB05BC /* TCAWorkshopApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCAWorkshopApp.swift; sourceTree = "<group>"; };
@@ -73,7 +69,7 @@
 		7EC96C582A964261004A17B4 /* MeetingRoomListDomain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeetingRoomListDomain.swift; sourceTree = "<group>"; };
 		7EDCDBBC2A95F2BD0018AF04 /* DependencyValue+MeetingRoomClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DependencyValue+MeetingRoomClient.swift"; sourceTree = "<group>"; };
 		7EE5F9322A9482B500371EEE /* DateFormatter+Init.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormatter+Init.swift"; sourceTree = "<group>"; };
-		7EE5F9342A94887E00371EEE /* FirebaseClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseClient.swift; sourceTree = "<group>"; };
+		7EE5F9342A94887E00371EEE /* MeetingRoomClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingRoomClient.swift; sourceTree = "<group>"; };
 		7EED7E992A9DD2DD00981004 /* UnavailableMeetingRoomTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnavailableMeetingRoomTest.swift; sourceTree = "<group>"; };
 		7EED7E9B2A9DD35700981004 /* BookedMeetingRoomTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookedMeetingRoomTest.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -117,7 +113,7 @@
 				7E6BC5172A81277700D2A871 /* Constants.swift */,
 				7E7C63D32A7D233700AB05BC /* Preview Content */,
 				7E7C639D2A7D17AB00AB05BC /* Assets.xcassets */,
-				7E6BC5132A81267100D2A871 /* Firebase */,
+				7E4D29692AA8C5C300C91036 /* Network */,
 				7E4309F92A7E6564006F0CD9 /* Models */,
 			);
 			path = Common;
@@ -132,6 +128,14 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		7E4D29692AA8C5C300C91036 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				7EE5F9342A94887E00371EEE /* MeetingRoomClient.swift */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
 		7E6BC50E2A8125FD00D2A871 /* MeetingRoom */ = {
 			isa = PBXGroup;
 			children = (
@@ -142,16 +146,6 @@
 				7EC40DD42A93336C007007CE /* AvailableMeetingRoom */,
 			);
 			path = MeetingRoom;
-			sourceTree = "<group>";
-		};
-		7E6BC5132A81267100D2A871 /* Firebase */ = {
-			isa = PBXGroup;
-			children = (
-				7EE5F9342A94887E00371EEE /* FirebaseClient.swift */,
-				7E28FA0C2A80A0DD002E3AA9 /* AppDelegate+Firebase.swift */,
-				7E6BC51A2A81382400D2A871 /* GoogleService-Info.plist */,
-			);
-			path = Firebase;
 			sourceTree = "<group>";
 		};
 		7E6BC5162A81275100D2A871 /* Tests */ = {
@@ -347,7 +341,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				7E6BC5152A8126C300D2A871 /* Preview Assets.xcassets in Resources */,
-				7E6BC51B2A81382400D2A871 /* GoogleService-Info.plist in Resources */,
 				7E7C639E2A7D17AB00AB05BC /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -370,7 +363,7 @@
 				7EC96C592A964261004A17B4 /* MeetingRoomListDomain.swift in Sources */,
 				7E6BC5122A81265D00D2A871 /* MeetingRoom.swift in Sources */,
 				7EC40DE62A933957007007CE /* UnavailableMeetingRoomView.swift in Sources */,
-				7EE5F9352A94887E00371EEE /* FirebaseClient.swift in Sources */,
+				7EE5F9352A94887E00371EEE /* MeetingRoomClient.swift in Sources */,
 				7EC40DDC2A9333B4007007CE /* AvailableMeetingRoomDomain.swift in Sources */,
 				7EC40DE42A93392C007007CE /* BookedMeetingRoomView.swift in Sources */,
 				7E7C639C2A7D17AA00AB05BC /* MeetingRoomListView.swift in Sources */,
@@ -383,7 +376,6 @@
 				7E7C639A2A7D17AA00AB05BC /* TCAWorkshopApp.swift in Sources */,
 				7EE5F9332A9482B500371EEE /* DateFormatter+Init.swift in Sources */,
 				7EC40DDA2A9333A8007007CE /* UnavailableMeetingRoomDomain.swift in Sources */,
-				7E28FA0D2A80A0DD002E3AA9 /* AppDelegate+Firebase.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
