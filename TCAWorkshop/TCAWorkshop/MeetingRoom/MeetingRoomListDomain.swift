@@ -12,7 +12,7 @@ import Foundation
 
 struct MeetingRoomListDomain: Reducer {
     @Dependency(\.meetingRoomClient)
-    var firebaseClient: MeetingRoomClient
+    var meetingRoomClient: MeetingRoomClient
     
     @Dependency(\.customDateFormatter.minuteHourFormatter)
     var minuteDateFormatter
@@ -105,7 +105,7 @@ struct MeetingRoomListDomain: Reducer {
                         let start = Date()
                         defer { Logger.methodExecTimePrint(start) }
                         
-                        let fetchedMeetingRooms = try await firebaseClient.fetch()
+                        let fetchedMeetingRooms = try await meetingRoomClient.fetch()
                         await send(
                             .processFetchedMeetingRooms(with: fetchedMeetingRooms),
                             animation: .easeInOut
@@ -123,7 +123,7 @@ struct MeetingRoomListDomain: Reducer {
                     state.unavailableMeetingRoomArray.removeAll()
                     
                     return .run { send in
-                        let fetchedMeetingRooms = try await firebaseClient.fetch()
+                        let fetchedMeetingRooms = try await meetingRoomClient.fetch()
                         await send(
                             .processFetchedMeetingRooms(with: fetchedMeetingRooms),
                             animation: .easeInOut
@@ -139,7 +139,7 @@ struct MeetingRoomListDomain: Reducer {
             case .listRefreshed:
                 state.isMeetingRoomFetching = true
                 return .run { send in
-                    let fetchedMeetingRooms = try await self.firebaseClient.fetch()
+                    let fetchedMeetingRooms = try await self.meetingRoomClient.fetch()
                     await send(
                         .processFetchedMeetingRooms(with: fetchedMeetingRooms),
                         animation: .easeInOut
@@ -173,7 +173,7 @@ struct MeetingRoomListDomain: Reducer {
                 state.isMeetingRoomFetchFailed = false
                 
                 return .run { send in
-                    let fetchedMeetingRooms = try await self.firebaseClient.fetch()
+                    let fetchedMeetingRooms = try await self.meetingRoomClient.fetch()
                     try await clock.sleep(for: .seconds(0.5))
                     await send(
                         .processFetchedMeetingRooms(with: fetchedMeetingRooms),
