@@ -14,29 +14,34 @@ protocol APINetworkInterface {
     var fetch: @Sendable () async throws -> [APIData] { get }
 }
 
+enum MeetingRoomClientError: Error {
+    case fetchError
+    case postError
+}
+
 struct MeetingRoomClient: APINetworkInterface {
     var update: (@Sendable (_ with: MeetingRoom) async throws -> Void)
     var fetch: (@Sendable () async throws -> [MeetingRoom])
 }
 
 extension MeetingRoomClient {
-    enum MeetingRoomClientError: Error {
-        case fetchError
-        case postError
-    }
-    
     static let live = Self(
     update: { meetingRoom in
         let updatePayload = try JSONEncoder().encode(meetingRoom)
-        let url = URL(string: "https://my-json-server.typicode.com/ValseLee/TCA_Workshop/meetingRooms")!
+        print("ID: ", meetingRoom.id.uuidString)
+        let url = URL(string: "https://my-json-server.typicode.com/ValseLee/TCA_Workshop/meetingRooms/\(meetingRoom.id.uuidString)")!
         var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpMethod = "PATCH"
+        request.httpBody = updatePayload
+        
         let (data, response) = try await URLSession.shared.upload(for: request, from: updatePayload)
         
         if let httpResponse = response as? HTTPURLResponse,
-           httpResponse.statusCode != 200 { throw MeetingRoomClientError.postError }
-        Logger._printData(.update, data)
+           httpResponse.statusCode != 200 {
+            print("Update Failed", response)
+            throw MeetingRoomClientError.postError
+        }
         
     }, fetch: {
         let (data, response) = try await URLSession.shared.data(
