@@ -1,42 +1,42 @@
 {
     "meetingRooms":[
         {
-            "id": "84d649b8-4cb6-11ee-be56-0242ac120002",
+            "id": "84D649B8-4CB6-11EE-BE56-0242AC120002",
             "meetingRoomName": "Van gogh",
             "rentDateFromUNIXTime": 1694006100,
             "rentBy": "AVAILABLE",
             "rentHourAndMinute": 0
         },
         {
-            "id": "84d64c74-4cb6-11ee-be56-0242ac120002",
+            "id": "84D64C74-4CB6-11EE-BE56-0242AC120002",
             "meetingRoomName": "Rembrandt",
             "rentDateFromUNIXTime": 1694006000,
             "rentBy": "AVAILABLE",
             "rentHourAndMinute": 0
         },
         {
-            "id": "84d6500c-4cb6-11ee-be56-0242ac120002",
+            "id": "84D6500C-4CB6-11EE-BE56-0242AC120002",
             "meetingRoomName": "Monet",
             "rentDateFromUNIXTime": 1694003100,
             "rentBy": "OTHERS",
             "rentHourAndMinute": 2
         },
         {
-            "id": "84d65160-4cb6-11ee-be56-0242ac120002",
+            "id": "84D65160-4CB6-11EE-BE56-0242AC120002",
             "meetingRoomName": "Salvado,r Dali",
             "rentDateFromUNIXTime": 1694004100,
             "rentBy": "OTHERS",
             "rentHourAndMinute": 2
         },
         {
-            "id": "84d65296-4cb6-11ee-be56-0242ac120002",
+            "id": "84D65296-4CB6-11EE-BE56-0242AC120002",
             "meetingRoomName": "Da Vinci",
             "rentDateFromUNIXTime": 1694005132,
             "rentBy": "CURRENT_USER",
             "rentHourAndMinute": 3
         },
         {
-            "id": "84d653fe-4cb6-11ee-be56-0242ac120002",
+            "id": "84D653FE-4CB6-11EE-BE56-0242AC120002",
             "meetingRoomName": "Picasso",
             "rentDateFromUNIXTime": 1694004911,
             "rentBy": "CURRENT_USER",
