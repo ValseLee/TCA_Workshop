@@ -21,11 +21,12 @@ final class TCAWorkshopTests: XCTestCase {
         // 원한다면 서버 테스트도 가능하다.
         // 테스트의 편의 및 각 case 열거형에 값을 전달할 때 통일된 인스턴스를 사용하기 위해 아래처럼 구현
         let networkStore = TestStore(
-            initialState: MeetingRoomListDomain.State()) {
-                MeetingRoomListDomain()
-            } withDependencies: { [testInstance = testInstance] dependency in
-                dependency.meetingRoomClient.fetch = { return [testInstance] }
-            }
+            initialState: MeetingRoomListDomain.State()
+        ) {
+            MeetingRoomListDomain()
+        } withDependencies: { [testInstance = testInstance] dependency in
+            dependency.meetingRoomClient.fetch = { return [testInstance] }
+        }
 
         // 3️⃣ View가 보여지는 시점부터 MeetingRoom을 fetch할 때까지의 stream을 테스트하기 시작
         // action을 처음 '트리거'할 때는 `send`를 사용하며, 이 action이 되먹이는 모든 action은 `receive`로 받아온다.
@@ -63,6 +64,65 @@ final class TCAWorkshopTests: XCTestCase {
         }
     }
     
+    func testCancelMeetingRoom() async throws {
+        // 1️⃣ Test를 위한 Instance를 생성
+        var testInstance = MeetingRoom.testInstance()
+        // 2️⃣ 이 미팅룸은 현재 유저에 의해 rent 된 상황
+        testInstance.rentBy = "CURRENT_USER"
+        
+        let networkStore = TestStore(
+            initialState: BookedMeetingRoomFeature.State(
+                selectedMeetingRoom: testInstance,
+                id: testInstance.id
+            )
+        ) {
+            BookedMeetingRoomFeature()
+        } withDependencies: { dependency in
+            dependency.continuousClock = ImmediateClock()
+        }
+        
+        await networkStore.send(.cancelReservationButtonTapped) {
+            $0.isCancelReservationButtonTapped = true
+            $0.selectedMeetingRoom.rentBy = "AVAILABLE"
+        }
+        
+        // 3️⃣ update에 성공했다면, Response 를 받고 각 State를 변형한다.
+        await networkStore.receive(.cancelReservationResponse) {
+            $0.isCancelReservationButtonTapped = false
+            $0.isCancelReservationCompleted = true
+        }
+    }
+    
+    func testCancelMeetingRoom_Failed() async throws {
+        // 1️⃣ Test를 위한 Instance를 생성
+        var testInstance = MeetingRoom.testInstance()
+        // 2️⃣ 이 미팅룸은 현재 유저에 의해 rent 된 상황
+        testInstance.rentBy = "CURRENT_USER"
+        
+        let networkStore = TestStore(
+            initialState: BookedMeetingRoomFeature.State(
+                selectedMeetingRoom: testInstance,
+                id: testInstance.id
+            )
+        ) {
+            BookedMeetingRoomFeature()
+        } withDependencies: { dependency in
+            // 3️⃣ update에 실패한 상황을 테스트하기 위해, dependency의 로직을 재할당한다.
+            dependency.meetingRoomClient.update = { meetingRoom in throw MeetingRoomClientError.postError }
+            dependency.continuousClock = ImmediateClock()
+        }
+        
+        await networkStore.send(.cancelReservationButtonTapped) {
+            $0.isCancelReservationButtonTapped = true
+            $0.selectedMeetingRoom.rentBy = "AVAILABLE"
+        }
+        
+        await networkStore.receive(.cancelReservationCancelled) {
+            $0.isCancelReservationButtonTapped = false
+            $0.isCancelReservationCancelled = true
+        }
+    }
+    
     func testMeetingRoomArrays() async throws {
         let store = TestStore(initialState: MeetingRoomListDomain.State()) {
             MeetingRoomListDomain()
@@ -79,7 +139,11 @@ final class TCAWorkshopTests: XCTestCase {
         let store = TestStore(initialState: MeetingRoomListDomain.State()) {
             MeetingRoomListDomain()
         } withDependencies: {
-            $0.continuousClock = ContinuousClock()
+            $0.continuousClock = ImmediateClock()
+            
+            // 🧩 위 코드를 각주하고, 아래 각주를 해제한 뒤 테스트를 돌리면
+            // 테스트가 120초 소요되고, QUARANTINED DUE TO HIGH LOGGING VOLUME 메시지를 볼 수 있다.
+            // $0.continuousClock = ContinuousClock()
         }
         
         await store.send(.takeLongLongTimeTaskButtonTapped)
@@ -96,7 +160,7 @@ final class TCAWorkshopTests: XCTestCase {
         }
         
         await store.send(.takeLongLongTimeTaskButtonTapped)
-        await store.receive(.takeLongLongTimeTaskResponse("COMPLETE"), timeout: .seconds(1.0)) {
+        await store.receive(.takeLongLongTimeTaskResponse("COMPLETE")) {
             $0.takeLongLongTimeTaskResult = "COMPLETE"
         }
     }
