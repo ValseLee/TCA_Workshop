@@ -64,6 +64,71 @@ final class TCAWorkshopTests: XCTestCase {
         }
     }
     
+    func testMeetingRoomListOnAppearWithChildUpdate() async throws {
+        // 조금 더 복잡한 테스트를 구성해보자.
+        // 상황: 유저가 meetingRoomList를 init한 이후, child에서 meetingRoom을 취소했을 때
+        
+        // 1️⃣ Test를 위한 Instance를 생성
+        var testInstance = MeetingRoom.testInstance()
+        testInstance.rentBy = "CURRENT_USER"
+        
+        // 2️⃣ Test를 위한 Store를 선언
+        let networkStore = TestStore(
+            initialState: MeetingRoomListDomain.State(
+                // 🧩 이미 예약된 배열이 있는 상황을 가정하기 때문에, bookedMeetingRoomArray에 더미 데이터를 심어준다.
+                bookedMeetingRoomArray: [
+                    .init(
+                        selectedMeetingRoom: testInstance,
+                        id: testInstance.id
+                    )
+                ],
+                isMeetingRoomInitOnce: true,
+                hasMeetingRoomChanged: true
+            )
+        ) {
+            MeetingRoomListDomain()
+        } withDependencies: { dependency in
+            dependency.continuousClock = ImmediateClock()
+        }
+        
+        // 🧩 Child 에서 CURRENT_USER의 예약을 취소했기 때문에 testInstance의 rentBy를 AVAILABLE로 수정
+        // 동일한 instance가 서버에서 fetch되리라는 가정 하에 테스트 진행
+        testInstance.rentBy = "AVAILABLE"
+        networkStore.dependencies.meetingRoomClient.fetch = { [testInstance = testInstance] in return [testInstance] }
+        
+        await networkStore.send(.onMeetingRoomListViewAppear) {
+            $0.isBookedMeetingRoomArrayEmpty = false
+            $0.isMeetingRoomFetching = true
+            // onAppear로 인해 bookedMeetingRoom은 비워져야 한다.
+            $0.bookedMeetingRoomArray = []
+        }
+        
+        // 4️⃣ fetch가 되었다는 가정 하에, testInstance가 availableMeetingRoomArray에 append 되는지 확인
+        await networkStore.receive(.processFetchedMeetingRooms(with: [testInstance])) {
+            $0.availableMeetingRoomArray = [
+                .init(
+                    selectedMeetingRoom: testInstance,
+                    id: testInstance.id
+                )
+            ]
+        }
+        
+        // 🧩 상단의 이벤트가 `.meetingRoomFetchComplete` 이벤트를 호출해야 하지만
+        // 관련 이벤트는 현재 '실패'하지 않기 때문에 Receive 이벤트에 대한 테스트는 불필요하다고 판단한다면
+        // Queue에 담겨있는 '모든' Receive 이벤트를 스킵할 수 있다.
+        // 이 경우, 예상되는 Expected Failure로 남은 경고를 확인할 수 있다.
+        await networkStore.skipReceivedActions(strict: true)
+        
+        // 🧩 Receive 이벤트 테스트를 스킵했기 때문에 아래의 테스트 코드는 작성하지 않아야 한다.
+//        await networkStore.receive(.meetingRoomFetchComplete) {
+//            $0.isMeetingRoomInitOnce = true
+//            $0.isMeetingRoomFetching = false
+//            $0.isAvailableMeetingRoomArrayEmpty = false
+//            $0.isBookedMeetingRoomArrayEmpty = true
+//            $0.hasMeetingRoomChanged = false
+//        }
+    }
+    
     func testCancelMeetingRoom() async throws {
         // 1️⃣ Test를 위한 Instance를 생성
         var testInstance = MeetingRoom.testInstance()
@@ -120,6 +185,38 @@ final class TCAWorkshopTests: XCTestCase {
         await networkStore.receive(.cancelReservationCancelled) {
             $0.isCancelReservationButtonTapped = false
             $0.isCancelReservationCancelled = true
+        }
+    }
+    
+    func testBookMeetingRoom() async throws {
+        // 1️⃣ Test를 위한 Instance를 생성
+        var testInstance = MeetingRoom.testInstance()
+        // 2️⃣ 이 미팅룸은 현재 유저에 의해 rent 된 상황
+        testInstance.rentBy = "AVAILABLE"
+        
+        let networkStore = TestStore(
+            initialState: AvailableMeetingRoomFeature.State(
+                selectedMeetingRoom: testInstance,
+                id: testInstance.id
+            )
+        ) {
+            AvailableMeetingRoomFeature()
+        } withDependencies: { dependency in
+            dependency.continuousClock = ImmediateClock()
+        }
+        
+        // 3️⃣ 모든 이벤트를 테스트하지 않도록 exhaustivity 속성을 .off 할 수 있다.
+        // 상단의 다른 테스트처럼 store가 플로우대로 변형하는 이벤트를 무시할 수 있다.
+        // 즉, 개발자가 원하는 State에 대한 변형만 assert 할 수 있다.
+        // showSkippedAssertions에 전달하는 불 값에 따라 무시된 State 변형을 출력하여 확인할 수 있다.
+        networkStore.exhaustivity = .off(showSkippedAssertions: false)
+        
+        await networkStore.send(.reservationButtonTapped)
+        // 4️⃣ 원래대로라면 해당 이벤트에서 2개의 State가 변형되어야 한다.
+        // exhaustivity test를 진행했다면 각 state의 변형도 테스트해야 하지만
+        // 해당 속성을 꺼두었기 때문에 State 변형이 무시된다.
+        await networkStore.receive(.reservationResponse) {
+            $0.isReservationCompleted = true
         }
     }
     
