@@ -8,7 +8,7 @@
 import ComposableArchitecture
 import SwiftUI
 
-struct MeeitngCardView: View {
+struct MeetingCardView: View {
     let store: StoreOf<MeetingCardDomain>
     
     var body: some View {
@@ -16,34 +16,44 @@ struct MeeitngCardView: View {
             self.store,
             observe: { $0 }
         ) { viewStore in
-            ScrollView {
-                LazyVStack(pinnedViews: .sectionHeaders) {
-                    Section {
-                        Text(viewStore.state.meetingInfo.subject)
-                            .bold()
-                    } header: {
-                        subjectHeaderBuilder(with: "미팅 주제")
-                    }
-                    
-                    Section {
-                        VStack(alignment: .leading) {
-                            Text("총 인원: \(viewStore.state.meetingInfo.participants.count)")
-                                
-                            
-                            ForEach(
-                                viewStore.meetingInfo.participants,
-                                id: \.self
-                            ) { names in
-                                Text(names)
-                            }
+            NavigationStack {
+                ScrollView {
+                    LazyVStack(pinnedViews: .sectionHeaders) {
+                        Section {
+                            Text(viewStore.state.meetingInfo.subject)
+                                .bold()
+                        } header: {
+                            subjectHeaderBuilder(with: "미팅 주제")
                         }
-                        .frame(
-                            maxWidth: .infinity,
-                            alignment: .leading
-                        )
-                        .padding(.horizontal)
-                    } header: {
-                        subjectHeaderBuilder(with: "참여 인원")
+                        
+                        Section {
+                            VStack(alignment: .leading) {
+                                Text("총 인원: \(viewStore.state.meetingInfo.participants.count)\n")
+                                
+                                ForEach(
+                                    viewStore.meetingInfo.participants,
+                                    id: \.self
+                                ) { names in
+                                    Text(names)
+                                }
+                            }
+                            .frame(
+                                maxWidth: .infinity,
+                                alignment: .leading
+                            )
+                            .padding(.horizontal)
+                        } header: {
+                            subjectHeaderBuilder(with: "참여 인원")
+                        }
+                    }
+                }
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button {
+                            viewStore.send(.cancelButtonTapped)
+                        } label: {
+                            Text("닫기")
+                        }
                     }
                 }
             }
@@ -71,7 +81,7 @@ struct MeeitngCardView: View {
 
 struct MeeitngCardView_Previews: PreviewProvider {
     static var previews: some View {
-        MeeitngCardView(
+        MeetingCardView(
             store: Store(
                 initialState: MeetingCardDomain.State(
                     id: .init(),
