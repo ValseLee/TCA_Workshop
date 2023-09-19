@@ -10,6 +10,11 @@ import SwiftUI
 
 struct MeetingCardView: View {
     let store: StoreOf<MeetingCardDomain>
+    let gridSystem: [GridItem] = [
+        GridItem(.flexible()),
+        GridItem(.flexible()),
+        GridItem(.flexible()),
+    ]
     
     var body: some View {
         WithViewStore(
@@ -18,32 +23,120 @@ struct MeetingCardView: View {
         ) { viewStore in
             NavigationStack {
                 ScrollView {
-                    LazyVStack(pinnedViews: .sectionHeaders) {
+                    LazyVStack(
+                        spacing: 24,
+                        pinnedViews: .sectionHeaders
+                    ) {
                         Section {
-                            Text(viewStore.state.meetingInfo.subject)
+                            TextField(
+                                "",
+                                text: viewStore.binding(
+                                    get: { $0.meetingInfo.subject },
+                                    send: { .isSubjectEditing($0) }
+                                )
+                            )
+                            .bold()
+                            .autocorrectionDisabled()
+                            .textInputAutocapitalization(.never)
+                            .multilineTextAlignment(.center)
+                            .disabled(!viewStore.state.isSubjectEditButtonTapped)
+                            .frame(maxWidth: 270)
+                            .overlay(alignment: .bottom) {
+                                Rectangle()
+                                    .frame(maxHeight: 1.5)
+                                    .opacity(viewStore.state.isSubjectEditButtonTapped ? 1.0 : 0.0)
+                                    .offset(y: 6)
+                            }
+                            .overlay(alignment: .bottomTrailing) {
+                                HStack {
+                                    Text("(\(viewStore.state.meetingInfo.subject.count) / \(20))")
+                                        .monospacedDigit()
+                                        .font(.footnote)
+                                        .animation(nil)
+                                }
+                                .offset(y: 26)
                                 .bold()
+                                .opacity(viewStore.state.isSubjectEditButtonTapped ? 1.0 : 0.0)
+                                .foregroundColor(
+                                    viewStore.state.meetingInfo.subject.count >= 20
+                                    ? .red
+                                    : .green
+                                )
+                                .offset(
+                                    x: viewStore.state.isSubjectMaximumCharcterReached && viewStore.state.meetingInfo.subject.count >= 20
+                                    ? 0
+                                    : -2
+                                )
+                                .animation(
+                                    .default.speed(3.5).repeatCount(4, autoreverses: true),
+                                    value: viewStore.state.isSubjectMaximumCharcterReached
+                                )
+                                                                
+                            }
+                            .overlay(alignment: .trailing) {
+                                HStack(spacing: 4) {
+                                    Button {
+                                        viewStore.send(.emptySubjectTextFieldButtonTapped)
+                                    } label: {
+                                        Image(systemName: "xmark.circle")
+                                    }
+                                }
+                                .opacity(viewStore.state.isSubjectEditButtonTapped ? 1.0 : 0.0)
+                                .foregroundColor(.red)
+                            }
+                            
                         } header: {
-                            subjectHeaderBuilder(with: "미팅 주제")
+                            HStack {
+                                subjectHeaderBuilder(with: "미팅 주제")
+                                
+                                Button {
+                                    viewStore.send(
+                                        .subjectEditButtonTapped,
+                                        animation: .easeInOut
+                                    )
+                                } label: {
+                                    Image(
+                                        systemName: viewStore.state.isSubjectEditButtonTapped
+                                        ? "checkmark.circle"
+                                        : "pencil.circle"
+                                    )
+                                }
+                            }
+                            .padding()
                         }
                         
+                        Divider()
+                            .padding(.horizontal)
+                            .padding(.top, 12)
+                        
                         Section {
-                            VStack(alignment: .leading) {
-                                Text("총 인원: \(viewStore.state.meetingInfo.participants.count)\n")
-                                
+                            LazyVGrid(
+                                columns: gridSystem,
+                                spacing: 24
+                            ) {
                                 ForEach(
                                     viewStore.meetingInfo.participants,
                                     id: \.self
                                 ) { names in
-                                    Text(names)
+                                    VStack(spacing: 8) {
+                                        Image(systemName: "person.fill")
+                                        
+                                        Text(names)
+                                    }
+                                    .padding(32)
+                                    .background {
+                                        RoundedRectangle(cornerRadius: 15)
+                                            .opacity(0.05)
+                                    }
                                 }
                             }
-                            .frame(
-                                maxWidth: .infinity,
-                                alignment: .leading
-                            )
-                            .padding(.horizontal)
                         } header: {
-                            subjectHeaderBuilder(with: "참여 인원")
+                            HStack {
+                                subjectHeaderBuilder(with: "참여 인원")
+                                
+                                Text("총 인원: \(viewStore.state.meetingInfo.participants.count)명")
+                            }
+                            .padding()
                         }
                     }
                 }
@@ -75,7 +168,6 @@ struct MeetingCardView: View {
                 maxWidth: .infinity,
                 alignment: .leading
             )
-            .padding()
     }
 }
 
