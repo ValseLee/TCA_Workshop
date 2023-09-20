@@ -6,8 +6,6 @@
 //
 
 import ComposableArchitecture
-import FirebaseFirestore
-import FirebaseFirestoreSwift
 import Foundation
 
 struct MeetingRoomListDomain: Reducer {
