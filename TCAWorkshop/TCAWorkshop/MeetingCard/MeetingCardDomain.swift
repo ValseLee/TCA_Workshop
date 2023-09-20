@@ -21,6 +21,13 @@ struct MeetingCardDomain: Reducer {
         var meetingInfo: MeetingInfo
         var isSubjectEditButtonTapped: Bool = false
         var isSubjectMaximumCharcterReached: Bool = false
+        
+        var nameCardLongPressedDuration: Double = 0
+        var isNameCardLongPressed: Bool = false
+        
+        var isMeetingParticipantAddedButtonTapped: Bool = false
+        var isMeetingParticipantMaximumCharacterReached: Bool = false
+        var meetingParticipantName: String = "New"
     }
     
     enum Action: Equatable {
@@ -28,6 +35,12 @@ struct MeetingCardDomain: Reducer {
         case subjectEditButtonTapped
         case isSubjectEditing(String)
         case emptySubjectTextFieldButtonTapped
+        
+        case isNameCardLongPressing
+        case isNameCardLongPressed
+        
+        case isMeetingParticipantAddedButtonTapped
+        case isMeetingParticipantEditted(String)
     }
     
     var body: some ReducerOf<Self> {
@@ -65,6 +78,34 @@ struct MeetingCardDomain: Reducer {
             case .emptySubjectTextFieldButtonTapped:
                 state.meetingInfo.subject = ""
                 state.isSubjectMaximumCharcterReached = false
+                
+                return .none
+                
+            case .isNameCardLongPressing:
+//                state.nameCardLongPressedDuration += 0.2
+                return .none
+                
+            case .isNameCardLongPressed:
+                state.isNameCardLongPressed = true
+                return .none
+                
+            case .isMeetingParticipantAddedButtonTapped:
+                if state.isMeetingParticipantAddedButtonTapped {
+                    state.isMeetingParticipantAddedButtonTapped = false
+                    state.meetingInfo.participants.append(state.meetingParticipantName)
+                } else {
+                    state.isMeetingParticipantAddedButtonTapped = true
+                }
+                
+                return .none
+                
+            case let .isMeetingParticipantEditted(newParticipant):
+                if newParticipant.count > 5 {
+                    state.isMeetingParticipantMaximumCharacterReached = true
+                } else if newParticipant.count <= 5 {
+                    state.isMeetingParticipantMaximumCharacterReached = false
+                    state.meetingParticipantName = newParticipant
+                }
                 
                 return .none
             }

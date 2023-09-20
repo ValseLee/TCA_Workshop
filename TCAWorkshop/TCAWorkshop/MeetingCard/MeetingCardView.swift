@@ -9,6 +9,7 @@ import ComposableArchitecture
 import SwiftUI
 
 struct MeetingCardView: View {
+    var num: Int = 0
     let store: StoreOf<MeetingCardDomain>
     let gridSystem: [GridItem] = [
         GridItem(.flexible()),
@@ -28,63 +29,7 @@ struct MeetingCardView: View {
                         pinnedViews: .sectionHeaders
                     ) {
                         Section {
-                            TextField(
-                                "",
-                                text: viewStore.binding(
-                                    get: { $0.meetingInfo.subject },
-                                    send: { .isSubjectEditing($0) }
-                                )
-                            )
-                            .bold()
-                            .autocorrectionDisabled()
-                            .textInputAutocapitalization(.never)
-                            .multilineTextAlignment(.center)
-                            .disabled(!viewStore.state.isSubjectEditButtonTapped)
-                            .frame(maxWidth: 270)
-                            .overlay(alignment: .bottom) {
-                                Rectangle()
-                                    .frame(maxHeight: 1.5)
-                                    .opacity(viewStore.state.isSubjectEditButtonTapped ? 1.0 : 0.0)
-                                    .offset(y: 6)
-                            }
-                            .overlay(alignment: .bottomTrailing) {
-                                HStack {
-                                    Text("(\(viewStore.state.meetingInfo.subject.count) / \(20))")
-                                        .monospacedDigit()
-                                        .font(.footnote)
-                                        .animation(nil)
-                                }
-                                .offset(y: 26)
-                                .bold()
-                                .opacity(viewStore.state.isSubjectEditButtonTapped ? 1.0 : 0.0)
-                                .foregroundColor(
-                                    viewStore.state.meetingInfo.subject.count >= 20
-                                    ? .red
-                                    : .green
-                                )
-                                .offset(
-                                    x: viewStore.state.isSubjectMaximumCharcterReached && viewStore.state.meetingInfo.subject.count >= 20
-                                    ? 0
-                                    : -2
-                                )
-                                .animation(
-                                    .default.speed(3.5).repeatCount(4, autoreverses: true),
-                                    value: viewStore.state.isSubjectMaximumCharcterReached
-                                )
-                                                                
-                            }
-                            .overlay(alignment: .trailing) {
-                                HStack(spacing: 4) {
-                                    Button {
-                                        viewStore.send(.emptySubjectTextFieldButtonTapped)
-                                    } label: {
-                                        Image(systemName: "xmark.circle")
-                                    }
-                                }
-                                .opacity(viewStore.state.isSubjectEditButtonTapped ? 1.0 : 0.0)
-                                .foregroundColor(.red)
-                            }
-                            
+                            meetingCardTextFieldView(viewStore)
                         } header: {
                             HStack {
                                 subjectHeaderBuilder(with: "미팅 주제")
@@ -110,23 +55,43 @@ struct MeetingCardView: View {
                             .padding(.top, 12)
                         
                         Section {
+                            if viewStore.state.isMeetingParticipantAddedButtonTapped {
+                                meetingParticipantTextFieldView(viewStore)
+                            }
+                            
                             LazyVGrid(
                                 columns: gridSystem,
                                 spacing: 24
                             ) {
-                                ForEach(
-                                    viewStore.meetingInfo.participants,
-                                    id: \.self
-                                ) { names in
+                                eachNameCardView(viewStore)
+                                
+                                Button {
+                                    viewStore.send(
+                                        .isMeetingParticipantAddedButtonTapped,
+                                        animation: .easeInOut
+                                    )
+                                } label: {
                                     VStack(spacing: 8) {
-                                        Image(systemName: "person.fill")
+                                        Image(systemName: "person.badge.plus.fill")
                                         
-                                        Text(names)
+                                        Text("추가")
+                                            .frame(maxWidth: 72)
+                                            .lineLimit(1)
                                     }
-                                    .padding(32)
+                                    .foregroundColor(.blue)
+                                    .padding(.horizontal)
+                                    .padding(.vertical, 36)
                                     .background {
                                         RoundedRectangle(cornerRadius: 15)
-                                            .opacity(0.05)
+                                            .stroke(
+                                                Color.blue,
+                                                style: StrokeStyle(
+                                                    lineWidth: 1.5,
+                                                    dash: [6],
+                                                    dashPhase: 6
+                                                )
+                                            )
+                                            .shadow(radius: 1, x: 1, y: 2)
                                     }
                                 }
                             }
@@ -168,6 +133,115 @@ struct MeetingCardView: View {
                 maxWidth: .infinity,
                 alignment: .leading
             )
+    }
+    
+    private func maximumStringCountView(
+        _ viewStore: ViewStoreOf<MeetingCardDomain>
+    ) -> some View {
+        HStack {
+            Text("(\(viewStore.state.meetingInfo.subject.count) / \(20))")
+                .monospacedDigit()
+                .font(.footnote)
+                .animation(nil)
+        }
+        .offset(y: 26)
+        .bold()
+        .opacity(viewStore.state.isSubjectEditButtonTapped ? 1.0 : 0.0)
+        .foregroundColor(
+            viewStore.state.meetingInfo.subject.count >= 20
+            ? .red
+            : .green
+        )
+        .offset(
+            x: viewStore.state.isSubjectMaximumCharcterReached
+            && viewStore.state.meetingInfo.subject.count >= 20
+            ? 0
+            : -2
+        )
+        .animation(
+            .default.speed(3.5).repeatCount(4, autoreverses: true),
+            value: viewStore.state.isSubjectMaximumCharcterReached
+        )
+    }
+    
+    private func meetingCardTextFieldView(
+        _ viewStore: ViewStoreOf<MeetingCardDomain>
+    ) -> some View {
+        TextField(
+            "",
+            text: viewStore.binding(
+                get: { $0.meetingInfo.subject },
+                send: { .isSubjectEditing($0) }
+            )
+        )
+        .bold()
+        .autocorrectionDisabled()
+        .textInputAutocapitalization(.never)
+        .multilineTextAlignment(.center)
+        .disabled(!viewStore.state.isSubjectEditButtonTapped)
+        .frame(maxWidth: 270)
+        .overlay(alignment: .bottom) {
+            Rectangle()
+                .frame(maxHeight: 1.5)
+                .opacity(viewStore.state.isSubjectEditButtonTapped ? 1.0 : 0.0)
+                .offset(y: 6)
+        }
+        .overlay(alignment: .bottomTrailing) {
+            maximumStringCountView(viewStore)
+        }
+        .overlay(alignment: .trailing) {
+            HStack(spacing: 4) {
+                Button {
+                    viewStore.send(.emptySubjectTextFieldButtonTapped)
+                } label: {
+                    Image(systemName: "xmark.circle")
+                }
+            }
+            .opacity(viewStore.state.isSubjectEditButtonTapped ? 1.0 : 0.0)
+            .foregroundColor(.red)
+        }
+    }
+    
+    private func eachNameCardView(_ viewStore: ViewStoreOf<MeetingCardDomain>) -> some View {
+        ForEach(
+            viewStore.state.meetingInfo.participants,
+            id: \.self
+        ) { names in
+            VStack(spacing: 8) {
+                Image(systemName: "person.fill")
+                
+                Text(names)
+                    .frame(maxWidth: 72)
+                    .lineLimit(1)
+            }
+            .padding(.horizontal)
+            .padding(.vertical, 36)
+            .overlay(alignment: .topTrailing) {
+                if viewStore.state.isNameCardLongPressed {
+                    Image(systemName: "xmark.circle")
+                        .padding([.top, .trailing], 8)
+                }
+            }
+            .background {
+                RoundedRectangle(cornerRadius: 15)
+                    .stroke(Color.black, lineWidth: 2)
+                    .shadow(radius: 1, x: 1, y: 2)
+            }
+        }
+    }
+    
+    private func meetingParticipantTextFieldView(_ viewStore: ViewStoreOf<MeetingCardDomain>) -> some View {
+        TextField(
+            "",
+            text: viewStore.binding(
+                get: { $0.meetingParticipantName },
+                send: { .isMeetingParticipantEditted($0) }
+            )
+        )
+        .bold()
+        .autocorrectionDisabled()
+        .textInputAutocapitalization(.never)
+        .multilineTextAlignment(.center)
     }
 }
 
