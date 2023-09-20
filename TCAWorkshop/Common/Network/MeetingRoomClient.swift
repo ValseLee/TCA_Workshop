@@ -63,7 +63,7 @@ extension MeetingRoomClient {
         update: { meetingRoom in
             print("\(meetingRoom.id), Update")
         }, fetch: {
-            print("Fetch Start in: \(Constants.FIREBASE_COLLECTION.description)")
+            print("Fetch Start")
             return [MeetingRoom.testInstance()]
         }
     )
