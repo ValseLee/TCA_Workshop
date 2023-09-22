@@ -8,8 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		7E0F9DA32A97827200A1475A /* Dependency+DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E0F9DA22A97827200A1475A /* Dependency+DateFormatter.swift */; };
-		7E28FA082A80A09A002E3AA9 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 7E28FA072A80A09A002E3AA9 /* FirebaseFirestore */; };
-		7E28FA0A2A80A09A002E3AA9 /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 7E28FA092A80A09A002E3AA9 /* FirebaseFirestoreSwift */; };
+		7E0FE4752AB883C1007CEBB2 /* MeetingCardTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E0FE4742AB883C1007CEBB2 /* MeetingCardTest.swift */; };
+		7E4F0EAF2AB7F52600F07322 /* MeetingCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E4F0EAE2AB7F52600F07322 /* MeetingCardView.swift */; };
+		7E4F0EB12AB7F57C00F07322 /* MeetingCardDomain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E4F0EB02AB7F57C00F07322 /* MeetingCardDomain.swift */; };
+		7E4F0EB32AB7F7BB00F07322 /* MeetingInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E4F0EB22AB7F7BB00F07322 /* MeetingInfo.swift */; };
 		7E6BC5112A81265A00D2A871 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E612C322A7E69DD00E4EC21 /* Logger.swift */; };
 		7E6BC5122A81265D00D2A871 /* MeetingRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E612C2E2A7E65BF00E4EC21 /* MeetingRoom.swift */; };
 		7E6BC5152A8126C300D2A871 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7E7C63D42A7D233700AB05BC /* Preview Assets.xcassets */; };
@@ -28,7 +30,6 @@
 		7EC40DE62A933957007007CE /* UnavailableMeetingRoomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC40DE52A933957007007CE /* UnavailableMeetingRoomView.swift */; };
 		7EC40DE82A93395D007007CE /* AvailableMeetingRoomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC40DE72A93395D007007CE /* AvailableMeetingRoomView.swift */; };
 		7EC96C592A964261004A17B4 /* MeetingRoomListDomain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC96C582A964261004A17B4 /* MeetingRoomListDomain.swift */; };
-		7EDCDBBB2A95E2B20018AF04 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 7EDCDBBA2A95E2B20018AF04 /* FirebaseFirestore */; };
 		7EDCDBBD2A95F2BD0018AF04 /* DependencyValue+MeetingRoomClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EDCDBBC2A95F2BD0018AF04 /* DependencyValue+MeetingRoomClient.swift */; };
 		7EE5F9332A9482B500371EEE /* DateFormatter+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE5F9322A9482B500371EEE /* DateFormatter+Init.swift */; };
 		7EE5F9352A94887E00371EEE /* MeetingRoomClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE5F9342A94887E00371EEE /* MeetingRoomClient.swift */; };
@@ -48,6 +49,10 @@
 
 /* Begin PBXFileReference section */
 		7E0F9DA22A97827200A1475A /* Dependency+DateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Dependency+DateFormatter.swift"; sourceTree = "<group>"; };
+		7E0FE4742AB883C1007CEBB2 /* MeetingCardTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingCardTest.swift; sourceTree = "<group>"; };
+		7E4F0EAE2AB7F52600F07322 /* MeetingCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingCardView.swift; sourceTree = "<group>"; };
+		7E4F0EB02AB7F57C00F07322 /* MeetingCardDomain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingCardDomain.swift; sourceTree = "<group>"; };
+		7E4F0EB22AB7F7BB00F07322 /* MeetingInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingInfo.swift; sourceTree = "<group>"; };
 		7E612C2E2A7E65BF00E4EC21 /* MeetingRoom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingRoom.swift; sourceTree = "<group>"; };
 		7E612C322A7E69DD00E4EC21 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		7E6BC5172A81277700D2A871 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -80,8 +85,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				7E7C63C52A7D17F200AB05BC /* ComposableArchitecture in Frameworks */,
-				7E28FA082A80A09A002E3AA9 /* FirebaseFirestore in Frameworks */,
-				7E28FA0A2A80A09A002E3AA9 /* FirebaseFirestoreSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -89,7 +92,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7EDCDBBB2A95E2B20018AF04 /* FirebaseFirestore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -123,6 +125,7 @@
 			isa = PBXGroup;
 			children = (
 				7E612C2E2A7E65BF00E4EC21 /* MeetingRoom.swift */,
+				7E4F0EB22AB7F7BB00F07322 /* MeetingInfo.swift */,
 				7E612C322A7E69DD00E4EC21 /* Logger.swift */,
 			);
 			path = Models;
@@ -134,6 +137,16 @@
 				7EE5F9342A94887E00371EEE /* MeetingRoomClient.swift */,
 			);
 			path = Network;
+			sourceTree = "<group>";
+		};
+		7E4F0EAD2AB7F51700F07322 /* MeetingCard */ = {
+			isa = PBXGroup;
+			children = (
+				7E0FE4742AB883C1007CEBB2 /* MeetingCardTest.swift */,
+				7E4F0EB02AB7F57C00F07322 /* MeetingCardDomain.swift */,
+				7E4F0EAE2AB7F52600F07322 /* MeetingCardView.swift */,
+			);
+			path = MeetingCard;
 			sourceTree = "<group>";
 		};
 		7E6BC50E2A8125FD00D2A871 /* MeetingRoom */ = {
@@ -180,6 +193,7 @@
 			isa = PBXGroup;
 			children = (
 				7E7C63992A7D17AA00AB05BC /* TCAWorkshopApp.swift */,
+				7E4F0EAD2AB7F51700F07322 /* MeetingCard */,
 				7E6BC50E2A8125FD00D2A871 /* MeetingRoom */,
 			);
 			path = TCAWorkshop;
@@ -265,8 +279,6 @@
 			name = TCAWorkshop;
 			packageProductDependencies = (
 				7E7C63C42A7D17F200AB05BC /* ComposableArchitecture */,
-				7E28FA072A80A09A002E3AA9 /* FirebaseFirestore */,
-				7E28FA092A80A09A002E3AA9 /* FirebaseFirestoreSwift */,
 			);
 			productName = TCAWorkshop;
 			productReference = 7E7C63962A7D17AA00AB05BC /* TCAWorkshop.app */;
@@ -287,7 +299,6 @@
 			);
 			name = TCAWorkshopTests;
 			packageProductDependencies = (
-				7EDCDBBA2A95E2B20018AF04 /* FirebaseFirestore */,
 			);
 			productName = TCAWorkshopTests;
 			productReference = 7E7C63A62A7D17AB00AB05BC /* TCAWorkshopTests.xctest */;
@@ -323,7 +334,6 @@
 			mainGroup = 7E7C638D2A7D17AA00AB05BC;
 			packageReferences = (
 				7E7C63C32A7D17F200AB05BC /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
-				7E28FA062A80A09A002E3AA9 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			productRefGroup = 7E7C63972A7D17AA00AB05BC /* Products */;
 			projectDirPath = "";
@@ -359,10 +369,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7E4F0EB12AB7F57C00F07322 /* MeetingCardDomain.swift in Sources */,
 				7E6BC5112A81265A00D2A871 /* Logger.swift in Sources */,
 				7EC96C592A964261004A17B4 /* MeetingRoomListDomain.swift in Sources */,
 				7E6BC5122A81265D00D2A871 /* MeetingRoom.swift in Sources */,
 				7EC40DE62A933957007007CE /* UnavailableMeetingRoomView.swift in Sources */,
+				7E4F0EB32AB7F7BB00F07322 /* MeetingInfo.swift in Sources */,
 				7EE5F9352A94887E00371EEE /* MeetingRoomClient.swift in Sources */,
 				7EC40DDC2A9333B4007007CE /* AvailableMeetingRoomDomain.swift in Sources */,
 				7EC40DE42A93392C007007CE /* BookedMeetingRoomView.swift in Sources */,
@@ -375,6 +387,7 @@
 				7E6BC5182A81277700D2A871 /* Constants.swift in Sources */,
 				7E7C639A2A7D17AA00AB05BC /* TCAWorkshopApp.swift in Sources */,
 				7EE5F9332A9482B500371EEE /* DateFormatter+Init.swift in Sources */,
+				7E4F0EAF2AB7F52600F07322 /* MeetingCardView.swift in Sources */,
 				7EC40DDA2A9333A8007007CE /* UnavailableMeetingRoomDomain.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -387,6 +400,7 @@
 				7EED7E9C2A9DD35700981004 /* BookedMeetingRoomTest.swift in Sources */,
 				7EED7E9A2A9DD2DD00981004 /* UnavailableMeetingRoomTest.swift in Sources */,
 				7E7C63AB2A7D17AB00AB05BC /* TCAWorkshopTests.swift in Sources */,
+				7E0FE4752AB883C1007CEBB2 /* MeetingCardTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -648,14 +662,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		7E28FA062A80A09A002E3AA9 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
-			requirement = {
-				branch = master;
-				kind = branch;
-			};
-		};
 		7E7C63C32A7D17F200AB05BC /* XCRemoteSwiftPackageReference "swift-composable-architecture" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture/";
@@ -667,25 +673,10 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		7E28FA072A80A09A002E3AA9 /* FirebaseFirestore */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 7E28FA062A80A09A002E3AA9 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseFirestore;
-		};
-		7E28FA092A80A09A002E3AA9 /* FirebaseFirestoreSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 7E28FA062A80A09A002E3AA9 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseFirestoreSwift;
-		};
 		7E7C63C42A7D17F200AB05BC /* ComposableArchitecture */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 7E7C63C32A7D17F200AB05BC /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
 			productName = ComposableArchitecture;
-		};
-		7EDCDBBA2A95E2B20018AF04 /* FirebaseFirestore */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 7E28FA062A80A09A002E3AA9 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseFirestore;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

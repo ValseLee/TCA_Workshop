@@ -16,7 +16,7 @@ struct BookedMeetingRoomView: View {
             self.store,
             observe: { $0 }
         ) { viewStore in
-            VStack(spacing: 24) {
+            VStack {
                 Image(systemName: "calendar")
                     .resizable()
                     .frame(width: 150, height: 150)
@@ -30,101 +30,102 @@ struct BookedMeetingRoomView: View {
                     }
                 
                 Divider()
-                                
-                HStack {
-                    Text("회의실 이름")
-                        .bold()
-                    
-                    Spacer()
-                    
-                    Text(viewStore.selectedMeetingRoom.meetingRoomName)
-                        .padding(.horizontal)
-                        .padding(.vertical, 8)
-                        .background {
-                            Capsule()
-                                .foregroundColor(.green)
-                        }
-                }
-                .frame(
-                    maxWidth: .infinity,
-                    alignment: .leading
-                )
                 
-                HStack {
-                    Text("회의실 대여자")
-                        .bold()
-                    
-                    Spacer()
-                    
-                    Text(viewStore.selectedMeetingRoom.rentBy)
-                        .padding(.horizontal)
-                        .padding(.vertical, 8)
-                        .background {
-                            Capsule()
-                                .foregroundColor(.green)
-                        }
-                }
-                .frame(
-                    maxWidth: .infinity,
-                    alignment: .leading
-                )
-                
-                DatePicker(
-                    // TCA의 State Binding 예시 1
-                    selection: viewStore.$selectedMeetingRoom.rentDate,
-                    in: Date()...,
-                    displayedComponents: .date
-                ) {
-                    Text("대여 희망일")
-                        .bold()
-                }
-                .environment(\.locale, .current)
-                .datePickerStyle(.compact)
-                
-                DatePicker(
-                    selection: viewStore.$selectedMeetingRoom.rentDate,
-                    in: Date()...,
-                    displayedComponents: .hourAndMinute
-                ) {
-                    Text("대여 시작 시간")
-                        .bold()
-                }
-                .environment(\.locale, .current)
-                .datePickerStyle(.graphical)
-                
-                HStack {
-                    VStack(
-                        alignment: .leading,
-                        spacing: 8
-                    ) {
-                        /// TCA의 API로 구현하는 Transition은 insertion이 제대로 되지 않는다
-                        /// Issue로 제보 필요
-                        Text("**대여 시간:** ") +
-                        Text("**\(viewStore.state.selectedMeetingRoom.rentHourAndMinute) 시간**")
+                VStack(spacing: 24) {
+                    HStack {
+                        Text("회의실 이름")
                             .bold()
-                            .monospacedDigit()
-                            .foregroundColor(.green)
                         
-                        Text("최대 3시간(베타는 종일 대여)")
-                            .font(.footnote)
-                            .foregroundColor(.secondary)
+                        Spacer()
+                        
+                        Text(viewStore.selectedMeetingRoom.meetingRoomName)
+                            .padding(.horizontal)
+                            .padding(.vertical, 8)
+                            .background {
+                                Capsule()
+                                    .foregroundColor(.green)
+                            }
                     }
+                    .frame(
+                        maxWidth: .infinity,
+                        alignment: .leading
+                    )
                     
-                    Spacer()
+                    HStack {
+                        Text("회의실 대여자")
+                            .bold()
+                        
+                        Spacer()
+                        
+                        Text(viewStore.selectedMeetingRoom.rentBy)
+                            .padding(.horizontal)
+                            .padding(.vertical, 8)
+                            .background {
+                                Capsule()
+                                    .foregroundColor(.green)
+                            }
+                    }
+                    .frame(
+                        maxWidth: .infinity,
+                        alignment: .leading
+                    )
                     
-                    Stepper(
-                        value: viewStore.$selectedMeetingRoom.rentHourAndMinute,
-                        in: 1...3
+                    DatePicker(
+                        // TCA의 State Binding 예시 1
+                        selection: viewStore.$selectedMeetingRoom.rentDate,
+                        in: Date()...,
+                        displayedComponents: .date
                     ) {
-                        // Text("LABLES HIDDEN")
+                        Text("대여 희망일")
+                            .bold()
                     }
-                    .labelsHidden()
+                    .environment(\.locale, .current)
+                    .datePickerStyle(.compact)
+                    
+                    DatePicker(
+                        selection: viewStore.$selectedMeetingRoom.rentDate,
+                        in: Date()...,
+                        displayedComponents: .hourAndMinute
+                    ) {
+                        Text("대여 시작 시간")
+                            .bold()
+                    }
+                    .environment(\.locale, .current)
+                    .datePickerStyle(.graphical)
+                    
+                    HStack {
+                        VStack(
+                            alignment: .leading
+                        ) {
+                            /// TCA의 API로 구현하는 Transition은 insertion이 제대로 되지 않는다
+                            /// Issue로 제보 필요
+                            Text("**대여 시간:** ") +
+                            Text("**\(viewStore.state.selectedMeetingRoom.rentHourAndMinute) 시간**")
+                                .bold()
+                                .monospacedDigit()
+                                .foregroundColor(.green)
+                            
+                            Text("최대 3시간(베타는 종일 대여)")
+                                .font(.footnote)
+                                .foregroundColor(.secondary)
+                        }
+                        
+                        Spacer()
+                        
+                        Stepper(
+                            value: viewStore.$selectedMeetingRoom.rentHourAndMinute,
+                            in: 1...3
+                        ) {
+                            // Text("LABLES HIDDEN")
+                        }
+                        .labelsHidden()
+                    }
+                    .frame(
+                        maxWidth: .infinity,
+                        alignment: .leading
+                    )
                 }
-                .frame(
-                    maxWidth: .infinity,
-                    alignment: .leading
-                )
-
+                
                 Spacer()
                 
                 primaryButtonBuilder {
@@ -142,6 +143,23 @@ struct BookedMeetingRoomView: View {
                         Text("예약 취소하기")
                     }
                 }
+                
+                Button {
+                    viewStore.send(.browseMeetingInfoButtonTapped)
+                } label: {
+                    Text("회의 정보 보러가기")
+                        .font(.callout)
+                }
+            }
+            .sheet(
+                store:
+                    store.scope(
+                        state: \.$meetingRoomInfo,
+                        action: BookedMeetingRoomFeature.Action
+                            .meetingRoomInfoAction
+                    )
+            ) {
+                MeetingCardView(store: $0)
             }
             .onDisappear {
                 guard viewStore.state.isCancelReservationCompleted else {
@@ -176,13 +194,21 @@ struct BookedMeetingRoomView: View {
 
 struct BookedMeetingRoomView_Previews: PreviewProvider {
     static var previews: some View {
+        let previewMeetingRoom: MeetingRoom = {
+            var meetingRoom = MeetingRoom.testInstance()
+            meetingRoom.rentBy = "CURRENT_USER"
+            return meetingRoom
+        }()
+        
         BookedMeetingRoomView(
             store: Store(
                 initialState: BookedMeetingRoomFeature.State(
-                    selectedMeetingRoom: .testInstance(),
-                    id: .init(1)
+                    selectedMeetingRoom: previewMeetingRoom,
+                    id: previewMeetingRoom.id
                 ), reducer: {
                     BookedMeetingRoomFeature()
+                }, withDependencies: {
+                    $0.meetingRoomClient.update = { _ in }
                 }
             )
         )

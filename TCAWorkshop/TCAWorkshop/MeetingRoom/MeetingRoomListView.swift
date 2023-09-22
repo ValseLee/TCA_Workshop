@@ -7,7 +7,6 @@
 
 import SwiftUI
 import ComposableArchitecture
-import FirebaseFirestore
 
 struct RootView: View {
     let store: StoreOf<MeetingRoomListDomain>

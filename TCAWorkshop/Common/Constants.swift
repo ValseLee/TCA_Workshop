@@ -5,8 +5,6 @@
 //  Created by Celan on 2023/08/07.
 //
 
-import FirebaseFirestore
-import FirebaseFirestoreSwift
 import Foundation
 
 public enum Constants {
@@ -15,8 +13,6 @@ public enum Constants {
         case unavailable
         case booked
     }
-    
-    static let FIREBASE_COLLECTION = Firestore.firestore().collection("MeetingRooms")
     
     static let DUMMY_MEETINGROOM_RENTNAMES: [String] = [
         "CURRENT_USER",
