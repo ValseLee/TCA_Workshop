@@ -9,7 +9,6 @@ import ComposableArchitecture
 import SwiftUI
 
 struct MeetingCardView: View {
-    var num: Int = 0
     let store: StoreOf<MeetingCardDomain>
     let gridSystem: [GridItem] = [
         GridItem(.flexible()),
@@ -64,36 +63,6 @@ struct MeetingCardView: View {
                                 spacing: 24
                             ) {
                                 eachNameCardView(viewStore)
-                                
-                                Button {
-                                    viewStore.send(
-                                        .isMeetingParticipantAddedButtonTapped,
-                                        animation: .easeInOut
-                                    )
-                                } label: {
-                                    VStack(spacing: 8) {
-                                        Image(systemName: "person.badge.plus.fill")
-                                        
-                                        Text("추가")
-                                            .frame(maxWidth: 72)
-                                            .lineLimit(1)
-                                    }
-                                    .foregroundColor(.blue)
-                                    .padding(.horizontal)
-                                    .padding(.vertical, 36)
-                                    .background {
-                                        RoundedRectangle(cornerRadius: 15)
-                                            .stroke(
-                                                Color.blue,
-                                                style: StrokeStyle(
-                                                    lineWidth: 1.5,
-                                                    dash: [6],
-                                                    dashPhase: 6
-                                                )
-                                            )
-                                            .shadow(radius: 1, x: 1, y: 2)
-                                    }
-                                }
                             }
                         } header: {
                             HStack {
@@ -146,7 +115,6 @@ struct MeetingCardView: View {
         }
         .offset(y: 26)
         .bold()
-        .opacity(viewStore.state.isSubjectEditButtonTapped ? 1.0 : 0.0)
         .foregroundColor(
             viewStore.state.meetingInfo.subject.count >= 20
             ? .red
@@ -188,6 +156,7 @@ struct MeetingCardView: View {
         }
         .overlay(alignment: .bottomTrailing) {
             maximumStringCountView(viewStore)
+                .opacity(viewStore.state.isSubjectEditButtonTapped ? 1.0 : 0.0)
         }
         .overlay(alignment: .trailing) {
             HStack(spacing: 4) {
@@ -204,13 +173,13 @@ struct MeetingCardView: View {
     
     private func eachNameCardView(_ viewStore: ViewStoreOf<MeetingCardDomain>) -> some View {
         ForEach(
-            viewStore.state.meetingInfo.participants,
+            0..<viewStore.state.meetingInfo.participants.count,
             id: \.self
-        ) { names in
+        ) { index in
             VStack(spacing: 8) {
                 Image(systemName: "person.fill")
                 
-                Text(names)
+                Text(viewStore.state.meetingInfo.participants[index])
                     .frame(maxWidth: 72)
                     .lineLimit(1)
             }
@@ -227,10 +196,44 @@ struct MeetingCardView: View {
                     .stroke(Color.black, lineWidth: 2)
                     .shadow(radius: 1, x: 1, y: 2)
             }
+            
+            if index == viewStore.state.meetingInfo.participants.count - 1 {
+                Button {
+                    viewStore.send(
+                        .isMeetingParticipantAddedButtonTapped,
+                        animation: .easeInOut
+                    )
+                } label: {
+                    VStack(spacing: 8) {
+                        Image(systemName: "person.badge.plus.fill")
+                        
+                        Text("추가")
+                            .frame(maxWidth: 72)
+                            .lineLimit(1)
+                    }
+                    .foregroundColor(.blue)
+                    .padding(.horizontal)
+                    .padding(.vertical, 36)
+                    .background {
+                        RoundedRectangle(cornerRadius: 15)
+                            .stroke(
+                                Color.blue,
+                                style: StrokeStyle(
+                                    lineWidth: 1.5,
+                                    dash: [6],
+                                    dashPhase: 6
+                                )
+                            )
+                            .shadow(radius: 1, x: 1, y: 2)
+                    }
+                }
+            }
         }
     }
     
-    private func meetingParticipantTextFieldView(_ viewStore: ViewStoreOf<MeetingCardDomain>) -> some View {
+    private func meetingParticipantTextFieldView(
+        _ viewStore: ViewStoreOf<MeetingCardDomain>
+    ) -> some View {
         TextField(
             "",
             text: viewStore.binding(
@@ -242,10 +245,26 @@ struct MeetingCardView: View {
         .autocorrectionDisabled()
         .textInputAutocapitalization(.never)
         .multilineTextAlignment(.center)
+        .frame(maxWidth: 160)
+        .overlay(alignment: .bottom) {
+            Rectangle()
+                .frame(maxHeight: 1.5)
+                .offset(y: 6)
+        }
+        .overlay(alignment: .trailing) {
+            HStack(spacing: 4) {
+                Button {
+                    viewStore.send(.emptyMeetingParticipantTextFieldButtonTapped)
+                } label: {
+                    Image(systemName: "xmark.circle")
+                }
+            }
+            .foregroundColor(.red)
+        }
     }
 }
 
-struct MeeitngCardView_Previews: PreviewProvider {
+struct MeetingCardView_Previews: PreviewProvider {
     static var previews: some View {
         MeetingCardView(
             store: Store(

@@ -41,6 +41,7 @@ struct MeetingCardDomain: Reducer {
         
         case isMeetingParticipantAddedButtonTapped
         case isMeetingParticipantEditted(String)
+        case emptyMeetingParticipantTextFieldButtonTapped
     }
     
     var body: some ReducerOf<Self> {
@@ -92,21 +93,29 @@ struct MeetingCardDomain: Reducer {
             case .isMeetingParticipantAddedButtonTapped:
                 if state.isMeetingParticipantAddedButtonTapped {
                     state.isMeetingParticipantAddedButtonTapped = false
-                    state.meetingInfo.participants.append(state.meetingParticipantName)
+                    guard state.meetingParticipantName == "New" || state.meetingParticipantName.count == 0 else {
+                        state.meetingInfo.participants.append(state.meetingParticipantName)
+                        return .none
+                    }
                 } else {
+                    state.meetingParticipantName = "New"
                     state.isMeetingParticipantAddedButtonTapped = true
                 }
-                
+ 
                 return .none
                 
             case let .isMeetingParticipantEditted(newParticipant):
-                if newParticipant.count > 5 {
+                if newParticipant.count > 10 {
                     state.isMeetingParticipantMaximumCharacterReached = true
-                } else if newParticipant.count <= 5 {
+                } else if newParticipant.count <= 10 {
                     state.isMeetingParticipantMaximumCharacterReached = false
                     state.meetingParticipantName = newParticipant
                 }
                 
+                return .none
+                
+            case .emptyMeetingParticipantTextFieldButtonTapped:
+                state.meetingParticipantName = ""
                 return .none
             }
         }
