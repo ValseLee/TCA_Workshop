@@ -103,7 +103,7 @@ struct MeetingRoomListDomain: Reducer {
                         let start = Date()
                         defer { Logger.methodExecTimePrint(start) }
                         
-                        let fetchedMeetingRooms = try await meetingRoomClient.fetch()
+                        let fetchedMeetingRooms = try await meetingRoomClient.fetchDataArray()
                         await send(
                             .processFetchedMeetingRooms(with: fetchedMeetingRooms),
                             animation: .easeInOut
@@ -121,7 +121,7 @@ struct MeetingRoomListDomain: Reducer {
                     state.unavailableMeetingRoomArray.removeAll()
                     
                     return .run { send in
-                        let fetchedMeetingRooms = try await meetingRoomClient.fetch()
+                        let fetchedMeetingRooms = try await meetingRoomClient.fetchDataArray()
                         await send(
                             .processFetchedMeetingRooms(with: fetchedMeetingRooms),
                             animation: .easeInOut
@@ -137,7 +137,7 @@ struct MeetingRoomListDomain: Reducer {
             case .listRefreshed:
                 state.isMeetingRoomFetching = true
                 return .run { send in
-                    let fetchedMeetingRooms = try await self.meetingRoomClient.fetch()
+                    let fetchedMeetingRooms = try await self.meetingRoomClient.fetchDataArray()
                     await send(
                         .processFetchedMeetingRooms(with: fetchedMeetingRooms),
                         animation: .easeInOut
@@ -171,7 +171,7 @@ struct MeetingRoomListDomain: Reducer {
                 state.isMeetingRoomFetchFailed = false
                 
                 return .run { send in
-                    let fetchedMeetingRooms = try await self.meetingRoomClient.fetch()
+                    let fetchedMeetingRooms = try await self.meetingRoomClient.fetchDataArray()
                     try await clock.sleep(for: .seconds(0.5))
                     await send(
                         .processFetchedMeetingRooms(with: fetchedMeetingRooms),
