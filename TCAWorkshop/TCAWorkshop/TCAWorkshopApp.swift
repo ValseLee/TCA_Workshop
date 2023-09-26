@@ -15,9 +15,11 @@ struct TCAWorkshopApp: App {
         WindowGroup {
             if !_XCTIsTesting {
                 NavigationStack {
-                    RootView(
-                        store: Store(initialState: MeetingRoomListDomain.State()) {
-                            MeetingRoomListDomain()
+                    GuessMyAgeView(
+                        store: Store(initialState: GuessMyAgeFeature.State(
+                            name: "TEST"
+                        )) {
+                            GuessMyAgeFeature()
                                 ._printChanges()
                         }
                     )
