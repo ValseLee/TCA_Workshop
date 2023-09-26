@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		7E0F9DA32A97827200A1475A /* Dependency+DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E0F9DA22A97827200A1475A /* Dependency+DateFormatter.swift */; };
 		7E0FE4752AB883C1007CEBB2 /* MeetingCardTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E0FE4742AB883C1007CEBB2 /* MeetingCardTest.swift */; };
+		7E31B64A2AC1B21D00C9A774 /* APINetworkProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ECCE2472AC1B193000FB5F0 /* APINetworkProtocol.swift */; };
+		7E31B64B2AC1B22400C9A774 /* GuessAgeClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ECCE2452AC1B182000FB5F0 /* GuessAgeClient.swift */; };
+		7E31B64C2AC1B27600C9A774 /* GuessAge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ECCE2432AC1B120000FB5F0 /* GuessAge.swift */; };
+		7E31B64E2AC1B37700C9A774 /* DependencyValue+GuessAgeClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E31B64D2AC1B37700C9A774 /* DependencyValue+GuessAgeClient.swift */; };
 		7E4F0EAF2AB7F52600F07322 /* MeetingCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E4F0EAE2AB7F52600F07322 /* MeetingCardView.swift */; };
 		7E4F0EB12AB7F57C00F07322 /* MeetingCardDomain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E4F0EB02AB7F57C00F07322 /* MeetingCardDomain.swift */; };
 		7E4F0EB32AB7F7BB00F07322 /* MeetingInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E4F0EB22AB7F7BB00F07322 /* MeetingInfo.swift */; };
@@ -30,6 +34,9 @@
 		7EC40DE62A933957007007CE /* UnavailableMeetingRoomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC40DE52A933957007007CE /* UnavailableMeetingRoomView.swift */; };
 		7EC40DE82A93395D007007CE /* AvailableMeetingRoomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC40DE72A93395D007007CE /* AvailableMeetingRoomView.swift */; };
 		7EC96C592A964261004A17B4 /* MeetingRoomListDomain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC96C582A964261004A17B4 /* MeetingRoomListDomain.swift */; };
+		7ECCE23E2AC1AF6B000FB5F0 /* GuessMyAgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ECCE23D2AC1AF6B000FB5F0 /* GuessMyAgeView.swift */; };
+		7ECCE2402AC1AF7B000FB5F0 /* GuessMyAgeFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ECCE23F2AC1AF7B000FB5F0 /* GuessMyAgeFeature.swift */; };
+		7ECCE2422AC1AF84000FB5F0 /* GuessMyAgeTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ECCE2412AC1AF84000FB5F0 /* GuessMyAgeTest.swift */; };
 		7EDCDBBD2A95F2BD0018AF04 /* DependencyValue+MeetingRoomClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EDCDBBC2A95F2BD0018AF04 /* DependencyValue+MeetingRoomClient.swift */; };
 		7EE5F9332A9482B500371EEE /* DateFormatter+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE5F9322A9482B500371EEE /* DateFormatter+Init.swift */; };
 		7EE5F9352A94887E00371EEE /* MeetingRoomClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE5F9342A94887E00371EEE /* MeetingRoomClient.swift */; };
@@ -50,6 +57,7 @@
 /* Begin PBXFileReference section */
 		7E0F9DA22A97827200A1475A /* Dependency+DateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Dependency+DateFormatter.swift"; sourceTree = "<group>"; };
 		7E0FE4742AB883C1007CEBB2 /* MeetingCardTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingCardTest.swift; sourceTree = "<group>"; };
+		7E31B64D2AC1B37700C9A774 /* DependencyValue+GuessAgeClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DependencyValue+GuessAgeClient.swift"; sourceTree = "<group>"; };
 		7E4F0EAE2AB7F52600F07322 /* MeetingCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingCardView.swift; sourceTree = "<group>"; };
 		7E4F0EB02AB7F57C00F07322 /* MeetingCardDomain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingCardDomain.swift; sourceTree = "<group>"; };
 		7E4F0EB22AB7F7BB00F07322 /* MeetingInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingInfo.swift; sourceTree = "<group>"; };
@@ -72,6 +80,12 @@
 		7EC40DE52A933957007007CE /* UnavailableMeetingRoomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnavailableMeetingRoomView.swift; sourceTree = "<group>"; };
 		7EC40DE72A93395D007007CE /* AvailableMeetingRoomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvailableMeetingRoomView.swift; sourceTree = "<group>"; };
 		7EC96C582A964261004A17B4 /* MeetingRoomListDomain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeetingRoomListDomain.swift; sourceTree = "<group>"; };
+		7ECCE23D2AC1AF6B000FB5F0 /* GuessMyAgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuessMyAgeView.swift; sourceTree = "<group>"; };
+		7ECCE23F2AC1AF7B000FB5F0 /* GuessMyAgeFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuessMyAgeFeature.swift; sourceTree = "<group>"; };
+		7ECCE2412AC1AF84000FB5F0 /* GuessMyAgeTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuessMyAgeTest.swift; sourceTree = "<group>"; };
+		7ECCE2432AC1B120000FB5F0 /* GuessAge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuessAge.swift; sourceTree = "<group>"; };
+		7ECCE2452AC1B182000FB5F0 /* GuessAgeClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuessAgeClient.swift; sourceTree = "<group>"; };
+		7ECCE2472AC1B193000FB5F0 /* APINetworkProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APINetworkProtocol.swift; sourceTree = "<group>"; };
 		7EDCDBBC2A95F2BD0018AF04 /* DependencyValue+MeetingRoomClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DependencyValue+MeetingRoomClient.swift"; sourceTree = "<group>"; };
 		7EE5F9322A9482B500371EEE /* DateFormatter+Init.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormatter+Init.swift"; sourceTree = "<group>"; };
 		7EE5F9342A94887E00371EEE /* MeetingRoomClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingRoomClient.swift; sourceTree = "<group>"; };
@@ -102,6 +116,7 @@
 			isa = PBXGroup;
 			children = (
 				7EDCDBBC2A95F2BD0018AF04 /* DependencyValue+MeetingRoomClient.swift */,
+				7E31B64D2AC1B37700C9A774 /* DependencyValue+GuessAgeClient.swift */,
 				7E0F9DA22A97827200A1475A /* Dependency+DateFormatter.swift */,
 			);
 			path = Dependencies;
@@ -127,6 +142,7 @@
 				7E612C2E2A7E65BF00E4EC21 /* MeetingRoom.swift */,
 				7E4F0EB22AB7F7BB00F07322 /* MeetingInfo.swift */,
 				7E612C322A7E69DD00E4EC21 /* Logger.swift */,
+				7ECCE2432AC1B120000FB5F0 /* GuessAge.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -134,7 +150,9 @@
 		7E4D29692AA8C5C300C91036 /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				7ECCE2472AC1B193000FB5F0 /* APINetworkProtocol.swift */,
 				7EE5F9342A94887E00371EEE /* MeetingRoomClient.swift */,
+				7ECCE2452AC1B182000FB5F0 /* GuessAgeClient.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -193,6 +211,7 @@
 			isa = PBXGroup;
 			children = (
 				7E7C63992A7D17AA00AB05BC /* TCAWorkshopApp.swift */,
+				7ECCE23C2AC1AF58000FB5F0 /* GuessMyAge */,
 				7E4F0EAD2AB7F51700F07322 /* MeetingCard */,
 				7E6BC50E2A8125FD00D2A871 /* MeetingRoom */,
 			);
@@ -259,6 +278,16 @@
 				7EE5F9322A9482B500371EEE /* DateFormatter+Init.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		7ECCE23C2AC1AF58000FB5F0 /* GuessMyAge */ = {
+			isa = PBXGroup;
+			children = (
+				7ECCE2412AC1AF84000FB5F0 /* GuessMyAgeTest.swift */,
+				7ECCE23F2AC1AF7B000FB5F0 /* GuessMyAgeFeature.swift */,
+				7ECCE23D2AC1AF6B000FB5F0 /* GuessMyAgeView.swift */,
+			);
+			path = GuessMyAge;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -373,17 +402,23 @@
 				7E6BC5112A81265A00D2A871 /* Logger.swift in Sources */,
 				7EC96C592A964261004A17B4 /* MeetingRoomListDomain.swift in Sources */,
 				7E6BC5122A81265D00D2A871 /* MeetingRoom.swift in Sources */,
+				7E31B64E2AC1B37700C9A774 /* DependencyValue+GuessAgeClient.swift in Sources */,
 				7EC40DE62A933957007007CE /* UnavailableMeetingRoomView.swift in Sources */,
 				7E4F0EB32AB7F7BB00F07322 /* MeetingInfo.swift in Sources */,
+				7ECCE2402AC1AF7B000FB5F0 /* GuessMyAgeFeature.swift in Sources */,
 				7EE5F9352A94887E00371EEE /* MeetingRoomClient.swift in Sources */,
 				7EC40DDC2A9333B4007007CE /* AvailableMeetingRoomDomain.swift in Sources */,
 				7EC40DE42A93392C007007CE /* BookedMeetingRoomView.swift in Sources */,
 				7E7C639C2A7D17AA00AB05BC /* MeetingRoomListView.swift in Sources */,
+				7E31B64C2AC1B27600C9A774 /* GuessAge.swift in Sources */,
 				7EC40DD82A933399007007CE /* BookedMeetingRoomDomain.swift in Sources */,
+				7E31B64A2AC1B21D00C9A774 /* APINetworkProtocol.swift in Sources */,
 				7EC40DE02A9333F7007007CE /* View+ButtonLabel.swift in Sources */,
 				7EC40DE82A93395D007007CE /* AvailableMeetingRoomView.swift in Sources */,
 				7E0F9DA32A97827200A1475A /* Dependency+DateFormatter.swift in Sources */,
+				7ECCE23E2AC1AF6B000FB5F0 /* GuessMyAgeView.swift in Sources */,
 				7EDCDBBD2A95F2BD0018AF04 /* DependencyValue+MeetingRoomClient.swift in Sources */,
+				7E31B64B2AC1B22400C9A774 /* GuessAgeClient.swift in Sources */,
 				7E6BC5182A81277700D2A871 /* Constants.swift in Sources */,
 				7E7C639A2A7D17AA00AB05BC /* TCAWorkshopApp.swift in Sources */,
 				7EE5F9332A9482B500371EEE /* DateFormatter+Init.swift in Sources */,
@@ -401,6 +436,7 @@
 				7EED7E9A2A9DD2DD00981004 /* UnavailableMeetingRoomTest.swift in Sources */,
 				7E7C63AB2A7D17AB00AB05BC /* TCAWorkshopTests.swift in Sources */,
 				7E0FE4752AB883C1007CEBB2 /* MeetingCardTest.swift in Sources */,
+				7ECCE2422AC1AF84000FB5F0 /* GuessMyAgeTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
