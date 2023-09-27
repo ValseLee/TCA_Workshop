@@ -25,7 +25,7 @@ final class TCAWorkshopTests: XCTestCase {
         ) {
             MeetingRoomListDomain()
         } withDependencies: { [testInstance = testInstance] dependency in
-            dependency.meetingRoomClient.fetch = { return [testInstance] }
+            dependency.meetingRoomClient.fetchDataArray = { return [testInstance] }
         }
 
         // 3️⃣ View가 보여지는 시점부터 MeetingRoom을 fetch할 때까지의 stream을 테스트하기 시작
@@ -94,7 +94,7 @@ final class TCAWorkshopTests: XCTestCase {
         // 🧩 Child 에서 CURRENT_USER의 예약을 취소했기 때문에 testInstance의 rentBy를 AVAILABLE로 수정
         // 동일한 instance가 서버에서 fetch되리라는 가정 하에 테스트 진행
         testInstance.rentBy = "AVAILABLE"
-        networkStore.dependencies.meetingRoomClient.fetch = { [testInstance = testInstance] in return [testInstance] }
+        networkStore.dependencies.meetingRoomClient.fetchDataArray = { [testInstance = testInstance] in return [testInstance] }
         
         await networkStore.send(.onMeetingRoomListViewAppear) {
             $0.isBookedMeetingRoomArrayEmpty = false

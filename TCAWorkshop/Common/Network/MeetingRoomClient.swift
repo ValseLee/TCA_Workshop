@@ -7,21 +7,15 @@
 
 import Foundation
 
-protocol APINetworkInterface {
-    associatedtype APIData: Codable
-    
-    var update: @Sendable (_ with: APIData) async throws -> Void { get }
-    var fetch: @Sendable () async throws -> [APIData] { get }
-}
-
 enum MeetingRoomClientError: Error {
     case fetchError
     case postError
 }
 
 struct MeetingRoomClient: APINetworkInterface {
-    var update: (@Sendable (_ with: MeetingRoom) async throws -> Void)
-    var fetch: (@Sendable () async throws -> [MeetingRoom])
+    var update: @Sendable (_ updateTarget: MeetingRoom) async throws -> Void
+    var fetchDataArray: @Sendable () async throws -> [MeetingRoom]
+    var singleFetch: @Sendable (String) async throws -> MeetingRoom
 }
 
 extension MeetingRoomClient {
@@ -43,7 +37,7 @@ extension MeetingRoomClient {
             throw MeetingRoomClientError.postError
         }
         
-    }, fetch: {
+    }, fetchDataArray: {
         let (data, response) = try await URLSession.shared.data(
             from: URL(string: "https://my-json-server.typicode.com/ValseLee/TCA_Workshop/meetingRooms")!
         )
@@ -57,14 +51,15 @@ extension MeetingRoomClient {
         let result = try JSONDecoder().decode([MeetingRoom].self, from: data)
         
         return result
-    })
+    }, singleFetch: { _ in return .testInstance() }
+    )
 
     static let test = Self(
         update: { meetingRoom in
             print("\(meetingRoom.id), Update")
-        }, fetch: {
+        }, fetchDataArray: {
             print("Fetch Start")
             return [MeetingRoom.testInstance()]
-        }
+        }, singleFetch: { _ in return .testInstance() }
     )
 }
