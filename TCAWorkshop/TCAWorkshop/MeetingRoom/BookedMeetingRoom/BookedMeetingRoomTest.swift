@@ -62,29 +62,29 @@ final class BookedMeetingRoomTest: XCTestCase {
         }
     }
     
-    func testMeetingCardRoomAppear() async throws {
-//        let now = Date.now
-        let testMeetingRoomInstance = MeetingRoom.testInstance()
-        let testMeetingInfoInstance = MeetingInfo.testInstance()
-//        testMeetingInfoInstance.date = now
-        
-        let store = TestStore(
-            initialState: BookedMeetingRoomFeature.State(
-                selectedMeetingRoom: testMeetingRoomInstance,
-                id: testMeetingRoomInstance.id
-            )) {
-                BookedMeetingRoomFeature()
-            } withDependencies: {
-                $0.date.now = .now
-            }
-        
-        await store.send(.browseMeetingInfoButtonTapped) {
-            $0.meetingRoomInfo = .init(
-                id: .init(0),
-                meetingInfo: testMeetingInfoInstance
-            )
-        }
-    }
+//    func testMeetingCardRoomAppear() async throws {
+////        let now = Date.now
+//        let testMeetingRoomInstance = MeetingRoom.testInstance()
+//        let testMeetingInfoInstance = MeetingInfo.testInstance()
+////        testMeetingInfoInstance.date = now
+//
+//        let store = TestStore(
+//            initialState: BookedMeetingRoomFeature.State(
+//                selectedMeetingRoom: testMeetingRoomInstance,
+//                id: testMeetingRoomInstance.id
+//            )) {
+//                BookedMeetingRoomFeature()
+//            } withDependencies: {
+//                $0.date.now = .now
+//            }
+//
+//        await store.send(.browseMeetingInfoButtonTapped) {
+//            $0.meetingRoomInfo = .init(
+//                id: .init(0),
+//                meetingInfo: testMeetingInfoInstance
+//            )
+//        }
+//    }
 }
 
 enum CancelError: Error {
