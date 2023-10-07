@@ -5,31 +5,38 @@
 //  Created by Celan on 2023/10/07.
 //
 
+import ComposableArchitecture
 import XCTest
+@testable import TCAWorkshop
 
+@MainActor
 final class GuessMyTest: XCTestCase {
-
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
-
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
-    }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
+    func testNavigationStack_Child_GuessMyAge_Parent_Update() async throws {
+        let guessAgeMock = GuessAge.testInstance()
+        
+        let testStore = TestStore(
+            initialState: GuessMyFeature.State(
+                path: StackState([
+                    GuessMyFeature.Path.State
+                        .guessMyAge(
+                            GuessMyAgeFeature.State(name: guessAgeMock.name)
+                        )
+                ])
+            )
+        ) {
+            GuessMyFeature()
+        }
+        
+        await testStore.send(.path(.element(id: 0, action: .guessMyAge(.guessAgeButtonTapped)))) {
+            $0.path[id: 0, case: /GuessMyFeature.Path.State.guessMyAge]?.isGuessAgeButtonTapped = true
+            $0.path[id: 0, case: /GuessMyFeature.Path.State.guessMyAge]?.age = nil
+            $0.path[id: 0, case: /GuessMyFeature.Path.State.guessMyAge]?.isGuessAgeIncorrect = false
+        }
+        
+        await testStore.receive(.path(.element(id: 0, action: .guessMyAge(.guessAgeResponse(guessAgeMock))))) {
+            $0.path[id: 0, case: /GuessMyFeature.Path.State.guessMyAge]?.isGuessAgeButtonTapped = false
+            $0.path[id: 0, case: /GuessMyFeature.Path.State.guessMyAge]?.age = 0
+            $0.recentGuessMyAgeInformation = guessAgeMock.name
         }
     }
-
 }
