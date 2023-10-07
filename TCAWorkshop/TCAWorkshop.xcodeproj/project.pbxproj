@@ -26,6 +26,8 @@
 		7E7C639E2A7D17AB00AB05BC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7E7C639D2A7D17AB00AB05BC /* Assets.xcassets */; };
 		7E7C63AB2A7D17AB00AB05BC /* TCAWorkshopTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7C63AA2A7D17AB00AB05BC /* TCAWorkshopTests.swift */; };
 		7E7C63C52A7D17F200AB05BC /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 7E7C63C42A7D17F200AB05BC /* ComposableArchitecture */; };
+		7EA41DFE2ACFBC6600FBE50D /* GuessMyFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EA41DFD2ACFBC6600FBE50D /* GuessMyFeature.swift */; };
+		7EA41E002ACFBC6C00FBE50D /* GuessMyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EA41DFF2ACFBC6C00FBE50D /* GuessMyView.swift */; };
 		7EC40DD82A933399007007CE /* BookedMeetingRoomDomain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC40DD72A933399007007CE /* BookedMeetingRoomDomain.swift */; };
 		7EC40DDA2A9333A8007007CE /* UnavailableMeetingRoomDomain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC40DD92A9333A8007007CE /* UnavailableMeetingRoomDomain.swift */; };
 		7EC40DDC2A9333B4007007CE /* AvailableMeetingRoomDomain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC40DDB2A9333B4007007CE /* AvailableMeetingRoomDomain.swift */; };
@@ -72,6 +74,8 @@
 		7E7C63A62A7D17AB00AB05BC /* TCAWorkshopTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TCAWorkshopTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7E7C63AA2A7D17AB00AB05BC /* TCAWorkshopTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCAWorkshopTests.swift; sourceTree = "<group>"; };
 		7E7C63D42A7D233700AB05BC /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		7EA41DFD2ACFBC6600FBE50D /* GuessMyFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuessMyFeature.swift; sourceTree = "<group>"; };
+		7EA41DFF2ACFBC6C00FBE50D /* GuessMyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuessMyView.swift; sourceTree = "<group>"; };
 		7EC40DD72A933399007007CE /* BookedMeetingRoomDomain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookedMeetingRoomDomain.swift; sourceTree = "<group>"; };
 		7EC40DD92A9333A8007007CE /* UnavailableMeetingRoomDomain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnavailableMeetingRoomDomain.swift; sourceTree = "<group>"; };
 		7EC40DDB2A9333B4007007CE /* AvailableMeetingRoomDomain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvailableMeetingRoomDomain.swift; sourceTree = "<group>"; };
@@ -211,6 +215,7 @@
 			isa = PBXGroup;
 			children = (
 				7E7C63992A7D17AA00AB05BC /* TCAWorkshopApp.swift */,
+				7EA41DFC2ACFBC5600FBE50D /* GuessMy */,
 				7ECCE23C2AC1AF58000FB5F0 /* GuessMyAge */,
 				7E4F0EAD2AB7F51700F07322 /* MeetingCard */,
 				7E6BC50E2A8125FD00D2A871 /* MeetingRoom */,
@@ -239,6 +244,15 @@
 			children = (
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		7EA41DFC2ACFBC5600FBE50D /* GuessMy */ = {
+			isa = PBXGroup;
+			children = (
+				7EA41DFD2ACFBC6600FBE50D /* GuessMyFeature.swift */,
+				7EA41DFF2ACFBC6C00FBE50D /* GuessMyView.swift */,
+			);
+			path = GuessMy;
 			sourceTree = "<group>";
 		};
 		7EC40DD42A93336C007007CE /* AvailableMeetingRoom */ = {
@@ -406,9 +420,11 @@
 				7EC40DE62A933957007007CE /* UnavailableMeetingRoomView.swift in Sources */,
 				7E4F0EB32AB7F7BB00F07322 /* MeetingInfo.swift in Sources */,
 				7ECCE2402AC1AF7B000FB5F0 /* GuessMyAgeFeature.swift in Sources */,
+				7EA41DFE2ACFBC6600FBE50D /* GuessMyFeature.swift in Sources */,
 				7EE5F9352A94887E00371EEE /* MeetingRoomClient.swift in Sources */,
 				7EC40DDC2A9333B4007007CE /* AvailableMeetingRoomDomain.swift in Sources */,
 				7EC40DE42A93392C007007CE /* BookedMeetingRoomView.swift in Sources */,
+				7EA41E002ACFBC6C00FBE50D /* GuessMyView.swift in Sources */,
 				7E7C639C2A7D17AA00AB05BC /* MeetingRoomListView.swift in Sources */,
 				7E31B64C2AC1B27600C9A774 /* GuessAge.swift in Sources */,
 				7EC40DD82A933399007007CE /* BookedMeetingRoomDomain.swift in Sources */,
