@@ -69,7 +69,7 @@ final class GuessMyAgeTest: XCTestCase {
         let guessAgeInstance = GuessAge.testInstance()
         
         let testStore = TestStore(
-            initialState: GuessMyAgeFeature.State(name: "Name")
+            initialState: GuessMyAgeFeature.State(name: guessAgeInstance.name)
         ) {
             GuessMyAgeFeature()
         } withDependencies: {
