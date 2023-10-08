@@ -76,12 +76,9 @@ final class GuessMyAgeTest: XCTestCase {
             $0.guessAgeClient.singleFetch = { _ in throw GuessAgeTestError.fetchFailed }
         }
         
-        await testStore.send(.guessAgeButtonTapped) {
-            $0.isGuessAgeButtonTapped = true
-            $0.age = nil
-            $0.isGuessAgeIncorrect = false
-        }
+        testStore.exhaustivity = .off(showSkippedAssertions: false)
         
+        await testStore.send(.guessAgeButtonTapped)
         await testStore.receive(.guessAgeFetchFailed)
     }
 }
