@@ -24,6 +24,8 @@ struct TCAWorkshopApp: App {
                         }
                     )
                 }
+            } else {
+                EmptyView()
             }
         }
     }

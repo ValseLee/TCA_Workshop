@@ -41,7 +41,6 @@ extension GuessAgeClient {
         update: { _ in },
         fetchDataArray: { [.testInstance()] },
         singleFetch: { with in
-            //
             return .testInstance()
         }
     )

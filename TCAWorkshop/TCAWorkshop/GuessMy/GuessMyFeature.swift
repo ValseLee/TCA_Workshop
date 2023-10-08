@@ -27,6 +27,7 @@ struct GuessMyFeature: Reducer {
                     state.recentGuessMyAgeInformation = guessMyAgeState.name
                 }
                 return .none
+                
             case .path:
                 return .none
             }
@@ -56,5 +57,4 @@ struct GuessMyFeature: Reducer {
             }
         }
     }
-
 }

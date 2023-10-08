@@ -24,6 +24,7 @@ struct GuessMyAgeFeature: Reducer {
         
         case guessAgeButtonTapped
         case guessAgeResponse(GuessAge)
+        case guessAgeFetchFailed
     }
     
     var body: some ReducerOf<Self> {
@@ -52,6 +53,8 @@ struct GuessMyAgeFeature: Reducer {
                         .guessAgeResponse(result),
                         animation: .easeInOut
                     )
+                } catch: { error, send in
+                    await send(.guessAgeFetchFailed)
                 }
                 
             case let .guessAgeResponse(result):
@@ -62,6 +65,9 @@ struct GuessMyAgeFeature: Reducer {
                     state.isGuessAgeIncorrect = true
                 }
                 
+                return .none
+                
+            case .guessAgeFetchFailed:
                 return .none
             }
         }
