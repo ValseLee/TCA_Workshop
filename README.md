@@ -1,8 +1,15 @@
 📍  Apple Developer Academy 2nd, TCA Workshop
 ---
-## About TCA_Workshop Repository
-> 본 레포지토리는  Apple Developer Academy 2nd @ POSTECH 에서 진행된 워크샵의 내용을 일부 담고 있습니다.
+> 본 레포지토리는  Apple Developer Academy 2nd @ POSTECH 에서 진행된 워크샵의 내용을 일부 담고 있습니다. <br>
+> 본 레포지토리의 TCA Contents는 1.0.0 버전을 기반으로 하고 있습니다. <br>
+> Updated at 23.12.15.
 
+## 🎙️ ANNOUNCEMENT!
+TCA 1.0.0 버전의 내용을 담고 있는 서적 출판에 직접 참여하였고, 해당 책이 무료로 출판되었습니다! <br>
+관심이 있는 분들께서는 참고하시기를 부탁드리며 본 레포지토리의 업데이트는 무기한 중단 예정임을 양해 바랍니다! <br>
+- [SwiftUI 상태 관리부터 테스트까지 iOS 개발자를 위한 TCA 1.0](https://ridibooks.com/books/2773000087)
+
+## About TCA_Workshop Repository
 - [Day1](https://github.com/ValseLee/TCA_Workshop/tree/main/TCAWorkshop/Day1)
   - Workshop Keynote를 볼 수 있습니다.
   - 해당 Keynote의 내용은 Wiki 내용의 아주 일부를 다루고 있습니다.
